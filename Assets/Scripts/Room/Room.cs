@@ -10,13 +10,13 @@ public class Room
 
     public bool blocked;
 
-    public bool start;
-
     public RoomType type;
 }
 
 public enum RoomType
 {
-    Death = 0,
-    Normal = 1,
+    Start = 0,
+    Exit = 1,
+    Normal = 2,
+    Death = 3,
 }

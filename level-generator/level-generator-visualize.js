@@ -61,14 +61,29 @@ window.draw = () => {
 
     line(cell.x * scale, (cell.y + 1) * scale, cell.x * scale, cell.y * scale);
 
+    switch (cell.type) {
+      case 0:
+        fill(255, 80);
+        break;
+
+      case 1:
+        fill(255, 0, 255);
+        break;
+
+      case 2:
+        fill(0, 255, 0, 80);
+        break;
+
+      case 3:
+        fill(255, 0, 0, 80);
+        break;
+
+      default:
+        break;
+    }
+
     if (cell.blocked) {
       fill(0);
-    } else if (cell.start) {
-      fill(255, 80);
-    } else if (cell.type === 0) {
-      fill(0, 255, 0, 80);
-    } else if (cell.type === 1) {
-      fill(255, 0, 0, 80);
     }
 
     noStroke();

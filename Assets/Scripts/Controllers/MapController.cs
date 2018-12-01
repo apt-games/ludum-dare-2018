@@ -28,7 +28,6 @@ public class MapController : MonoBehaviour
             room.y = cell._coord.y;
             room.walls = cell._walls;
             room.blocked = cell._blocked;
-            room.start = cell._start;
             room.type = (RoomType) cell._type;
 
             // spawn tiles as children
@@ -38,7 +37,7 @@ public class MapController : MonoBehaviour
             _rooms.Add(spawned);
 
             // start room
-            if (room.start)
+            if (room.type == 0)
                 Current = spawned;
         }
     }
@@ -49,14 +48,9 @@ public class MapController : MonoBehaviour
 
         Grid grid = new Grid(size);
 
-        Debug.Log(grid);
-        Debug.Log(grid._cells.Count);
-
-        // var didSetExit = false;
-
         Cell current = grid.PickRandomCell();
         // let current = grid.cells[0];
-        current._start = true;
+        current._type = 0;
         current._visited = true;
 
         int i = 0;
@@ -73,41 +67,37 @@ public class MapController : MonoBehaviour
 
                 current.RemoveWallsTo(next);
 
-                if (i > 1)
+                if (i > 3)
                 {
                     List<Cell> neighbors = current.GetNeighbors(grid);
-                    List<Cell> dangerousNeighbors = neighbors.FindAll(neighbor => neighbor._type == 1);
+                    List<Cell> dangerousNeighbors = neighbors.FindAll(neighbor => neighbor._type == 3);
 
-                    if (dangerousNeighbors.Count < 2)
+                    if (dangerousNeighbors.Count < 1)
                     {
-                        Cell neighbor = next.GetRandomNeighbor(grid);
-                        // neighbor._type = Math.round(Math.random());
-                        neighbor._type = 1;
-                        // next._type = 1;
-                        // this._type = [0, 1][weightedRandom([60, 40])];
+                        Cell neighbor = current.GetRandomNeighbor(grid);
+
+                        if (neighbor._type != 0)
+                        {
+                            neighbor._type = 3;
+                        }
                     }
                 }
 
                 current = next;
+
+                i++;
             }
             else
             {
-                // if (!didSetExit) {
-                //   current.exit = true;
-                //   didSetExit = true;
-                // }
-
                 Cell prev = stack.Dequeue();
 
                 current = prev;
             }
-
-            i++;
         } while (stack.Count != 0);
 
         foreach (var cell in grid._cells)
         {
-            if (cell._blocked || cell._start) continue;
+            if (cell._blocked) continue;
 
             Cell neighbor = cell.GetRandomNeighbor(grid);
 
@@ -115,17 +105,10 @@ public class MapController : MonoBehaviour
             {
                 cell.RemoveWallsTo(neighbor);
             }
-
-            //if (Math.round(Math.random()))
-            //{
-            //    neighbor = cell.GetRandomNeighbor(grid);
-
-            //    if (neighbor)
-            //    {
-            //        cell.RemoveWallsTo(neighbor);
-            //    }
-            //}
         }
+
+        Cell endCell = grid.PickRandomCell();
+        endCell._type = 1;
 
         return grid;
     }
@@ -203,12 +186,7 @@ public class Grid
     {
         List<Cell> filteredCells = _cells.FindAll(cell => !cell._blocked);
 
-        Debug.Log(_cells);
-
         int i = Random.Range(0, filteredCells.Count);
-
-        Debug.Log(i);
-        Debug.Log(filteredCells.Count);
 
         return filteredCells[i];
     }
@@ -267,12 +245,9 @@ public class Cell
         _start = false;
         _exit = false;
 
-         _blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
+        _type = 2;
 
-        if (!_blocked)
-        {
-            _type = 0;
-        }
+        _blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
 
         _visited = false;
     }
