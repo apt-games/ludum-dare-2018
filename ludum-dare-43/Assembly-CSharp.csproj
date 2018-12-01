@@ -64,7 +64,9 @@
     <Compile Include="Assets\Scripts\Controllers\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controllers\MapController.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Room\Room.cs" />
     <Compile Include="Assets\Scripts\Room\RoomBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Room\WallBehaviour.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/anders.havskjold/Projects/ludum-dare-2018/ludum-dare-43/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
