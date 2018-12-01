@@ -1,0 +1,5 @@
+level-generator/output/*
+!level-generator/output/.gitkeep
+
+.cache
+dist

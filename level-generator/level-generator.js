@@ -49,9 +49,7 @@ class Grid {
 
   reset() {
     for (let i = 0; i < this.cells.length; i++) {
-      const cell = this.cells[i];
-
-      cell.visited = false;
+      this.cells[i].visited = false;
     }
   }
 }
@@ -65,10 +63,10 @@ class Cell {
     this.exit = false;
 
     this.walls = [1, 1, 1, 1];
-    this.blocked = simplex.noise2D(x * 0.1, y * 0.1) > 0.6;
+    this.blocked = simplex.noise2D(x * 0.1, y * 0.1) > 0.45;
 
     if (!this.blocked) {
-      this.type = [0, 1][weightedRandom([60, 40])];
+      this.type = 0; // [0, 1][weightedRandom([60, 40])];
     }
 
     this.visited = false;
@@ -147,9 +145,11 @@ function generate(size = 10) {
   let didSetExit = false;
 
   let current = grid.pickRandomCell();
-  current.start = true;
   // let current = grid.cells[0];
+  current.start = true;
   current.visited = true;
+
+  let i = 0;
 
   while (current) {
     const next = current.getRandomAvailableNeighbor(grid);
@@ -160,6 +160,19 @@ function generate(size = 10) {
       stack.push(current);
 
       current.removeWallsTo(next);
+
+      if (i > 1) {
+        const neighbors = current.getNeighbors(grid);
+        const dangerousNeighbors = neighbors.filter(n => n.type === 1);
+
+        if (dangerousNeighbors.length < 2) {
+          const neighbor = next.getRandomNeighbor(grid);
+          // neighbor.type = Math.round(Math.random());
+          neighbor.type = 1;
+          // next.type = 1;
+          // this.type = [0, 1][weightedRandom([60, 40])];
+        }
+      }
 
       current = next;
     } else {
@@ -172,14 +185,28 @@ function generate(size = 10) {
 
       current = prev;
     }
+
+    i++;
   }
 
-  for (let i = 0; i < Math.floor(grid.cells.length / 2); i++) {
-    const cell = grid.pickRandomCell();
-    const neighbor = cell.getRandomNeighbor(grid);
+  for (let i = 0; i < grid.cells.length; i++) {
+    // const cell = grid.pickRandomCell();
+    const cell = grid.cells[i];
+
+    if (cell.blocked || cell.start) continue;
+
+    let neighbor = cell.getRandomNeighbor(grid);
 
     if (neighbor) {
       cell.removeWallsTo(neighbor);
+    }
+
+    if (Math.round(Math.random())) {
+      neighbor = cell.getRandomNeighbor(grid);
+
+      if (neighbor) {
+        cell.removeWallsTo(neighbor);
+      }
     }
   }
 
