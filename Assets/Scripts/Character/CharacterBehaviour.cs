@@ -6,12 +6,16 @@ public class CharacterBehaviour : MonoBehaviour
 {
     private NavMeshAgent _agent;
 
-    public Animator Animator;
+    private Animator _animator;
 
     private bool _isWalking;
 
+    public bool IsAlive = true;
+
     private void Awake ()
     {
+        _animator = GetComponentInChildren<Animator>();
+
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = true;
     }
@@ -26,10 +30,17 @@ public class CharacterBehaviour : MonoBehaviour
         SetWalking(true);
     }
 
+    public void Die()
+    {
+        Debug.Log("Died");
+        IsAlive = false;
+        _animator.SetTrigger("die");
+    }
+
     private void SetWalking(bool walking)
     {
         _isWalking = walking;
-        Animator.SetBool("walking", _isWalking);
+        _animator.SetBool("walking", _isWalking);
     }
 
     private void Update()
@@ -39,4 +50,5 @@ public class CharacterBehaviour : MonoBehaviour
             SetWalking(false);
         }
     }
+
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class RoomBehaviour : MonoBehaviour
 {
@@ -17,6 +16,15 @@ public class RoomBehaviour : MonoBehaviour
     private void Awake()
     {
         SetVisited(false);
+    }
+
+    public void RoomTriggeredBy(CharacterBehaviour character)
+    {
+        if (Model.type == RoomType.Death)
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerController
+                .KillCharacter(character);
+        }
     }
 
     public void OnMouseOver()
