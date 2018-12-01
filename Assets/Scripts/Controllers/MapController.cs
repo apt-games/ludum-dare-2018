@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MapController : MonoBehaviour
 {
@@ -29,6 +30,13 @@ public class MapController : MonoBehaviour
             if (room.start)
                 Current = spawned;
         }
+    }
+
+    private void Start()
+    {
+        // add surface mesh on current object and build from this
+        var surface = Current.Floor.gameObject.AddComponent<NavMeshSurface>();
+        surface.BuildNavMesh();
     }
 
     private RoomBehaviour CreateRoom(Room room)

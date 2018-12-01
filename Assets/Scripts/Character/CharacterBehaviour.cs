@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
-public class CharacterBehaviour : MonoBehaviour {
+[RequireComponent(typeof(NavMeshAgent))]
+public class CharacterBehaviour : MonoBehaviour
+{
+    private NavMeshAgent _agent;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private void Awake ()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+    }
 
     public void MoveTo(Transform room)
     {
@@ -18,6 +17,6 @@ public class CharacterBehaviour : MonoBehaviour {
 
         var target = new Vector3(room.position.x, room.position.y, transform.position.z);
 
-        iTween.MoveTo(gameObject, target, 1f);
+        _agent.SetDestination(target);
     }
 }

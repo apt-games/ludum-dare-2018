@@ -248,7 +248,7 @@ Transform:
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114170491595489030, guid: 540c66250ce1df84bb5b066cfdd52277,
     type: 2}
-  m_PrefabInternal: {fileID: 1877313288}
+  m_PrefabInternal: {fileID: 2045658307}
   m_Script: {fileID: 11500000, guid: 9c33d1b7d55d4974ea933b70288e5388, type: 3}
 --- !u!1 &1781157865
 GameObject:
@@ -259,6 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1781157866}
   - component: {fileID: 1781157867}
+  - component: {fileID: 1781157868}
   m_Layer: 0
   m_Name: MapController
   m_TagString: Untagged
@@ -293,6 +294,34 @@ MonoBehaviour:
   RoomPrefab: {fileID: 114392795578142640, guid: 8e02a718319973a42aff1f4cc516e966,
     type: 2}
   Current: {fileID: 0}
+--- !u!114 &1781157868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1781157865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.016666668
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 23800000, guid: 435d1ee593139a4438d452d6717d08fc, type: 2}
 --- !u!1 &1862339988
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +365,7 @@ MonoBehaviour:
   CameraController: {fileID: 519420030}
   PlayerController: {fileID: 367920721}
   MapController: {fileID: 1781157867}
---- !u!1001 &1877313288
+--- !u!1001 &2045658307
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -349,7 +378,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4797240953491622, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 4797240953491622, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
       propertyPath: m_LocalPosition.z
@@ -375,6 +404,30 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1944326721355118, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 195045161424203322, guid: 540c66250ce1df84bb5b066cfdd52277,
+        type: 2}
+      propertyPath: m_WalkableMask
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 136613455073940948, guid: 540c66250ce1df84bb5b066cfdd52277,
+        type: 2}
+      propertyPath: m_Direction
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797240953491622, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 195045161424203322, guid: 540c66250ce1df84bb5b066cfdd52277,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.05
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 136613455073940948, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
   m_IsPrefabAsset: 0

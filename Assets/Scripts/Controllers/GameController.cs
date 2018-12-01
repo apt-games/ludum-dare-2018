@@ -11,7 +11,10 @@ public class GameController : MonoBehaviour
         MapController.RoomSelected += OnRoomSelected;
 
         MapController.InitiateMap();
+    }
 
+    private void Start()
+    {
         WalkToRoom(MapController.Current);
     }
 
