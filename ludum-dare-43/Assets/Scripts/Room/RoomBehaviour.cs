@@ -5,11 +5,14 @@ public class RoomBehaviour : MonoBehaviour
 {
     public event Action<RoomBehaviour> Selected;
 
-    public WallBehaviour[] Walls = new WallBehaviour[4]; 
+    public WallBehaviour[] Walls = new WallBehaviour[4];
+
+    public bool Visited;
+    public Room Model;
 
     private void Start()
     {
-        SetVisible(false);
+        SetVisited(false);
     }
 
     public void OnMouseOver()
@@ -21,11 +24,19 @@ public class RoomBehaviour : MonoBehaviour
         }
     }
 
-    public void SetVisible(bool visible)
+    public void SetVisited(bool visited)
     {
+        Visited = visited;
     }
 
-    public void SettWalls(int[] roomWalls)
+    public void SetModel(Room room)
+    {
+        Model = room;
+
+        SetWalls(room.walls);
+    }
+
+    private void SetWalls(int[] roomWalls)
     {
         for (int i = 0; i < roomWalls.Length; i++)
         {
