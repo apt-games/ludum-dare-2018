@@ -13,7 +13,7 @@ public class MapController : MonoBehaviour
     private readonly List<RoomBehaviour> _rooms = new List<RoomBehaviour>();
 
     // Use this for initialization
-    private void Start()
+    public void InitiateMap()
     {
         var map = JsonUtility.FromJson<MapStructure>(json);
 
@@ -24,10 +24,11 @@ public class MapController : MonoBehaviour
             spawned.Selected += OnRoomClicked;
 
             _rooms.Add(spawned);
-        }
 
-        // initial;
-        WalkToRoom(_rooms[0]);
+            // start room
+            if (room.start)
+                Current = spawned;
+        }
     }
 
     private RoomBehaviour CreateRoom(Room room)
@@ -43,15 +44,8 @@ public class MapController : MonoBehaviour
     {
         if (CanMoveToRoom(room.Model))
         {
-            WalkToRoom(room);
+            RoomSelected?.Invoke(room);
         }
-    }
-
-    private void WalkToRoom(RoomBehaviour room)
-    {
-        Current = room;
-        RoomSelected?.Invoke(room);
-        room.SetVisited(true);
     }
 
     private bool CanMoveToRoom(Room room)
@@ -78,7 +72,8 @@ public class MapController : MonoBehaviour
         return false;
     }
 
-    private string json = "{\"Rooms\":[{\"x\":0,\"y\":0,\"walls\":[1,1,0,1]},{\"x\":1,\"y\":0,\"walls\":[1,0,0,1]},{\"x\":2,\"y\":0,\"walls\":[1,0,1,0]},{\"x\":3,\"y\":0,\"walls\":[1,0,1,0]},{\"x\":4,\"y\":0,\"walls\":[1,1,0,0]},{\"x\":5,\"y\":0,\"walls\":[1,1,0,1]},{\"x\":6,\"y\":0,\"walls\":[1,0,0,1]},{\"x\":7,\"y\":0,\"walls\":[1,0,1,0]},{\"x\":8,\"y\":0,\"walls\":[1,0,0,0]},{\"x\":9,\"y\":0,\"walls\":[1,1,0,0]},{\"x\":0,\"y\":1,\"walls\":[0,0,1,1]},{\"x\":1,\"y\":1,\"walls\":[0,1,1,0]},{\"x\":2,\"y\":1,\"walls\":[1,0,0,1]},{\"x\":3,\"y\":1,\"walls\":[1,0,1,0]},{\"x\":4,\"y\":1,\"walls\":[0,1,1,0]},{\"x\":5,\"y\":1,\"walls\":[0,0,0,1]},{\"x\":6,\"y\":1,\"walls\":[0,0,1,0]},{\"x\":7,\"y\":1,\"walls\":[1,1,1,0]},{\"x\":8,\"y\":1,\"walls\":[0,1,0,1]},{\"x\":9,\"y\":1,\"walls\":[0,1,0,1]},{\"x\":0,\"y\":2,\"walls\":[1,0,0,1]},{\"x\":1,\"y\":2,\"walls\":[1,1,1,0]},{\"x\":2,\"y\":2,\"walls\":[0,1,0,1]},{\"x\":3,\"y\":2,\"walls\":[1,1,0,1]},{\"x\":4,\"y\":2,\"walls\":[1,0,0,1]},{\"x\":5,\"y\":2,\"walls\":[0,1,1,0]},{\"x\":6,\"y\":2,\"walls\":[1,0,0,1]},{\"x\":7,\"y\":2,\"walls\":[1,0,1,0]},{\"x\":8,\"y\":2,\"walls\":[0,1,1,0]},{\"x\":9,\"y\":2,\"walls\":[0,1,0,1]},{\"x\":0,\"y\":3,\"walls\":[0,1,0,1]},{\"x\":1,\"y\":3,\"walls\":[1,0,0,1]},{\"x\":2,\"y\":3,\"walls\":[0,1,1,0]},{\"x\":3,\"y\":3,\"walls\":[0,0,1,1]},{\"x\":4,\"y\":3,\"walls\":[0,1,1,0]},{\"x\":5,\"y\":3,\"walls\":[1,0,0,1]},{\"x\":6,\"y\":3,\"walls\":[0,1,1,0]},{\"x\":7,\"y\":3,\"walls\":[1,0,0,1]},{\"x\":8,\"y\":3,\"walls\":[1,1,1,0]},{\"x\":9,\"y\":3,\"walls\":[0,1,0,1]},{\"x\":0,\"y\":4,\"walls\":[0,1,0,1]},{\"x\":1,\"y\":4,\"walls\":[0,0,1,1]},{\"x\":2,\"y\":4,\"walls\":[1,1,0,0]},{\"x\":3,\"y\":4,\"walls\":[1,0,0,1]},{\"x\":4,\"y\":4,\"walls\":[1,0,1,0]},{\"x\":5,\"y\":4,\"walls\":[0,1,1,0]},{\"x\":6,\"y\":4,\"walls\":[1,0,0,1]},{\"x\":7,\"y\":4,\"walls\":[0,0,1,0]},{\"x\":8,\"y\":4,\"walls\":[1,1,0,0]},{\"x\":9,\"y\":4,\"walls\":[0,1,0,1]},{\"x\":0,\"y\":5,\"walls\":[0,0,0,1]},{\"x\":1,\"y\":5,\"walls\":[1,1,1,0]},{\"x\":2,\"y\":5,\"walls\":[0,1,0,1]},{\"x\":3,\"y\":5,\"walls\":[0,0,0,1]},{\"x\":4,\"y\":5,\"walls\":[1,0,1,0]},{\"x\":5,\"y\":5,\"walls\":[1,1,0,0]},{\"x\":6,\"y\":5,\"walls\":[0,1,0,1]},{\"x\":7,\"y\":5,\"walls\":[1,1,0,1]},{\"x\":8,\"y\":5,\"walls\":[0,1,0,1]},{\"x\":9,\"y\":5,\"walls\":[0,1,0,1]},{\"x\":0,\"y\":6,\"walls\":[0,0,0,1]},{\"x\":1,\"y\":6,\"walls\":[1,0,1,0]},{\"x\":2,\"y\":6,\"walls\":[0,1,1,0]},{\"x\":3,\"y\":6,\"walls\":[0,1,0,1]},{\"x\":4,\"y\":6,\"walls\":[1,0,0,1]},{\"x\":5,\"y\":6,\"walls\":[0,1,1,0]},{\"x\":6,\"y\":6,\"walls\":[0,1,0,1]},{\"x\":7,\"y\":6,\"walls\":[0,1,0,1]},{\"x\":8,\"y\":6,\"walls\":[0,0,1,1]},{\"x\":9,\"y\":6,\"walls\":[0,1,1,0]},{\"x\":0,\"y\":7,\"walls\":[0,1,0,1]},{\"x\":1,\"y\":7,\"walls\":[1,0,1,1]},{\"x\":2,\"y\":7,\"walls\":[1,0,1,0]},{\"x\":3,\"y\":7,\"walls\":[0,1,1,0]},{\"x\":4,\"y\":7,\"walls\":[0,0,1,1]},{\"x\":5,\"y\":7,\"walls\":[1,1,0,0]},{\"x\":6,\"y\":7,\"walls\":[0,1,0,1]},{\"x\":7,\"y\":7,\"walls\":[0,0,0,1]},{\"x\":8,\"y\":7,\"walls\":[1,0,1,0]},{\"x\":9,\"y\":7,\"walls\":[1,1,0,0]},{\"x\":0,\"y\":8,\"walls\":[0,0,1,1]},{\"x\":1,\"y\":8,\"walls\":[1,1,0,0]},{\"x\":2,\"y\":8,\"walls\":[1,0,0,1]},{\"x\":3,\"y\":8,\"walls\":[1,0,1,0]},{\"x\":4,\"y\":8,\"walls\":[1,0,1,0]},{\"x\":5,\"y\":8,\"walls\":[0,1,1,0]},{\"x\":6,\"y\":8,\"walls\":[0,0,1,1]},{\"x\":7,\"y\":8,\"walls\":[0,1,1,0]},{\"x\":8,\"y\":8,\"walls\":[1,1,0,1]},{\"x\":9,\"y\":8,\"walls\":[0,1,0,1]},{\"x\":0,\"y\":9,\"walls\":[1,0,1,1]},{\"x\":1,\"y\":9,\"walls\":[0,0,1,0]},{\"x\":2,\"y\":9,\"walls\":[0,1,1,0]},{\"x\":3,\"y\":9,\"walls\":[1,0,1,1]},{\"x\":4,\"y\":9,\"walls\":[1,0,1,0]},{\"x\":5,\"y\":9,\"walls\":[1,0,1,0]},{\"x\":6,\"y\":9,\"walls\":[1,0,1,0]},{\"x\":7,\"y\":9,\"walls\":[1,0,1,0]},{\"x\":8,\"y\":9,\"walls\":[0,0,1,0]},{\"x\":9,\"y\":9,\"walls\":[0,1,1,0]}]}";
+    private string json =
+        "{\"Rooms\":[{\"x\":0,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,0],\"type\":0},{\"x\":3,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,0],\"type\":0},{\"x\":4,\"y\":0,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,1],\"type\":1},{\"x\":0,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":1},{\"x\":1,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":3,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":4,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":0,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":0},{\"x\":1,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":2,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":1},{\"x\":3,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":4,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":5,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":0,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":1,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":0},{\"x\":3,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":4,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":5,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":0,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":3,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":4,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":5,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":0,\"y\":5,\"start\":true,\"blocked\":false,\"walls\":[0,1,1,1],\"type\":1},{\"x\":1,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":0},{\"x\":2,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0},{\"x\":3,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,1],\"type\":0},{\"x\":4,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":5,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0}]}";
 }
 
 public class MapStructure

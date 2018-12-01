@@ -140,7 +140,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &367920721
 MonoBehaviour:
@@ -153,8 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4590c92d105d42e458c8113f4befdfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapController: {fileID: 1781157867}
-  CameraController: {fileID: 519420030}
   Players:
   - {fileID: 1576823045}
 --- !u!1 &519420028
@@ -279,7 +277,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1781157867
 MonoBehaviour:
@@ -295,6 +293,49 @@ MonoBehaviour:
   RoomPrefab: {fileID: 114392795578142640, guid: 8e02a718319973a42aff1f4cc516e966,
     type: 2}
   Current: {fileID: 0}
+--- !u!1 &1862339988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1862339989}
+  - component: {fileID: 1862339990}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1862339989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1862339988}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1862339990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1862339988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7409fd30f6225d94aa86c589c10ea267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraController: {fileID: 519420030}
+  PlayerController: {fileID: 367920721}
+  MapController: {fileID: 1781157867}
 --- !u!1001 &1877313288
 Prefab:
   m_ObjectHideFlags: 0
@@ -332,7 +373,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4797240953491622, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 540c66250ce1df84bb5b066cfdd52277, type: 2}

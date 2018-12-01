@@ -11,6 +11,8 @@ public class RoomBehaviour : MonoBehaviour
     
     public Room Model;
 
+    public Renderer Floor;
+
     private void Awake()
     {
         SetVisited(false);

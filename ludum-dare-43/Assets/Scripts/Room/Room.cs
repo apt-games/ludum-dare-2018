@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 [Serializable]
 public class Room
@@ -8,4 +7,10 @@ public class Room
     public int y;
 
     public int[] walls;
+
+    public bool blocked;
+
+    public bool start;
+
+    public int type;
 }
