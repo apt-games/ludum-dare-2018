@@ -29,16 +29,5 @@ public class GameController : MonoBehaviour
         PlayerController.MoveAllPlayersTo(room);
 
         room.SetVisited(true);
-
-        CheckIfDeath(room.Model.type);
-    }
-
-    private void CheckIfDeath(int type)
-    {
-        if (type == 1)
-        {
-            // death room
-
-        }
     }
 }
