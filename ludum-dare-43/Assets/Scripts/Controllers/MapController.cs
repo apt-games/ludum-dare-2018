@@ -26,7 +26,8 @@ public class MapController : MonoBehaviour
             _rooms.Add(spawned);
         }
 
-        Current = _rooms[0];
+        // initial;
+        WalkToRoom(_rooms[0]);
     }
 
     private RoomBehaviour CreateRoom(Room room)
@@ -42,10 +43,15 @@ public class MapController : MonoBehaviour
     {
         if (CanMoveToRoom(room.Model))
         {
-            Current = room;
-            RoomSelected?.Invoke(room);
-            room.SetVisited(true);
+            WalkToRoom(room);
         }
+    }
+
+    private void WalkToRoom(RoomBehaviour room)
+    {
+        Current = room;
+        RoomSelected?.Invoke(room);
+        room.SetVisited(true);
     }
 
     private bool CanMoveToRoom(Room room)

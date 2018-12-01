@@ -5,12 +5,13 @@ public class RoomBehaviour : MonoBehaviour
 {
     public event Action<RoomBehaviour> Selected;
 
-    public WallBehaviour[] Walls = new WallBehaviour[4];
+    public GameObject VisibilityBlocker;
 
-    public bool Visited;
+    public WallBehaviour[] Walls = new WallBehaviour[4];
+    
     public Room Model;
 
-    private void Start()
+    private void Awake()
     {
         SetVisited(false);
     }
@@ -26,7 +27,7 @@ public class RoomBehaviour : MonoBehaviour
 
     public void SetVisited(bool visited)
     {
-        Visited = visited;
+        VisibilityBlocker.SetActive(!visited);
     }
 
     public void SetModel(Room room)
