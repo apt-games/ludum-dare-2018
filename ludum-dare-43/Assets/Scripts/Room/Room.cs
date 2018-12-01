@@ -12,5 +12,11 @@ public class Room
 
     public bool start;
 
-    public int type;
+    public RoomType type;
+}
+
+public enum RoomType
+{
+    Death = 0,
+    Normal = 1,
 }
