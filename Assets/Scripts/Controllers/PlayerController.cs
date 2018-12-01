@@ -5,11 +5,20 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
-    public List<CharacterBehaviour> Players;
+    public CharacterBehaviour CharacterPrefab;
 
-    private void Awake()
+    public List<CharacterBehaviour> Players { get; } = new List<CharacterBehaviour>();
+
+    public void Init(RoomBehaviour room)
     {
+        transform.position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
+        Spawn();
+    }
 
+    private void Spawn()
+    {
+        var player = Instantiate(CharacterPrefab, transform);
+        Players.Add(player);
     }
 
     public void MoveAllPlayersTo(RoomBehaviour room)

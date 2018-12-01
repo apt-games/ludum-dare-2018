@@ -15,7 +15,9 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        WalkToRoom(MapController.Current);
+        CameraController.ShowRoom(MapController.Current);
+        PlayerController.Init(MapController.Current);
+        MapController.Current.SetVisited(true);
     }
 
     private void OnRoomSelected(RoomBehaviour room)
@@ -26,9 +28,7 @@ public class GameController : MonoBehaviour
     private void WalkToRoom(RoomBehaviour room)
     {
         MapController.Current = room;
-
-        CameraController.ShowRoom(room.transform);
-
+        CameraController.ShowRoom(room);
         PlayerController.MoveAllPlayersTo(room);
 
         room.SetVisited(true);
