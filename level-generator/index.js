@@ -1,4 +1,6 @@
+const path = require('path');
 const fs = require('fs');
+
 const SimplexNoise = require('simplex-noise');
 
 const simplex = new SimplexNoise();
@@ -189,33 +191,22 @@ function generate() {
 
 const grid = generate();
 
-fs.writeFile('./grid.json', JSON.stringify(grid, null, 2), 'utf8', err => {
+const gridFile = path.join(__dirname, 'output', 'grid.json');
+
+fs.writeFile(gridFile, JSON.stringify(grid, null, 2), 'utf8', err => {
   if (err) {
     console.log(err);
   } else {
-    console.log('wrote grid.json');
+    console.log(`wrote ${gridFile}`);
   }
 });
-fs.writeFile(
-  './cells.json',
-  JSON.stringify(
-    grid.cells.map(({ x, y, start, blocked, walls, type }) => ({
-      x,
-      y,
-      start,
-      blocked,
-      walls,
-      type,
-    })),
-    null,
-    2
-  ),
-  'utf8',
-  err => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('wrote cells.json');
-    }
+
+const cellsFile = path.join(__dirname, 'output', 'cells.json');
+
+fs.writeFile(cellsFile, JSON.stringify(grid.cells, null, 2), 'utf8', err => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(`wrote ${cellsFile}`);
   }
-);
+});
