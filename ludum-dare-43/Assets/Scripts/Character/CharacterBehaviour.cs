@@ -15,6 +15,9 @@ public class CharacterBehaviour : MonoBehaviour {
     public void MoveTo(Transform room)
     {
         Debug.Log("Moving character to " + room.position);
-        transform.position = new Vector3(room.position.x, room.position.y, transform.position.z);
+
+        var target = new Vector3(room.position.x, room.position.y, transform.position.z);
+
+        iTween.MoveTo(gameObject, target, 1f);
     }
 }

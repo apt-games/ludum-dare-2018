@@ -4,20 +4,22 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public MapController MapController;
+    public CameraController CameraController;
 
     public List<CharacterBehaviour> Players;
 
-	// Use this for initialization
-	void Start ()
+	private void Start ()
 	{
 	    MapController.RoomSelected += OnRoomSelected;
 	}
 
-    private void OnRoomSelected(RoomBehaviour obj)
+    private void OnRoomSelected(RoomBehaviour room)
     {
+        CameraController.ShowRoom(room.transform);
+
         foreach (var player in Players)
         {
-            player.MoveTo(obj.transform);
+            player.MoveTo(room.transform);
         }
     }
 }
