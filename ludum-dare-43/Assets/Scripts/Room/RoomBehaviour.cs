@@ -37,6 +37,9 @@ public class RoomBehaviour : MonoBehaviour
         Model = room;
 
         SetWalls(room.walls);
+
+        if (room.type == RoomType.Death)
+            Floor.material.color = Color.red;
     }
 
     private void SetWalls(int[] roomWalls)
