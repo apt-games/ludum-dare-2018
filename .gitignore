@@ -38,3 +38,7 @@ ehthumbs.db
 # VS Code generated #
 # ============ #
 .vscode/
+
+
+level-generator/output/*
+!level-generator/output/.gitkeep
