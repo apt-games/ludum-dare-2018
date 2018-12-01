@@ -11,19 +11,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Perfect DOS VGA 437 SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: -1149093990
   material: {fileID: 21734572642297276}
-  materialHashCode: 0
+  materialHashCode: 1611032273
   fontAssetType: 1
   m_fontInfo:
     Name: Perfect DOS VGA 437
     PointSize: 84
-    Scale: 0
+    Scale: 1
     CharacterCount: 97
     LineHeight: 84
     Baseline: 0
     Ascender: 63
-    CapHeight: 0
+    CapHeight: 52.5
     Descender: -21
     CenterLine: 0
     SuperscriptOffset: 63
@@ -33,7 +33,7 @@ MonoBehaviour:
     UnderlineThickness: 5.25
     strikethrough: 15.272727
     strikethroughThickness: 5.25
-    TabWidth: 0
+    TabWidth: 472.5
     Padding: 5
     AtlasWidth: 512
     AtlasHeight: 512
@@ -42,10 +42,10 @@ MonoBehaviour:
   - id: 32
     x: 6
     y: 517
-    width: 0
-    height: 0
+    width: 47.25
+    height: 84
     xOffset: 0
-    yOffset: 0
+    yOffset: 63
     xAdvance: 47.25
     scale: 1
   - id: 33
@@ -1039,9 +1039,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
