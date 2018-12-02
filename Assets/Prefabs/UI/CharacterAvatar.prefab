@@ -139,7 +139,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224579784951311848}
-  - component: {fileID: 114625616998843694}
   - component: {fileID: 95094238614021798}
   - component: {fileID: 114874050046789338}
   m_Layer: 0
@@ -212,7 +211,7 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1762916434777644}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 317d87db0ea22754b9ba827abe2df07c, type: 2}
   m_CullingMode: 0
@@ -386,6 +385,7 @@ MonoBehaviour:
   Ability: {fileID: 0}
   CharacterAvatar: {fileID: 0}
   Image: {fileID: 114518902234483216}
+  texture: {fileID: 0}
 --- !u!114 &114378993527382074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -494,19 +494,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114625616998843694
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1762916434777644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates: []
-  delegates: []
 --- !u!114 &114644415806387232
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -713,12 +700,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79ae22c53e36264780df1e3cbe665bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
   Actions: {fileID: 1136804228830244}
   Image: {fileID: 1288335972979138}
   AvatarName: {fileID: 1448527840933190}
   Character: {fileID: 0}
   CharacterAbilityPrefab: {fileID: 114233723544587068, guid: 6e77aca035033b5429cdc431173ea635,
     type: 2}
+  Selected: {fileID: 1035066705858342}
 --- !u!114 &114875648270100308
 MonoBehaviour:
   m_ObjectHideFlags: 1

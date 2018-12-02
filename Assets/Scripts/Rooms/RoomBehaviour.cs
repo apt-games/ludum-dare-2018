@@ -25,7 +25,6 @@ public class RoomBehaviour : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("clicked " + name);
             Selected?.Invoke(this);
         }
     }
