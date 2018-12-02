@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
     public List<CharacterBehaviour> Players { get; } = new List<CharacterBehaviour>();
