@@ -12,6 +12,8 @@ public class CharacterBehaviour : MonoBehaviour
 
     public bool IsAlive = true;
 
+    public RoomBehaviour OccupyingRoom;
+
     private void Awake ()
     {
         _animator = GetComponentInChildren<Animator>();
@@ -20,14 +22,24 @@ public class CharacterBehaviour : MonoBehaviour
         _agent.updateRotation = true;
     }
 
-    public void MoveTo(Transform room)
+    public void MoveTo(RoomBehaviour room)
     {
-        Debug.Log("Moving character to " + room.position);
+        var p = room.transform.position;
+        OccupyingRoom = room;
 
-        var target = new Vector3(room.position.x, room.position.y, transform.position.z);
+        Debug.Log("Moving character to " + p);
+
+        var target = new Vector3(p.x, p.y, transform.position.z);
 
         _agent.SetDestination(target);
         SetWalking(true);
+    }
+
+    public void UseAbility()
+    {
+        var ability = GetComponentInChildren<AbilityBehaviour>();
+        if (ability != null)
+            ability.UseAbility();
     }
 
     public void Die()
@@ -35,6 +47,7 @@ public class CharacterBehaviour : MonoBehaviour
         Debug.Log("Died");
         IsAlive = false;
         _animator.SetTrigger("die");
+        _agent.isStopped = true;
     }
 
     private void SetWalking(bool walking)
@@ -50,5 +63,4 @@ public class CharacterBehaviour : MonoBehaviour
             SetWalking(false);
         }
     }
-
 }

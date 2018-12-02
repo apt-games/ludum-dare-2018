@@ -18,6 +18,18 @@ public static class Factory
             throw new NullReferenceException("Failed to load " + path);
         }
     }
+    public static T LoadPrefab<T>(string path, Vector3 position, Transform parent)
+    {
+        try
+        {
+            return (GameObject.Instantiate(Resources.Load(path), position, Quaternion.identity, parent) as GameObject)
+                .GetComponent<T>();
+        }
+        catch
+        {
+            throw new NullReferenceException("Failed to load " + path);
+        }
+    }
 
     public static int RandomRotation => _rotations[Random.Range(0, _rotations.Length)];
 }

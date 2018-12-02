@@ -11,6 +11,7 @@ public class Room
     public bool blocked;
 
     public RoomType type;
+    public RoomItem item;
 }
 
 public enum RoomType
@@ -22,4 +23,10 @@ public enum RoomType
     UncertainSafe = 4,
     Death = 5,
     UncertainDeath = 6,
+}
+
+public enum RoomItem
+{
+    None = 0,
+    Person = 1,
 }

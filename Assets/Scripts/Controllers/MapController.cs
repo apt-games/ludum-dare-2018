@@ -17,8 +17,6 @@ public class MapController : MonoBehaviour
     // Use this for initialization
     public void InitiateMap()
     {
-        // var map = JsonUtility.FromJson<MapStructure>(json);
-
         Grid grid = GenerateMap(12);
 
         // foreach (var room in map.Rooms)
@@ -29,11 +27,12 @@ public class MapController : MonoBehaviour
                 x = cell._coord.x,
                 y = cell._coord.y,
                 walls = cell._walls,
-                type = (RoomType)cell._type
+                type = (RoomType)cell._type,
+                item = (RoomItem)cell._item
             };
 
             // spawn tiles as children
-            var spawned = RoomFactory.CreateRoom(room);
+            var spawned = RoomFactory.Create(room);
             spawned.transform.parent = transform;
             spawned.Selected += OnRoomClicked;
 
@@ -58,10 +57,12 @@ public class MapController : MonoBehaviour
 
         Grid grid = new Grid(size);
 
-        Cell current = grid.PickRandomCell();
-        // let current = grid.cells[0];
-        current._type = 1;
-        current._visited = true;
+        Cell start = grid.PickRandomCell();
+        start._type = RoomType.Start;
+        start._item = RoomItem.None;
+        start._visited = true;
+
+        Cell current = start;
 
         do
         {
@@ -97,8 +98,9 @@ public class MapController : MonoBehaviour
             }
         }
 
-        Cell endCell = grid.PickRandomCell();
-        endCell._type = 2;
+        Cell exit = grid.PickRandomCell();
+        exit._type = RoomType.Exit;
+        exit._item = RoomItem.None;
 
         return grid;
     }
@@ -172,7 +174,7 @@ public class Grid
         return filteredCells[i];
     }
 
-    public Cell GetRandomCellByType(int type)
+    public Cell GetRandomCellByType(RoomType type)
     {
         List<Cell> filteredCells = _cells.FindAll(cell => cell._type == type);
 
@@ -197,7 +199,8 @@ public class Cell
     public bool _start;
     public bool _exit;
 
-    public int _type;
+    public RoomType _type;
+    public RoomItem _item;
 
     public bool _visited;
 
@@ -227,10 +230,20 @@ public class Cell
 
         bool blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
 
-        List<int> types = new List<int>() { 3, 4, 5, 6 };
-        int weighted = WeightedRandom(new List<int>() { 10, 40, 10, 40 });
+        List<RoomType> types = new List<RoomType>() {
+            RoomType.Safe,
+            RoomType.UncertainSafe,
+            RoomType.Death,
+            RoomType.UncertainDeath,
+        };
+        int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 40, 10, 40 });
 
-        _type = blocked ? 0 : types[weighted];
+        _type = blocked ? 0 : types[weightedTypeIndex];
+
+        List<RoomItem> items = new List<RoomItem>() { RoomItem.None, RoomItem.Person };
+        int weightedItemIndex = WeightedRandom(new List<int>() { 85, 15 });
+
+        _item = blocked ? 0 : items[weightedItemIndex];
 
         _visited = false;
     }
@@ -253,7 +266,7 @@ public class Cell
         return 0;
     }
 
-    public void SetType(int type)
+    public void SetType(RoomType type)
     {
         _type = type;
     }

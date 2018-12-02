@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
     public CameraController CameraController;
     public PlayerController PlayerController;
     public MapController MapController;
+
+    public RoomBehaviour SelectedRoom;
+
+    public static GameController Instance => GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
 
     private void Awake()
     {
@@ -22,15 +27,63 @@ public class GameController : MonoBehaviour
 
     private void OnRoomSelected(RoomBehaviour room)
     {
-        WalkToRoom(room);
+        SelectedRoom = room;
+
+        if (_toggleAbility)
+        {
+            PlayerController.SelectedCharacter.UseAbility();
+        }
+        else
+        {
+            MapController.Current = room;
+            CameraController.ShowRoom(room);
+            room.SetVisited(true);
+
+            if (_toggleAll)
+                PlayerController.MovePartyTo(room);
+            else
+                PlayerController.MoveSelectedCharacterTo(room);
+
+        }
     }
 
-    private void WalkToRoom(RoomBehaviour room)
-    {
-        MapController.Current = room;
-        CameraController.ShowRoom(room);
-        PlayerController.MoveAllPlayersTo(room);
+    private bool _toggleAbility;
+    private bool _toggleAll;
 
-        room.SetVisited(true);
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            _toggleAbility = false;
+            _toggleAll = false;
+            SelectCharacter();
+            Debug.Log($"Selected single");
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            _toggleAbility = false;
+            _toggleAll = true;
+            SelectCharacter();
+            Debug.Log($"Selected party");
+        }
+
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            _toggleAbility = !_toggleAbility;
+
+            Debug.Log($"Ability {_toggleAbility}");
+        }
+    }
+
+    private void SelectCharacter()
+    {
+        // select first which is not current
+        PlayerController.SelectedCharacter = PlayerController.Players.FirstOrDefault(c => c.IsAlive && c != PlayerController.SelectedCharacter);
+        if (PlayerController.SelectedCharacter != null)
+        {
+            MapController.Current = PlayerController.SelectedCharacter.OccupyingRoom;
+            CameraController.ShowRoom(PlayerController.SelectedCharacter.OccupyingRoom);
+        }
     }
 }
