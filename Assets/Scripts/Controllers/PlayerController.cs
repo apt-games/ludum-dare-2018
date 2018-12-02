@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
     public List<CharacterBehaviour> Players { get; } = new List<CharacterBehaviour>();
@@ -32,6 +32,15 @@ public class PlayerController : MonoBehaviour
     public void MoveSelectedCharacterTo(RoomBehaviour room)
     {
         SelectedCharacter?.MoveTo(room);
+
+        StartCoroutine(WaitForSafe());
+    }
+
+    private IEnumerator WaitForSafe()
+    {
+        yield return new WaitForSeconds(2);
+        if (SelectedCharacter != null && SelectedCharacter.IsAlive)
+            MovePartyTo(SelectedCharacter.OccupyingRoom);
     }
 
     public void MovePartyTo(RoomBehaviour room)

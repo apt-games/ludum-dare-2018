@@ -15,7 +15,7 @@ public static class CharacterFactory
         character.CharacterInfo = CharacterInfoGenerator.getCharacterInfo();
 
         var ability = AbilityFactory.Create();
-        ability.transform.SetParent(character.transform, false);
+        character.AddAbility(ability);
 
         return character;
     }

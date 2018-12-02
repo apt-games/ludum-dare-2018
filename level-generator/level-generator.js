@@ -165,7 +165,7 @@ function generate(size = 10) {
     }
   }
 
-  for (let i = 0; i < grid.cells.length; i++) {
+  for (let i = 0; i < grid.cells.length; i += 3) {
     // const cell = grid.pickRandomCell();
     const cell = grid.cells[i];
 
