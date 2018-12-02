@@ -18,6 +18,9 @@ public class StoneAbility : BaseAbility
 
         iTween.MoveTo(stone, target, 2f);
 
+        foreach (Transform child in stone.transform)
+            iTween.RotateBy(child.gameObject, new Vector3(0, 0, 2), 2f);
+
         base.Use();
     }
 }

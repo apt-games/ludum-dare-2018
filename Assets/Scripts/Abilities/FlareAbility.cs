@@ -18,6 +18,9 @@ public class FlareAbility : BaseAbility
 
         iTween.MoveTo(flare, target, 2f);
 
+        foreach (Transform child in flare.transform)
+            iTween.RotateBy(child.gameObject, new Vector3(0, 0, 2), 2f);
+
         base.Use();
     }
 }
