@@ -398,4 +398,5 @@ MonoBehaviour:
   CameraController: {fileID: 519420030}
   PlayerController: {fileID: 367920721}
   MapController: {fileID: 1781157867}
+  UIController: {fileID: 0}
   SelectedRoom: {fileID: 0}

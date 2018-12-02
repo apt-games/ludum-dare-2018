@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 719ec09291914b24d82f68b8f1c05b38, type: 3}
+  m_Name: female02
+  m_EditorClassIdentifier: 
+  Avatar: {fileID: 21300000, guid: 592a3b5b62abea24a85a2e2184a096ab, type: 3}
+  Sex: 1
+  Colors:
+    Head: {r: 1, g: 0, b: 0.8116398, a: 1}
+    Body: {r: 1, g: 0.45740873, b: 0, a: 1}
+    Legs: {r: 0.3920133, g: 0, b: 0.94509804, a: 1}

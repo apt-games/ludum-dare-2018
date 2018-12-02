@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
         CameraController.ShowRoom(MapController.Current);
         PlayerController.Init(MapController.Current);
         MapController.Current.SetVisited(true);
-        UIController.UpdateUI();
+        UIController?.UpdateUI();//DO NOT COMMIT
     }
 
     private void OnRoomSelected(RoomBehaviour room)

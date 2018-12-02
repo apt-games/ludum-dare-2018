@@ -7,11 +7,23 @@ using UnityEngine.AI;
 public class CharacterBehaviour : MonoBehaviour
 {
     public RoomBehaviour OccupyingRoom { get; set; }
-    public CharacterInfo CharacterInfo { get; set; }
+
+    public CharacterInfo CharacterInfo
+    {
+        get { return _characterInfo; }
+        set
+        {
+            if (_characterInfo != value)
+            {
+                _characterInfo = value;
+                SetColors(_characterInfo.colors);
+            }
+        }
+    }
+
     public List<AbilityBehaviour> Abilities { get; } = new List<AbilityBehaviour>();
 
     public CharacterBody CharacterBody;
-    public CharacterColors CharacterColors;
 
     private NavMeshAgent _agent;
     private Animator _animator;
@@ -20,6 +32,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
+    private CharacterInfo _characterInfo;
 
     private void Awake ()
     {
@@ -32,8 +45,6 @@ public class CharacterBehaviour : MonoBehaviour
     private void Start()
     {
         Abilities.AddRange(GetComponentsInChildren<AbilityBehaviour>());
-
-        SetColors(CharacterColors);
     }
 
     private void Update()
@@ -99,12 +110,4 @@ public class CharacterBehaviour : MonoBehaviour
         _isWalking = walking;
         _animator.SetBool("walking", _isWalking);
     }
-}
-
-[Serializable]
-public class CharacterColors
-{
-    public Color Head;
-    public Color Body;
-    public Color Legs;
 }

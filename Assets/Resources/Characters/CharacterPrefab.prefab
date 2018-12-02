@@ -321,10 +321,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterBody: {fileID: 114346949608110860}
-  CharacterColors:
-    Head: {r: 1, g: 0, b: 0, a: 1}
-    Body: {r: 0.039849162, g: 1, b: 0, a: 1}
-    Legs: {r: 0.98100656, g: 0.990566, b: 0, a: 1}
 --- !u!114 &114346949608110860
 MonoBehaviour:
   m_ObjectHideFlags: 1
