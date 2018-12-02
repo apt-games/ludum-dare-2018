@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     public void AddToParty(CharacterBehaviour character)
     {
+        character.transform.SetParent(transform);
         Players.Add(character);
     }
 

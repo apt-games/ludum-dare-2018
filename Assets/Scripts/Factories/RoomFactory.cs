@@ -76,7 +76,7 @@ namespace Assets.Scripts.Factories
                     var character = CharacterFactory.Create(roomBehaviour.transform.position,
                         roomBehaviour.transform);
                     character.OccupyingRoom = roomBehaviour;
-                    character.SetDead(model.type.IsOneOf(RoomType.UncertainDeath, RoomType.Death));
+                    //character.SetDead(model.type.IsOneOf(RoomType.UncertainDeath, RoomType.Death));
                     roomBehaviour.AddItem(character);
                     break;
                 default:

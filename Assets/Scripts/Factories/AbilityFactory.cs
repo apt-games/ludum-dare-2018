@@ -12,6 +12,9 @@ public static class AbilityFactory
     {
         var ability = Factory.LoadPrefab<AbilityBehaviour>(_abilities[Random.Range(0, _abilities.Length)]);
 
+        // add more random uses for ability
+        ability.Uses = Random.Range(0, 3);
+
         // fill with random info
 
         return ability;

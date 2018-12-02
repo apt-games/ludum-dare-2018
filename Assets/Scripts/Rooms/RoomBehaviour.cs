@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class RoomBehaviour : MonoBehaviour
 {
     public event Action<RoomBehaviour> Selected;
 
-    public GameObject VisibilityBlocker;
+    public SpriteRenderer VisibilityBlocker;
 
     public WallBehaviour[] Walls = new WallBehaviour[4];
     
@@ -14,11 +15,15 @@ public class RoomBehaviour : MonoBehaviour
 
     public Renderer Floor;
 
+    public Color SemiVisibleColor = Color.gray;
+
     public List<object> Items { get; } = new List<object>();
+
+    public RoomVisibilityStatus Visibility { get; private set; } = RoomVisibilityStatus.Hidden;
 
     private void Awake()
     {
-        SetVisited(false);
+        VisibilityBlocker.gameObject.SetActive(true);
     }
 
     public void OnMouseOver()
@@ -29,19 +34,40 @@ public class RoomBehaviour : MonoBehaviour
         }
     }
 
-    public void SetVisited(bool visited)
+    public void SetDiscovered()
     {
-        VisibilityBlocker.SetActive(!visited);
+        if (Visibility == RoomVisibilityStatus.Hidden)
+        {
+            Visibility = RoomVisibilityStatus.Discovered;
+            StartCoroutine(AnimateColorToSemiVisible());
+        }
+    }
+
+    public IEnumerator AnimateColorToSemiVisible()
+    {
+        float ElapsedTime = 0.0f;
+        float TotalTime = 0.5f;
+        while (ElapsedTime < TotalTime)
+        {
+            ElapsedTime += Time.deltaTime;
+            VisibilityBlocker.color = Color.Lerp(Color.black, SemiVisibleColor, (ElapsedTime / TotalTime));
+            yield return null;
+        }
+    }
+
+    public void SetVisited()
+    {
+        if (Visibility != RoomVisibilityStatus.Visited)
+        {
+            Visibility = RoomVisibilityStatus.Visited;
+            VisibilityBlocker.gameObject.SetActive(false);
+        }
     }
 
     public void SetModel(Room room)
     {
         Model = room;
-
         SetWalls(room.walls);
-
-        if (room.type == RoomType.Death)
-            Floor.material.color = Color.red;
     }
 
     private void SetWalls(int[] roomWalls)
@@ -60,15 +86,25 @@ public class RoomBehaviour : MonoBehaviour
 
     public bool ContainsCharacter(out CharacterBehaviour character)
     {
+        character = null;
+
         foreach (var item in Items)
         {
             var behaviour = item as CharacterBehaviour;
             if (behaviour == null) continue;
             character = behaviour;
-            return true;
         }
 
-        character = null;
+        if (character != null)
+        {
+            Items.Remove(character);
+            return true;
+        }
         return false;
     }
+}
+
+public enum RoomVisibilityStatus
+{
+    Hidden, Discovered, Visited,
 }

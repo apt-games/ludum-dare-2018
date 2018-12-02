@@ -301,7 +301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1752052213796044
 GameObject:
   m_ObjectHideFlags: 1
@@ -1431,7 +1431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d08c2fe65f221a4da1f7abe8d553a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VisibilityBlocker: {fileID: 1752040798533158}
+  VisibilityBlocker: {fileID: 212057978732158706}
   Walls:
   - {fileID: 114404947231027308}
   - {fileID: 114732401914710840}
@@ -1445,6 +1445,7 @@ MonoBehaviour:
     type: 0
     item: 0
   Floor: {fileID: 23294206871933080}
+  SemiVisibleColor: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
 --- !u!114 &114404947231027308
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1509,7 +1510,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 495b0bb56bd640140bf57ab56a87736c, type: 3}
-  m_Color: {r: 0.03448736, g: 0.042096823, b: 0.047169805, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

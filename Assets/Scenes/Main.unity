@@ -608,7 +608,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 833907839}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1185,6 +1185,8 @@ MonoBehaviour:
   PlayerController: {fileID: 367920721}
   CharacterAvatarPrefab: {fileID: 114874050046789338, guid: 48fd3e17d3f424d41a21af216a82fddf,
     type: 2}
+  hotSpot: {x: 0, y: 0}
+  cursorMode: 1
 --- !u!4 &1918072529
 Transform:
   m_ObjectHideFlags: 0

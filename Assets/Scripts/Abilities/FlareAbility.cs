@@ -19,7 +19,7 @@ public class FlareAbility : BaseAbility
         var flare = Instantiate(Prefab, transform.position, Quaternion.identity);
 
         var room = GameController.Instance.SelectedRoom;
-        room.SetVisited(true);
+        room.SetVisited();
 
         var target = room.transform.position + new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
 
