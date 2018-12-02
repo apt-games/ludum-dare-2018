@@ -39,3 +39,5 @@ ehthumbs.db
 # ============ #
 .vscode/
 
+dist
+node_modules

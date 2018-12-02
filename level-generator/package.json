@@ -2,24 +2,14 @@
   "name": "ludum-dare-2018",
   "version": "0.1.0",
   "description": "Ludum Dare 2018",
+  "author": "Magnus Bergman <magnus@apt.no>",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel index.html"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/apt-games/ludum-dare-2018.git"
-  },
-  "author": "Magnus Bergman <magnus@apt.no>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/apt-games/ludum-dare-2018/issues"
-  },
-  "homepage": "https://github.com/apt-games/ludum-dare-2018#readme",
   "dependencies": {
-    "faker": "^4.1.0",
-    "lodash": "^4.17.11",
     "p5": "^0.7.2",
     "parcel": "^1.10.3",
     "simplex-noise": "^2.4.0"
