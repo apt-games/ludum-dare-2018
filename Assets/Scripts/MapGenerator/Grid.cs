@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,7 +20,9 @@ public class Grid
         {
             for (int x = 0; x < _size.x; x++)
             {
-                _cells.Add(new Cell(x, y, _size, seed));
+                Cell cell = new Cell(x, y, _size, seed);
+
+                _cells.Add(cell);
             }
         }
     }
@@ -93,6 +96,7 @@ public class Cell
         _exit = false;
 
         bool blocked = Mathf.PerlinNoise((float)(seed + _coord.x * 0.6), (float)(seed + _coord.y * 0.6)) > 0.52;
+        // bool blocked = false;
 
         List<RoomType> types = new List<RoomType>() {
             RoomType.Safe,
@@ -100,7 +104,7 @@ public class Cell
             RoomType.Death,
             RoomType.UncertainDeath,
         };
-        int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 50, 10, 30 });
+        int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 55, 10, 25 });
 
         // Debug.Log("X: " + _coord.x + ", Y: " + _coord.y + ", blocked: " + blocked);
 
@@ -219,6 +223,35 @@ public class Cell
         int i = Random.Range(0, neighbors.Count);
 
         return neighbors[i];
+    }
+
+    public void AddWallsTo(Cell cell)
+    {
+        int x = _coord.x - cell._coord.x;
+
+        if (x == 1)
+        {
+            _walls[3] = 1;
+            cell._walls[1] = 1;
+        }
+        else if (x == -1)
+        {
+            _walls[1] = 1;
+            cell._walls[3] = 1;
+        }
+
+        int y = _coord.y - cell._coord.y;
+
+        if (y == 1)
+        {
+            _walls[0] = 1;
+            cell._walls[2] = 1;
+        }
+        else if (y == -1)
+        {
+            _walls[2] = 1;
+            cell._walls[0] = 1;
+        }
     }
 
     public void RemoveWallsTo(Cell cell)

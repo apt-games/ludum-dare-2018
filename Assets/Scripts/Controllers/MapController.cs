@@ -130,8 +130,6 @@ public class MapController : MonoBehaviour
 
     public Grid GenerateMap(int size)
     {
-        Queue<Cell> stack = new Queue<Cell>();
-
         Grid grid = new Grid(size);
 
         //Cell start = grid.PickRandomCell();
@@ -144,43 +142,6 @@ public class MapController : MonoBehaviour
 
         start._type = RoomType.Start;
         start._item = RoomItem.None;
-        start._visited = true;
-
-        Cell current = start;
-
-        do
-        {
-            Cell next = current.GetRandomAvailableNeighbor(grid);
-
-            if (next != null)
-            {
-                next._visited = true;
-
-                stack.Enqueue(current);
-
-                current.RemoveWallsTo(next);
-
-                current = next;
-            }
-            else
-            {
-                Cell prev = stack.Dequeue();
-
-                current = prev;
-            }
-        } while (stack.Count > 0);
-
-        //foreach (var cell in grid._cells)
-        //{
-        //    if (cell._type == 0) continue;
-
-        //    Cell neighbor = cell.GetRandomNeighbor(grid);
-
-        //    if (neighbor != null)
-        //    {
-        //        cell.RemoveWallsTo(neighbor);
-        //    }
-        //}
 
         //Cell exit = grid.PickRandomCell();
 
@@ -270,15 +231,18 @@ public class MapController : MonoBehaviour
 
         Debug.Log("SEARCHED " + searchCount + " nodes.");
 
-        List<Node> optimalPath = new List<Node>();
-
-        Node n = endNode._parent;
-        Node p = null;
-
-        while (n != null)
+        List<Node> optimalPath = new List<Node>
         {
-            optimalPath.Add(n);
-            n = n._parent;
+            endNode
+        };
+
+        Node nextNode = endNode._parent;
+        Node prevNode = null;
+
+        while (nextNode != null)
+        {
+            optimalPath.Add(nextNode);
+            nextNode = nextNode._parent;
         }
 
         Debug.Log("There's " + optimalPath.Count + " steps between start and exit");
@@ -297,18 +261,69 @@ public class MapController : MonoBehaviour
                     RoomType.UncertainDeath,
                 };
 
-                int weightedTypeIndex = cell.WeightedRandom(new List<int>() { 10, 50, 10, 30 });
+                int weightedTypeIndex = cell.WeightedRandom(new List<int>() { 10, 55, 10, 25 });
 
                 // Make two first tiles in optimal path safe.
                 cell._type = i >= optimalPath.Count - 3 ? RoomType.Safe : types[weightedTypeIndex];
             }
 
-            if (p != null)
+            if (prevNode != null)
             {
-                cell.RemoveWallsTo(p._cell);
+                cell.RemoveWallsTo(prevNode._cell);
             }
 
-            p = node;
+            prevNode = node;
+        }
+
+        Queue<Cell> stack = new Queue<Cell>();
+
+        Cell current = start;
+        current._visited = true;
+
+        do
+        {
+            Cell next = current.GetRandomNeighborNotVisited(grid);
+
+            if (next != null)
+            {
+                next._visited = true;
+
+                stack.Enqueue(current);
+
+                current.RemoveWallsTo(next);
+
+                current = next;
+            }
+            else
+            {
+                Cell prev = stack.Dequeue();
+
+                current = prev;
+            }
+        } while (stack.Count > 0);
+
+        foreach (var cell in grid._cells)
+        {
+            if (cell._type == RoomType.Blocked)
+            {
+                List<Cell> neighbors = cell.GetNeighbors(grid);
+
+                foreach (Cell neighbor in neighbors)
+                {
+                    cell.AddWallsTo(neighbor);
+                }
+
+                // Debug.Log("CELL: " + cell._coord.x + "," + cell._coord.y + ", type: " + cell._type);
+            }
+            else
+            {
+                Cell neighbor = cell.GetRandomNeighbor(grid);
+
+                if (neighbor._type != RoomType.Blocked)
+                {
+                    cell.RemoveWallsTo(neighbor);
+                }
+            }
         }
 
         return grid;
