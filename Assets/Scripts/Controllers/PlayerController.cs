@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     public CharacterBehaviour SelectedCharacter;
 
+    private RoomBehaviour _targetRoom;
+
     public void Init(RoomBehaviour room)
     {
         Spawn(room);
@@ -36,15 +38,16 @@ public class PlayerController : MonoBehaviour
     public void MoveSelectedCharacterTo(RoomBehaviour room)
     {
         SelectedCharacter?.MoveTo(room);
+        _targetRoom = room;
 
         StartCoroutine(WaitForSafe());
     }
 
     private IEnumerator WaitForSafe()
     {
-        yield return new WaitForSeconds(2);
-        if (SelectedCharacter != null && SelectedCharacter.IsAlive)
-            MovePartyTo(SelectedCharacter.OccupyingRoom);
+        yield return new WaitForSeconds(3);
+        if (_targetRoom != null)
+            MovePartyTo(_targetRoom);
     }
 
     public void MovePartyTo(RoomBehaviour room)
