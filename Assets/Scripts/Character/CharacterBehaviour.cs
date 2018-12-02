@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -14,12 +15,21 @@ public class CharacterBehaviour : MonoBehaviour
 
     public RoomBehaviour OccupyingRoom;
 
+    public CharacterInfo CharacterInfo;
+
+    public List<AbilityBehaviour> Abilities { get; } = new List<AbilityBehaviour>();
+
     private void Awake ()
     {
         _animator = GetComponentInChildren<Animator>();
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = true;
+    }
+
+    private void Start()
+    {
+        Abilities.AddRange(GetComponentsInChildren<AbilityBehaviour>());
     }
 
     public void MoveTo(RoomBehaviour room)

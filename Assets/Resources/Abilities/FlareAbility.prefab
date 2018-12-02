@@ -69,6 +69,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Uses: 2
+  Ability: {fileID: 114620740405760780}
 --- !u!114 &114620740405760780
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -7,6 +7,8 @@ public class AbilityBehaviour : MonoBehaviour
 
     public int Uses;
 
+    public BaseAbility Ability;
+
     public void UseAbility()
     {
         if (Uses >= 0)
