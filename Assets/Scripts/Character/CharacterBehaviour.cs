@@ -12,7 +12,7 @@ public class CharacterBehaviour : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
     private bool _isWalking;
-    public bool IsAlive = true;
+    public bool IsAlive { get; private set; } = true;
 
     Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
@@ -64,6 +64,13 @@ public class CharacterBehaviour : MonoBehaviour
         IsAlive = false;
         _animator.SetTrigger("die");
         _agent.isStopped = true;
+    }
+
+    public void SetDead(bool dead)
+    {
+        IsAlive = !dead;
+        if (dead)
+            _animator.SetTrigger("die");
     }
 
     public void AddAbility(AbilityBehaviour ability)

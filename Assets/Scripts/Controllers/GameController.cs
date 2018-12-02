@@ -46,6 +46,19 @@ public class GameController : MonoBehaviour
             else
                 PlayerController.MoveSelectedCharacterTo(room);
 
+            CharacterBehaviour character;
+            if (room.ContainsCharacter(out character))
+            {
+                if (character.IsAlive)
+                {
+                    PlayerController.AddToParty(character);
+                    // TODO: Update UI here
+                }
+                else
+                {
+                    // TODO: Glow Revive ability
+                }
+            }
         }
     }
 

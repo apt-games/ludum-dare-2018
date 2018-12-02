@@ -66,6 +66,21 @@ namespace Assets.Scripts.Factories
                     throw new ArgumentOutOfRangeException();
             }
 
+            switch (model.item)
+            {
+                case RoomItem.None:
+                    break;
+                case RoomItem.Person:
+                    var character = CharacterFactory.CreateInitial(roomBehaviour.transform.position,
+                        roomBehaviour.transform);
+                    character.OccupyingRoom = roomBehaviour;
+                    character.SetDead(model.type.IsOneOf(RoomType.UncertainDeath, RoomType.Death));
+                    roomBehaviour.AddItem(character);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             return roomBehaviour;
         }
     }

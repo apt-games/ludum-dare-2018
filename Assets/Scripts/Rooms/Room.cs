@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 [Serializable]
 public class Room
@@ -29,4 +30,12 @@ public enum RoomItem
 {
     None = 0,
     Person = 1,
+}
+
+public static class EnumExtensions
+{
+    public static bool IsOneOf(this RoomType enumeration, params RoomType[] enums)
+    {
+        return enums.Contains(enumeration);
+    }
 }
