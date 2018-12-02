@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Factories
@@ -23,9 +22,9 @@ namespace Assets.Scripts.Factories
 
         public static RoomBehaviour CreateRoom(global::Room model)
         {
-            var obj = Resources.Load("Rooms/RoomPrefab");
+            var prefab = Resources.Load("Rooms/RoomPrefab");
 
-            var roomBehaviour = (Object.Instantiate(obj, new Vector3(model.x, -model.y, 0), Quaternion.identity) as GameObject).GetComponent<RoomBehaviour>();
+            var roomBehaviour = (GameObject.Instantiate(prefab, new Vector3(model.x, -model.y, 0), Quaternion.identity) as GameObject).GetComponent<RoomBehaviour>();
             roomBehaviour.name = $"Room ({model.x},{model.y})";
             roomBehaviour.SetModel(model);
 
@@ -51,6 +50,22 @@ namespace Assets.Scripts.Factories
                 case RoomType.Death:
                     roomBehaviour.Floor.material = Resources.Load<Material>(_floors[2]);
                     roomBehaviour.Floor.transform.Rotate(Vector3.up, 180);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            switch (model.type)
+            {
+                case RoomType.Blocked:
+                case RoomType.Start:
+                case RoomType.Exit:
+                case RoomType.Safe:
+                case RoomType.UncertainSafe:
+                    break;
+                case RoomType.UncertainDeath:
+                case RoomType.Death:
+                    // add trap
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

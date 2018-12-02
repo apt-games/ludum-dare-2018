@@ -18,15 +18,6 @@ public class RoomBehaviour : MonoBehaviour
         SetVisited(false);
     }
 
-    public void RoomTriggeredBy(CharacterBehaviour character)
-    {
-        if (Model.type == RoomType.Death)
-        {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerController
-                .KillCharacter(character);
-        }
-    }
-
     public void OnMouseOver()
     {
         if (Input.GetMouseButtonUp(0))
