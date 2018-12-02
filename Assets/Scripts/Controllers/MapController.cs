@@ -59,9 +59,9 @@ public class MapController : MonoBehaviour
 
         //Cell start = grid.PickRandomCell();
 
-        bool startAtXEdge = Random.Range(0, 1) == 1;
-        int startX = startAtXEdge ? Random.Range(0, 1) == 1 ? 0 : size - 1 : Random.Range(1, size - 2);
-        int startY = startAtXEdge ? Random.Range(1, size - 2) : Random.Range(0, 1) == 1 ? 0 : size - 1;
+        bool startAtXEdge = Random.Range(0, 2) == 1;
+        int startX = startAtXEdge ? Random.Range(0, 2) == 1 ? 0 : size - 1 : Random.Range(1, size - 1);
+        int startY = startAtXEdge ? Random.Range(1, size - 1) : Random.Range(0, 2) == 1 ? 0 : size - 1;
 
         Cell start = grid.GetCellAtCoord(new Vector2Int(startX, startY));
 
