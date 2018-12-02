@@ -39,9 +39,6 @@ public class UIController : MonoBehaviour {
 	public void UpdateUI () {
         _activeCharacterAbility = null;
 
-
-
-
         foreach (var characterAvatar in _characterAvatars) {
             Destroy(characterAvatar.gameObject);
         }
@@ -119,6 +116,22 @@ public class UIController : MonoBehaviour {
         Cursor.SetCursor(_walkCursor, hotSpot, cursorMode);
     }
 
+    public void ResetSelection() {
+        if (_activeCharacterAbility != null) {
+            _activeCharacterAbility.SetSelected(false);
+            _activeCharacterAbility = null;
+            GameController.Instance.SetAbilityActive(false);
+        }
+
+        if (_activeCharacterAvatar != null) {
+            GameController.Instance.SelectCharacter(null);
+            _activeCharacterAvatar.SetSelected(false);
+            _activeCharacterAvatar = null;
+        }
+
+        Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
+    }
+
     public void OnAbilityClick (CharacterAbility characterAbility) {
         if (_activeCharacterAbility == null || characterAbility != _activeCharacterAbility) {
             if (_activeCharacterAbility != null) {
@@ -145,6 +158,12 @@ public class UIController : MonoBehaviour {
 
         if (_activeCharacterAbility != null) {
             Cursor.SetCursor(_activeCharacterAbility.texture, new Vector2(16, 16), cursorMode);
+        }
+    }
+
+    public void Update() {
+        if (Input.GetMouseButtonDown(1) && (_activeCharacterAvatar != null || _activeCharacterAbility)) {
+            ResetSelection();
         }
     }
 }

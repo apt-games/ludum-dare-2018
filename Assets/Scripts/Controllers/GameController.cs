@@ -40,6 +40,7 @@ public class GameController : MonoBehaviour
         if (_toggleAbility)
         {
             PlayerController.SelectedCharacter.UseAbility();
+            SelectCharacter(null);
         }
         else
         {
