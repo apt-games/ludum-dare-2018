@@ -63,7 +63,8 @@ class Cell {
 
     const blocked = simplex.noise2D(x * 0.1, y * 0.1) > 0.45;
 
-    this.type = blocked ? 0 : [3, 4, 5, 6][weightedRandom([10, 40, 10, 40])];
+    this.type = blocked ? 0 : [3, 4, 5, 6][weightedRandom([10, 50, 10, 30])];
+    this.item = blocked ? 0 : [0, 1, 2][weightedRandom([85, 15])];
 
     this.visited = false;
   }
@@ -138,10 +139,13 @@ function generate(size = 10) {
 
   const grid = new Grid(size, size);
 
-  let current = grid.pickRandomCell();
-  // let current = grid.cells[0];
-  current.type = 1;
-  current.visited = true;
+  const start = grid.pickRandomCell();
+  // let start = grid.cells[0];
+  start.type = 1;
+  start.item = 0;
+  start.visited = true;
+
+  let current = start;
 
   while (current) {
     const next = current.getRandomAvailableNeighbor(grid);
@@ -182,8 +186,9 @@ function generate(size = 10) {
     // }
   }
 
-  const endCell = grid.pickRandomCell();
-  endCell.type = 2;
+  const exit = grid.pickRandomCell();
+  exit.type = 2;
+  exit.item = 0;
 
   return grid;
 }

@@ -94,11 +94,27 @@ window.draw = () => {
         break;
     }
 
-    if (cell.blocked) {
+    noStroke();
+    rect(cell.x * scale, cell.y * scale, scale, scale);
+
+    switch (cell.item) {
+      case 0: // None
+        fill(255, 0);
+        break;
+
+      case 1: // Person
+        fill(255);
+        break;
+
+      case 2: // Item ?
+        fill(255, 0, 255);
+        break;
+
+      default:
+        break;
     }
 
     noStroke();
-
-    rect(cell.x * scale, cell.y * scale, scale, scale);
+    ellipse(cell.x * scale + scale * 0.5, cell.y * scale + scale * 0.5, scale * 0.25);
   }
 };
