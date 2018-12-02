@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class RoomBehaviour : MonoBehaviour
 {
     public event Action<RoomBehaviour> Selected;
 
-    public GameObject VisibilityBlocker;
+    public SpriteRenderer VisibilityBlocker;
 
     public WallBehaviour[] Walls = new WallBehaviour[4];
     
@@ -14,11 +15,15 @@ public class RoomBehaviour : MonoBehaviour
 
     public Renderer Floor;
 
+    public Color SemiVisibleColor = Color.gray;
+
     public List<object> Items { get; } = new List<object>();
+
+    public RoomVisibilityStatus Visibility { get; private set; } = RoomVisibilityStatus.Hidden;
 
     private void Awake()
     {
-        SetVisited(false);
+        VisibilityBlocker.gameObject.SetActive(true);
     }
 
     public void OnMouseOver()
@@ -29,9 +34,34 @@ public class RoomBehaviour : MonoBehaviour
         }
     }
 
-    public void SetVisited(bool visited)
+    public void SetDiscovered()
     {
-        VisibilityBlocker.SetActive(!visited);
+        if (Visibility == RoomVisibilityStatus.Hidden)
+        {
+            Visibility = RoomVisibilityStatus.Discovered;
+            StartCoroutine(AnimateColorToSemiVisible());
+        }
+    }
+
+    public IEnumerator AnimateColorToSemiVisible()
+    {
+        float ElapsedTime = 0.0f;
+        float TotalTime = 0.5f;
+        while (ElapsedTime < TotalTime)
+        {
+            ElapsedTime += Time.deltaTime;
+            VisibilityBlocker.color = Color.Lerp(Color.black, SemiVisibleColor, (ElapsedTime / TotalTime));
+            yield return null;
+        }
+    }
+
+    public void SetVisited()
+    {
+        if (Visibility != RoomVisibilityStatus.Visited)
+        {
+            Visibility = RoomVisibilityStatus.Visited;
+            VisibilityBlocker.gameObject.SetActive(false);
+        }
     }
 
     public void SetModel(Room room)
@@ -71,4 +101,9 @@ public class RoomBehaviour : MonoBehaviour
         character = null;
         return false;
     }
+}
+
+public enum RoomVisibilityStatus
+{
+    Hidden, Discovered, Visited,
 }
