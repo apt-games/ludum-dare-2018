@@ -13,7 +13,7 @@ public class AbilityBehaviour : MonoBehaviour
     {
         if (Uses >= 0)
         {
-            Debug.Log("Using Ability");
+            Debug.Log($"Using Ability {AbilityUsed != null}");
             AbilityUsed?.Invoke();
         }
     }

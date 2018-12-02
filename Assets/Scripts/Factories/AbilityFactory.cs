@@ -5,6 +5,7 @@ public static class AbilityFactory
     private static readonly string[] _abilities =
     {
         "Abilities/FlareAbility",
+        "Abilities/StoneAbility",
     };
 
     public static AbilityBehaviour Create()
