@@ -71,7 +71,9 @@ namespace Assets.Scripts.Factories
                 case RoomItem.None:
                     break;
                 case RoomItem.Person:
-                    var character = CharacterFactory.CreateInitial(roomBehaviour.transform.position,
+                    if (model.type == RoomType.Blocked)
+                        break;
+                    var character = CharacterFactory.Create(roomBehaviour.transform.position,
                         roomBehaviour.transform);
                     character.OccupyingRoom = roomBehaviour;
                     character.SetDead(model.type.IsOneOf(RoomType.UncertainDeath, RoomType.Death));

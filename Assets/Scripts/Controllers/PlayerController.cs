@@ -21,11 +21,11 @@ public class PlayerController : MonoBehaviour
     private void Spawn(RoomBehaviour room)
     {
         var position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
-        var initialCharacter = CharacterFactory.CreateInitial(position, transform);
+        var initialCharacter = CharacterFactory.Create(position, transform);
         initialCharacter.OccupyingRoom = room;
         Players.Add(initialCharacter);
 
-        var secondChar = CharacterFactory.CreateInitial(new Vector3(position.x - 0.1f, position.y, position.z), transform);
+        var secondChar = CharacterFactory.Create(new Vector3(position.x - 0.1f, position.y, position.z), transform);
         secondChar.OccupyingRoom = room;
         Players.Add(secondChar);
     }
