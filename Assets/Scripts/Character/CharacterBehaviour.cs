@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,8 +29,6 @@ public class CharacterBehaviour : MonoBehaviour
     private bool _isWalking;
     public bool IsAlive { get; private set; } = true;
 
-    Vector2 smoothDeltaPosition = Vector2.zero;
-    Vector2 velocity = Vector2.zero;
     private CharacterInfo _characterInfo;
 
     private void Awake ()
@@ -40,11 +37,6 @@ public class CharacterBehaviour : MonoBehaviour
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = true;
-    }
-
-    private void Start()
-    {
-        Abilities.AddRange(GetComponentsInChildren<AbilityBehaviour>());
     }
 
     private void Update()
@@ -100,6 +92,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void AddAbility(AbilityBehaviour ability)
     {
+        Debug.Log("Adding ability");
         ability.transform.SetParent(transform, false);
         ability.transform.localPosition = Vector3.zero;
         Abilities.Add(ability);

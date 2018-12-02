@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,26 +17,54 @@ public class UIController : MonoBehaviour {
     public PlayerController PlayerController;
     public CharacterAvatar CharacterAvatarPrefab;
 
+    public Vector2 hotSpot = Vector2.zero;
+    public CursorMode cursorMode = CursorMode.ForceSoftware;
+
+    private Texture2D _defaultCursor;
+    private Texture2D _walkCursor;
+
     public UIController() {
-        _characterAvatarPosX = (_characterAvatarHeight / 2) + _characterAvatarMargin;
-        _initialCharacterAvatarPosY = _characterAvatarPosX * -1;
+        _characterAvatarPosX = (_characterAvatarHeight / 2) - _characterAvatarMargin;
+        _initialCharacterAvatarPosY = (_characterAvatarPosX * -1) + _characterAvatarMargin;
+    }
+
+    public void Awake() {
+        _defaultCursor = Resources.Load<Texture2D>("UI/cursors/cursor");
+        _walkCursor = Resources.Load<Texture2D>("UI/cursors/walk cursor");
+
+        Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
     }
 
 	// Use this for initialization
 	public void UpdateUI () {
+        _activeCharacterAvatar = null;
+        _activeCharacterAbility = null;
+        Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
+
+        foreach (var characterAvatar in _characterAvatars) {
+            Destroy(characterAvatar.gameObject);
+        }
+
+        _characterAvatars.Clear();
+
         int posY = _initialCharacterAvatarPosY;
 
-        foreach (var Player in PlayerController.Players) {
+        foreach (var Player in PlayerController.Players.Where(p => p.IsAlive)) {
             Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
+
+
+            Debug.Log(position);
 
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
 
-            Debug.Log(Player.Abilities);
-
             characterAvatar.gameObject.SetActive(true);
             characterAvatar.Character = Player;
+            RectTransform transform = (RectTransform)  characterAvatar.transform;
 
-            characterAvatar.transform.localPosition = position;
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, _characterAvatarPosX, transform.rect.width);
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -posY, transform.rect.height);
+
+            // characterAvatar.transform.localPosition = position;
 
             var ImageComponent = characterAvatar.Image.GetComponent<Image>();
             ImageComponent.sprite = Player.CharacterInfo.avatar;
@@ -48,20 +76,21 @@ public class UIController : MonoBehaviour {
 
             characterAvatar.CreateActions();
 
+            _characterAvatars.Add(characterAvatar);
+
             posY = posY - (_characterAvatarHeight + _characterAvatarMargin);
         }
+
     }
 
-	// Update is called once per frame
-	private void Update () {
-
-	}
-
     public void OnAvatarClick (CharacterAvatar CharacterAvatar) {
-        CharacterAvatar.SetSelected(true);
 
         if (_activeCharacterAvatar != null) {
             if (CharacterAvatar == _activeCharacterAvatar) {
+                _activeCharacterAvatar = null;
+                CharacterAvatar.SetSelected(false);
+                GameController.Instance.SelectCharacter(null);
+                Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
                 return;
             }
 
@@ -74,9 +103,10 @@ public class UIController : MonoBehaviour {
             _activeCharacterAbility = null;
         }
 
-
+        CharacterAvatar.SetSelected(true);
         _activeCharacterAvatar = CharacterAvatar;
         GameController.Instance.SelectCharacter(CharacterAvatar.Character);
+        Cursor.SetCursor(_walkCursor, hotSpot, cursorMode);
     }
 
     public void OnAbilityClick (CharacterAbility characterAbility) {
@@ -90,6 +120,12 @@ public class UIController : MonoBehaviour {
 
             GameController.Instance.SelectCharacter(characterAbility.CharacterAvatar.Character);
             GameController.Instance.SetAbilityActive(true);
+        } else {
+            _activeCharacterAbility.SetSelected(false);
+            _activeCharacterAbility = null;
+            GameController.Instance.SetAbilityActive(false);
+            GameController.Instance.SelectCharacter(null);
+            Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
         }
 
         if (_activeCharacterAvatar != null && _activeCharacterAbility != null) {
@@ -97,18 +133,8 @@ public class UIController : MonoBehaviour {
             _activeCharacterAvatar = null;
         }
 
-//         if (_activeCharacterAvatar == null) {
-//             if (_activeCharacterAbility != null) {
-//                 GameController.Instance.SelectCharacter(characterAbility.CharacterAvatar.Character);
-//             } else {
-//                 GameController.Instance.SelectCharacter(null);
-//             }
-//         } else if (characterAbility.CharacterAvatar )
-//
-//         characterAbility.SetSelected(_isAbilityActive);
-// ;
-//         GameController.Instance.SetAbilityActive(_isAbilityActive);
-
-
+        if (_activeCharacterAbility != null) {
+            Cursor.SetCursor(_activeCharacterAbility.texture, new Vector2(16, 16), cursorMode);
+        }
     }
 }
