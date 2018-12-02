@@ -8,12 +8,14 @@ public class GameController : MonoBehaviour
     public MapController MapController;
     public UIController UIController;
 
+    [HideInInspector]
     public RoomBehaviour SelectedRoom;
 
     public static GameController Instance => GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
 
     private void Awake()
     {
+        PlayerController.PlayersChanged += OnPlayersChanged;
         MapController.RoomSelected += OnRoomSelected;
 
         MapController.InitiateMap();
@@ -56,7 +58,6 @@ public class GameController : MonoBehaviour
                 if (character.IsAlive)
                 {
                     PlayerController.AddToParty(character);
-                    // TODO: Update UI here
                 }
                 else
                 {
@@ -76,22 +77,6 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        // if (Input.GetKeyUp(KeyCode.Alpha1))
-        // {
-        //     _toggleAbility = false;
-        //     _toggleAll = false;
-        //     SelectCharacter();
-        //     Debug.Log($"Selected single");
-        // }
-        //
-        // if (Input.GetKeyUp(KeyCode.Alpha2))
-        // {
-        //     _toggleAbility = false;
-        //     _toggleAll = true;
-        //     SelectCharacter();
-        //     Debug.Log($"Selected party");
-        // }
-
         if (Input.GetKeyUp(KeyCode.A))
         {
             _toggleAbility = !_toggleAbility;
@@ -115,5 +100,10 @@ public class GameController : MonoBehaviour
 
     public void SetAbilityActive (bool state) {
         _toggleAbility = state;
+    }
+
+    public void OnPlayersChanged()
+    {
+        UIController?.UpdateUI();
     }
 }
