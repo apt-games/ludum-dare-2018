@@ -13,11 +13,13 @@ public class Grid
         _size.x = size;
         _size.y = size;
 
+        int seed = Random.Range(0, 10000);
+
         for (int y = 0; y < _size.y; y++)
         {
             for (int x = 0; x < _size.x; x++)
             {
-                _cells.Add(new Cell(x, y, _size));
+                _cells.Add(new Cell(x, y, _size, seed));
             }
         }
     }
@@ -70,7 +72,7 @@ public class Cell
 
     public List<Vector2Int> _neighborCoords = new List<Vector2Int>();
 
-    public Cell(int x, int y, Vector2Int size)
+    public Cell(int x, int y, Vector2Int size, int seed)
     {
         _coord.x = x;
         _coord.y = y;
@@ -90,7 +92,7 @@ public class Cell
         _start = false;
         _exit = false;
 
-        bool blocked = Mathf.PerlinNoise((float)(_coord.x * 0.2), (float)(_coord.y * 0.2)) > 0.5;
+        bool blocked = Mathf.PerlinNoise((float)(seed + _coord.x * 0.6), (float)(seed + _coord.y * 0.6)) > 0.52;
 
         List<RoomType> types = new List<RoomType>() {
             RoomType.Safe,
