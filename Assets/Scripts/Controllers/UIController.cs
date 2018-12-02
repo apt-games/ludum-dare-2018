@@ -1,5 +1,4 @@
 using System.Linq;
-﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +19,6 @@ public class UIController : MonoBehaviour {
 
 
     public UIController() {
-        Debug.Log("HEIII");
         _characterAvatarPosX = (_characterAvatarHeight / 2) - _characterAvatarMargin;
         _initialCharacterAvatarPosY = (_characterAvatarPosX * -1) + _characterAvatarMargin;
     }
@@ -35,8 +33,6 @@ public class UIController : MonoBehaviour {
         }
 
         _characterAvatars.Clear();
-
-        Debug.Log("This is count: " + _characterAvatars.Count);
 
         int posY = _initialCharacterAvatarPosY;
 
@@ -73,11 +69,6 @@ public class UIController : MonoBehaviour {
         }
 
     }
-
-	// Update is called once per frame
-	private void Update () {
-
-	}
 
     public void OnAvatarClick (CharacterAvatar CharacterAvatar) {
 

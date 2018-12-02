@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public List<CharacterBehaviour> Players { get; } = new List<CharacterBehaviour>();
+    public event Action PlayersChanged;
 
     public CharacterBehaviour SelectedCharacter;
 
@@ -19,8 +21,6 @@ public class PlayerController : MonoBehaviour
         var position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
         var initialCharacter = CharacterFactory.CreateInitial(position, transform);
         initialCharacter.OccupyingRoom = room;
-        Debug.Log("Spawned at " + position);
-        SelectedCharacter = initialCharacter;
         Players.Add(initialCharacter);
 
         var secondChar = CharacterFactory.CreateInitial(new Vector3(position.x - 0.1f, position.y, position.z), transform);
@@ -60,5 +60,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Killing char");
         character.Die();
         SelectedCharacter = null;
+        PlayersChanged?.Invoke();
     }
 }
