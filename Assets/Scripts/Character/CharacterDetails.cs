@@ -12,5 +12,5 @@ public class CharacterDetails : ScriptableObject
 
 public enum Sex
 {
-    Superior, Inferior,
+    Male, Female,
 }
