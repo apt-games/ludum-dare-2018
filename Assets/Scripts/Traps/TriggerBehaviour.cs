@@ -9,6 +9,12 @@ public class TriggerBehaviour : MonoBehaviour
     {
         var character = collider.gameObject.GetComponent<CharacterBehaviour>();
 
+        if (character != null && !character.IsAlive)
+        {
+            // check if character is dead, don't count it for triggering
+            return;
+        }
+
         Debug.Log("TRIGGERED " + transform.position);
         OnTriggerEntered?.Invoke(character);
     }
