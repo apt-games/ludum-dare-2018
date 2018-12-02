@@ -77,7 +77,6 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Died");
         IsAlive = false;
         _animator.SetTrigger("die");
         _agent.isStopped = true;
@@ -92,7 +91,6 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void AddAbility(AbilityBehaviour ability)
     {
-        Debug.Log("Adding ability");
         ability.transform.SetParent(transform, false);
         ability.transform.localPosition = Vector3.zero;
         Abilities.Add(ability);

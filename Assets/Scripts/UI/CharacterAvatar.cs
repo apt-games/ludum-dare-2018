@@ -73,13 +73,8 @@ public class CharacterAvatar : MonoBehaviour {
     public void CreateActions() {
         int posX = _initialCharacterAbilityPosX;
 
-
-        Debug.Log("Character.Abilities.Count: " + Character.Abilities.Count);
-
         foreach (var Ability in Character.Abilities) {
             var type = Ability.Ability.Type;
-
-            Debug.Log("Uses: " + Ability.Uses);
 
             for (int i = 0; i < Ability.Uses; i++) {
                 Vector3 position = new Vector3(posX, _characterAbilityPosY, 0);

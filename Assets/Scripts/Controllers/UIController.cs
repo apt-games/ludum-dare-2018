@@ -50,11 +50,6 @@ public class UIController : MonoBehaviour {
         int posY = _initialCharacterAvatarPosY;
 
         foreach (var Player in PlayerController.Players.Where(p => p.IsAlive)) {
-            Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
-
-
-            Debug.Log(position);
-
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
 
             characterAvatar.gameObject.SetActive(true);
