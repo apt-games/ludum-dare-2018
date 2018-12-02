@@ -66,6 +66,13 @@ public class CharacterBehaviour : MonoBehaviour
         _agent.isStopped = true;
     }
 
+    public void AddAbility(AbilityBehaviour ability)
+    {
+        ability.transform.SetParent(transform, false);
+        ability.transform.localPosition = Vector3.zero;
+        Abilities.Add(ability);
+    }
+
     private void SetWalking(bool walking)
     {
         _isWalking = walking;
