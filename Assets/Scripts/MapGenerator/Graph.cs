@@ -14,17 +14,12 @@ public class Graph
     public void AddNode(Node node)
     {
         _nodes.Add(node);
-        _graph.Add(CreateId(node._cell), node);
+        _graph.Add(node._id, node);
     }
 
     public Node GetNode(string id)
     {
         return _graph[id];
-    }
-
-    public string CreateId(Cell cell)
-    {
-        return "x:" + cell._coord.x + ",y:" + cell._coord.y;
     }
 
     public Node SetStart(string id)
@@ -56,9 +51,17 @@ public class Node
     public bool _searched = false;
     public Node _parent = null;
 
+    public string _id;
+
     public Node(Cell cell)
     {
         _cell = cell;
+        _id = GetIdFromCell(cell);
+    }
+
+    static public string GetIdFromCell(Cell cell)
+    {
+        return "x:" + cell._coord.x + ",y:" + cell._coord.y;
     }
 
     public void AddEdge(Node neighbor)

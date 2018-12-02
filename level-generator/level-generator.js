@@ -377,7 +377,7 @@ function generate(size = 10) {
     const node = shortestPath[i];
 
     if (node.cell.type !== 1 && node.cell.type !== 2) {
-      node.cell.type = 7;
+      node.cell.type = i > shortestPath.length - 4 ? 3 : [3, 4, 5, 6][weightedRandom([10, 50, 10, 30])];
     }
 
     if (prev) {

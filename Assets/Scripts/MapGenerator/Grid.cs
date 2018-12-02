@@ -90,7 +90,7 @@ public class Cell
         _start = false;
         _exit = false;
 
-        bool blocked = Mathf.PerlinNoise((float)(x * 0.5), (float)(y * 0.5)) > 0.2;
+        bool blocked = Mathf.PerlinNoise((float)(_coord.x * 0.2), (float)(_coord.y * 0.2)) > 0.5;
 
         List<RoomType> types = new List<RoomType>() {
             RoomType.Safe,
@@ -100,12 +100,16 @@ public class Cell
         };
         int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 50, 10, 30 });
 
+        // Debug.Log("X: " + _coord.x + ", Y: " + _coord.y + ", blocked: " + blocked);
+
         _type = blocked ? 0 : types[weightedTypeIndex];
+        // _type = types[weightedTypeIndex];
 
         List<RoomItem> items = new List<RoomItem>() { RoomItem.None, RoomItem.Person };
         int weightedItemIndex = WeightedRandom(new List<int>() { 85, 15 });
 
         _item = blocked ? 0 : items[weightedItemIndex];
+        // _item = items[weightedItemIndex];
 
         _visited = false;
     }

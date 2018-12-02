@@ -107,8 +107,8 @@ public class MapController : MonoBehaviour
 
         //Cell exit = grid.PickRandomCell();
 
-        int endX = startX == 0 || startX == size - 1 ? (startX == 0 ? size - 1 : 0) : (startX + Math.Floor(grid.width / 3 + grid.width)) % grid.width;
-        int endY = startY == 0 || startY == size - 1 ? (startY == 0 ? size - 1 : 0) : (startY + Math.Floor(grid.height / 3 + grid.height)) % grid.height;
+        int endX = startX == 0 || startX == size - 1 ? (startX == 0 ? size - 1 : 0) : (startX + (int)Math.Round(size / 3.0) + size) % size;
+        int endY = startY == 0 || startY == size - 1 ? (startY == 0 ? size - 1 : 0) : (startY + (int)Math.Round(size / 3.0) + size) % size;
 
         Cell exit = grid.GetCellAtCoord(new Vector2Int(endX, endY));
 
@@ -123,32 +123,56 @@ public class MapController : MonoBehaviour
             graph.AddNode(node);
         }
 
+        //foreach (Node node in graph._nodes)
+        //{
+        //    List<Cell> neighbors = node._cell.GetNeighbors(grid);
+
+        //    foreach (Cell neighbor in neighbors)
+        //    {
+        //        string neighborId = Node.GetIdFromCell(neighbor);
+        //        Node neighborNode = graph.GetNode(neighborId);
+        //        node.AddEdge(neighborNode);
+        //        neighborNode.AddEdge(node);
+        //    }
+        //}
+
         foreach (Cell cell in grid._cells)
         {
-            Node cellNode = graph.GetNode(graph.CreateId(cell));
+            string cellId = Node.GetIdFromCell(cell);
+            Node cellNode = graph.GetNode(cellId);
 
             List<Cell> neighbors = cell.GetNeighbors(grid);
 
             foreach (Cell neighbor in neighbors)
             {
-                Node neighborNode = graph.GetNode(graph.CreateId(cell));
+                string neighborId = Node.GetIdFromCell(neighbor);
+                Node neighborNode = graph.GetNode(neighborId);
                 cellNode.AddEdge(neighborNode);
                 neighborNode.AddEdge(cellNode);
             }
         }
 
+        Debug.Log("NODES IN GRAPH: " + graph._graph.Count);
+
         Queue<Node> queue = new Queue<Node>();
 
-        Node startNode = graph.SetStart(graph.CreateId(start));
-        Node endNode = graph.SetStart(graph.CreateId(exit));
+        string startId = Node.GetIdFromCell(start);
+        Node startNode = graph.SetStart(startId);
+
+        string endId = Node.GetIdFromCell(exit);
+        Node endNode = graph.SetStart(endId);
 
         queue.Enqueue(startNode);
+        startNode._searched = true;
+
+        int searchCount = 0;
 
         while (queue.Count > 0) {
             Node curr = queue.Dequeue();
 
             if (curr == endNode)
             {
+                Debug.Log("FOUND EXIT");
                 break;
             }
 
@@ -163,25 +187,31 @@ public class MapController : MonoBehaviour
                     queue.Enqueue(edge);
                 }
             }
+
+            searchCount++;
         }
+
+        Debug.Log("SEARCHED " + searchCount + " nodes.");
 
         List<Node> optimalPath = new List<Node>();
 
-        Node next = endNode._parent;
-        Node prev = null;
+        Node n = endNode._parent;
+        Node p = null;
 
-        while (next != null)
+        while (n != null)
         {
-            optimalPath.Add(next);
-            next = next._parent;
+            optimalPath.Add(n);
+            n = n._parent;
         }
+
+        Debug.Log("There's " + optimalPath.Count + " steps between start and exit");
 
         for (int i = 0; i < optimalPath.Count; i++)
         {
             Node node = optimalPath[i];
             Cell cell = node._cell;
 
-            if (i < optimalPath.Count - 2 && cell._type != RoomType.Start && cell._type != RoomType.Exit)
+            if (cell._type != RoomType.Start && cell._type != RoomType.Exit)
             {
                 List<RoomType> types = new List<RoomType>() {
                     RoomType.Safe,
@@ -192,19 +222,16 @@ public class MapController : MonoBehaviour
 
                 int weightedTypeIndex = cell.WeightedRandom(new List<int>() { 10, 50, 10, 30 });
 
-                cell._type = types[weightedTypeIndex];
-            }
-            else
-            {
-                cell._type = RoomType.Safe;
+                // Make two first tiles in optimal path safe.
+                cell._type = i >= optimalPath.Count - 3 ? RoomType.Safe : types[weightedTypeIndex];
             }
 
-            if (prev != null)
+            if (p != null)
             {
-                cell.RemoveWallsTo(prev._cell);
+                cell.RemoveWallsTo(p._cell);
             }
 
-            prev = node;
+            p = node;
         }
 
         return grid;
@@ -241,9 +268,6 @@ public class MapController : MonoBehaviour
 
         return false;
     }
-
-    //private string json =
-        //"{\"Rooms\":[{\"x\":0,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,0],\"type\":0},{\"x\":3,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,0],\"type\":0},{\"x\":4,\"y\":0,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,1],\"type\":1},{\"x\":0,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":1},{\"x\":1,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":3,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":4,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":0,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":0},{\"x\":1,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":2,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":1},{\"x\":3,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":4,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":5,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":0,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":1,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":0},{\"x\":3,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":4,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":5,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":0,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":3,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":4,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":5,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":0,\"y\":5,\"start\":true,\"blocked\":false,\"walls\":[0,1,1,1],\"type\":1},{\"x\":1,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":0},{\"x\":2,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0},{\"x\":3,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,1],\"type\":0},{\"x\":4,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":5,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0}]}";
 }
 
 public class MapStructure
