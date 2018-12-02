@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider))]
 public class CharacterBehaviour : MonoBehaviour
 {
     public int ID;
@@ -28,6 +28,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private NavMeshAgent _agent;
     private Animator _animator;
+    private CapsuleCollider _collider;
 
     public bool IsWalking { get; private set; }
     public bool IsAlive { get; private set; } = true;
@@ -37,6 +38,7 @@ public class CharacterBehaviour : MonoBehaviour
     private void Awake ()
     {
         _animator = GetComponentInChildren<Animator>();
+        _collider = GetComponentInChildren<CapsuleCollider>();
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = true;
@@ -90,13 +92,17 @@ public class CharacterBehaviour : MonoBehaviour
         IsAlive = false;
         _animator.SetTrigger("die");
         _agent.isStopped = true;
+        _collider.enabled = false;
     }
 
     public void SetDead(bool dead)
     {
         IsAlive = !dead;
         if (dead)
+        {
             _animator.SetTrigger("die");
+            _collider.enabled = false;
+        }
     }
 
     public void AddAbility(AbilityBehaviour ability)
