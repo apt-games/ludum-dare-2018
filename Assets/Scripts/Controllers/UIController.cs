@@ -37,9 +37,7 @@ public class UIController : MonoBehaviour {
 
 	// Use this for initialization
 	public void UpdateUI () {
-        _activeCharacterAvatar = null;
         _activeCharacterAbility = null;
-        Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
 
         foreach (var characterAvatar in _characterAvatars) {
             Destroy(characterAvatar.gameObject);
@@ -48,17 +46,15 @@ public class UIController : MonoBehaviour {
         _characterAvatars.Clear();
 
         int posY = _initialCharacterAvatarPosY;
+        bool stillHaveActiveCharacterAvatar = false;
 
-        foreach (var Player in PlayerController.Players.Where(p => p.IsAlive)) {
+        foreach (var Character in PlayerController.Players.Where(p => p.IsAlive)) {
             Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
-
-
-            Debug.Log(position);
 
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
 
             characterAvatar.gameObject.SetActive(true);
-            characterAvatar.Character = Player;
+            characterAvatar.Character = Character;
             RectTransform transform = (RectTransform)  characterAvatar.transform;
 
             transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, _characterAvatarPosX, transform.rect.width);
@@ -67,9 +63,9 @@ public class UIController : MonoBehaviour {
             // characterAvatar.transform.localPosition = position;
 
             var ImageComponent = characterAvatar.Image.GetComponent<Image>();
-            ImageComponent.sprite = Player.CharacterInfo.avatar;
+            ImageComponent.sprite = Character.CharacterInfo.avatar;
             TextMeshProUGUI avatarName = characterAvatar.AvatarName.GetComponent<TextMeshProUGUI>();
-            avatarName.SetText(Player.CharacterInfo.name);
+            avatarName.SetText(Character.CharacterInfo.name);
 
             characterAvatar.AvatarClicked += OnAvatarClick;
             characterAvatar.CharacterAbilityClicked += OnAbilityClick;
@@ -78,9 +74,19 @@ public class UIController : MonoBehaviour {
 
             _characterAvatars.Add(characterAvatar);
 
+            if (_activeCharacterAvatar != null && _activeCharacterAvatar.Character.ID == Character.ID) {
+                stillHaveActiveCharacterAvatar = true;
+                characterAvatar._animator.SetFloat("animationspeed", 1000f);
+                characterAvatar.SetSelected(true);
+                _activeCharacterAvatar = characterAvatar;
+            }
+
             posY = posY - (_characterAvatarHeight + _characterAvatarMargin);
         }
 
+        if (_activeCharacterAvatar == null || !stillHaveActiveCharacterAvatar) {
+            Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
+        }
     }
 
     public void OnAvatarClick (CharacterAvatar CharacterAvatar) {
@@ -103,10 +109,27 @@ public class UIController : MonoBehaviour {
             _activeCharacterAbility = null;
         }
 
+        CharacterAvatar._animator.SetFloat("animationspeed", 1f);
         CharacterAvatar.SetSelected(true);
         _activeCharacterAvatar = CharacterAvatar;
         GameController.Instance.SelectCharacter(CharacterAvatar.Character);
         Cursor.SetCursor(_walkCursor, hotSpot, cursorMode);
+    }
+
+    public void ResetSelection() {
+        if (_activeCharacterAbility != null) {
+            _activeCharacterAbility.SetSelected(false);
+            _activeCharacterAbility = null;
+            GameController.Instance.SetAbilityActive(false);
+        }
+
+        if (_activeCharacterAvatar != null) {
+            GameController.Instance.SelectCharacter(null);
+            _activeCharacterAvatar.SetSelected(false);
+            _activeCharacterAvatar = null;
+        }
+
+        Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
     }
 
     public void OnAbilityClick (CharacterAbility characterAbility) {
@@ -135,6 +158,12 @@ public class UIController : MonoBehaviour {
 
         if (_activeCharacterAbility != null) {
             Cursor.SetCursor(_activeCharacterAbility.texture, new Vector2(16, 16), cursorMode);
+        }
+    }
+
+    public void Update() {
+        if (Input.GetMouseButtonDown(1) && (_activeCharacterAvatar != null || _activeCharacterAbility)) {
+            ResetSelection();
         }
     }
 }

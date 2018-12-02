@@ -90,6 +90,10 @@ window.draw = () => {
         fill(255, 0, 0, 80);
         break;
 
+      case 7: // Optimal path
+        fill(0, 0, 255, 80);
+        break;
+
       default:
         break;
     }
