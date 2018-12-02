@@ -57,7 +57,14 @@ public class MapController : MonoBehaviour
 
         Grid grid = new Grid(size);
 
-        Cell start = grid.PickRandomCell();
+        //Cell start = grid.PickRandomCell();
+
+        bool startAtXEdge = Random.Range(0, 1) == 1;
+        int startX = startAtXEdge ? Random.Range(0, 1) == 1 ? 0 : size - 1 : Random.Range(1, size - 2);
+        int startY = startAtXEdge ? Random.Range(1, size - 2) : Random.Range(0, 1) == 1 ? 0 : size - 1;
+
+        Cell start = grid.GetCellAtCoord(new Vector2Int(startX, startY));
+
         start._type = RoomType.Start;
         start._item = RoomItem.None;
         start._visited = true;
@@ -84,23 +91,121 @@ public class MapController : MonoBehaviour
 
                 current = prev;
             }
-        } while (stack.Count != 0);
+        } while (stack.Count > 0);
 
-        foreach (var cell in grid._cells)
+        //foreach (var cell in grid._cells)
+        //{
+        //    if (cell._type == 0) continue;
+
+        //    Cell neighbor = cell.GetRandomNeighbor(grid);
+
+        //    if (neighbor != null)
+        //    {
+        //        cell.RemoveWallsTo(neighbor);
+        //    }
+        //}
+
+        //Cell exit = grid.PickRandomCell();
+
+        int endX = startX == 0 || startX == size - 1 ? (startX == 0 ? size - 1 : 0) : (startX + Math.Floor(grid.width / 3 + grid.width)) % grid.width;
+        int endY = startY == 0 || startY == size - 1 ? (startY == 0 ? size - 1 : 0) : (startY + Math.Floor(grid.height / 3 + grid.height)) % grid.height;
+
+        Cell exit = grid.GetCellAtCoord(new Vector2Int(endX, endY));
+
+        exit._type = RoomType.Exit;
+        exit._item = RoomItem.None;
+
+        Graph graph = new Graph();
+
+        foreach (Cell cell in grid._cells)
         {
-            if (cell._type == 0) continue;
+            Node node = new Node(cell);
+            graph.AddNode(node);
+        }
 
-            Cell neighbor = cell.GetRandomNeighbor(grid);
+        foreach (Cell cell in grid._cells)
+        {
+            Node cellNode = graph.GetNode(graph.CreateId(cell));
 
-            if (neighbor != null)
+            List<Cell> neighbors = cell.GetNeighbors(grid);
+
+            foreach (Cell neighbor in neighbors)
             {
-                cell.RemoveWallsTo(neighbor);
+                Node neighborNode = graph.GetNode(graph.CreateId(cell));
+                cellNode.AddEdge(neighborNode);
+                neighborNode.AddEdge(cellNode);
             }
         }
 
-        Cell exit = grid.PickRandomCell();
-        exit._type = RoomType.Exit;
-        exit._item = RoomItem.None;
+        Queue<Node> queue = new Queue<Node>();
+
+        Node startNode = graph.SetStart(graph.CreateId(start));
+        Node endNode = graph.SetStart(graph.CreateId(exit));
+
+        queue.Enqueue(startNode);
+
+        while (queue.Count > 0) {
+            Node curr = queue.Dequeue();
+
+            if (curr == endNode)
+            {
+                break;
+            }
+
+            List<Node> edges = curr._edges;
+
+            foreach (Node edge in edges)
+            {
+                if (!edge._searched)
+                {
+                    edge._searched = true;
+                    edge._parent = curr;
+                    queue.Enqueue(edge);
+                }
+            }
+        }
+
+        List<Node> optimalPath = new List<Node>();
+
+        Node next = endNode._parent;
+        Node prev = null;
+
+        while (next != null)
+        {
+            optimalPath.Add(next);
+            next = next._parent;
+        }
+
+        for (int i = 0; i < optimalPath.Count; i++)
+        {
+            Node node = optimalPath[i];
+            Cell cell = node._cell;
+
+            if (i < optimalPath.Count - 2 && cell._type != RoomType.Start && cell._type != RoomType.Exit)
+            {
+                List<RoomType> types = new List<RoomType>() {
+                    RoomType.Safe,
+                    RoomType.UncertainSafe,
+                    RoomType.Death,
+                    RoomType.UncertainDeath,
+                };
+
+                int weightedTypeIndex = cell.WeightedRandom(new List<int>() { 10, 50, 10, 30 });
+
+                cell._type = types[weightedTypeIndex];
+            }
+            else
+            {
+                cell._type = RoomType.Safe;
+            }
+
+            if (prev != null)
+            {
+                cell.RemoveWallsTo(prev._cell);
+            }
+
+            prev = node;
+        }
 
         return grid;
     }
@@ -144,204 +249,4 @@ public class MapController : MonoBehaviour
 public class MapStructure
 {
     public Room[] Rooms;
-}
-
-public class Grid
-{
-    public List<Cell> _cells = new List<Cell>();
-    public Vector2Int _size = new Vector2Int(0, 0);
-
-    public Grid(int size)
-    {
-        _size.x = size;
-        _size.y = size;
-
-        for (int y = 0; y < _size.y; y++)
-        {
-            for (int x = 0; x < _size.x; x++)
-            {
-                _cells.Add(new Cell(x, y, _size));
-            }
-        }
-    }
-
-    public Cell PickRandomCell()
-    {
-        List<Cell> filteredCells = _cells.FindAll(cell => cell._type != 0);
-
-        int i = Random.Range(0, filteredCells.Count);
-
-        return filteredCells[i];
-    }
-
-    public Cell GetRandomCellByType(RoomType type)
-    {
-        List<Cell> filteredCells = _cells.FindAll(cell => cell._type == type);
-
-        int i = Random.Range(0, filteredCells.Count);
-
-        return filteredCells[i];
-    }
-
-    public void Reset()
-    {
-        foreach (Cell cell in _cells)
-        {
-            cell.Reset();
-        }
-    }
-}
-
-public class Cell
-{
-    public Vector2Int _coord = new Vector2Int(0, 0);
-
-    public bool _start;
-    public bool _exit;
-
-    public RoomType _type;
-    public RoomItem _item;
-
-    public bool _visited;
-
-    public int[] _walls = new[] { 1, 1, 1, 1 };
-
-    public List<Vector2Int> _neighborCoords = new List<Vector2Int>();
-
-    public Cell(int x, int y, Vector2Int size)
-    {
-        _coord.x = x;
-        _coord.y = y;
-
-        if (_coord.x - 1 >= 0)
-            _neighborCoords.Add(new Vector2Int(_coord.x - 1, _coord.y));
-
-        if (_coord.x + 1 < size.x)
-            _neighborCoords.Add(new Vector2Int(_coord.x + 1, _coord.y));
-
-        if (_coord.y - 1 >= 0)
-            _neighborCoords.Add(new Vector2Int(_coord.x, _coord.y - 1));
-
-        if (_coord.y + 1 < size.y)
-            _neighborCoords.Add(new Vector2Int(_coord.x, _coord.y + 1));
-
-        _start = false;
-        _exit = false;
-
-        bool blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
-
-        List<RoomType> types = new List<RoomType>() {
-            RoomType.Safe,
-            RoomType.UncertainSafe,
-            RoomType.Death,
-            RoomType.UncertainDeath,
-        };
-        int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 40, 10, 40 });
-
-        _type = blocked ? 0 : types[weightedTypeIndex];
-
-        List<RoomItem> items = new List<RoomItem>() { RoomItem.None, RoomItem.Person };
-        int weightedItemIndex = WeightedRandom(new List<int>() { 85, 15 });
-
-        _item = blocked ? 0 : items[weightedItemIndex];
-
-        _visited = false;
-    }
-
-    public int WeightedRandom(List<int> weights)
-    {
-        int total = weights.Sum();
-        int random = Random.Range(0, total);
-
-        for (int i = 0; i < weights.Count; i++)
-        {
-            if (random < weights[i])
-            {
-                return i;
-            }
-
-            random -= weights[i];
-        }
-
-        return 0;
-    }
-
-    public void SetType(RoomType type)
-    {
-        _type = type;
-    }
-
-    public List<Cell> GetNeighbors(Grid grid)
-    {
-        List<Cell> neighborCells = new List<Cell>();
-
-        foreach (Vector2Int coord in _neighborCoords)
-        {
-            Cell cell = grid._cells[coord.y * grid._size.x + coord.x];
-
-            if (cell._type != 0)
-            {
-                neighborCells.Add(cell);
-            }
-        }
-
-        return neighborCells;
-    }
-
-    public Cell GetRandomAvailableNeighbor(Grid grid)
-    {
-        List<Cell> neighbors = GetNeighbors(grid).FindAll(cell => !cell._visited);
-
-        if (neighbors.Count > 0)
-        {
-            int i = Random.Range(0, neighbors.Count);
-
-            return neighbors[i];
-        }
-
-        return null;
-    }
-
-    public Cell GetRandomNeighbor(Grid grid)
-    {
-        List<Cell> neighbors = GetNeighbors(grid);
-
-        int i = Random.Range(0, neighbors.Count);
-
-        return neighbors[i];
-    }
-
-    public void RemoveWallsTo(Cell cell)
-    {
-        int x = _coord.x - cell._coord.x;
-
-        if (x == 1)
-        {
-            _walls[3] = 0;
-            cell._walls[1] = 0;
-        }
-        else if (x == -1)
-        {
-            _walls[1] = 0;
-            cell._walls[3] = 0;
-        }
-
-        int y = _coord.y - cell._coord.y;
-
-        if (y == 1)
-        {
-            _walls[0] = 0;
-            cell._walls[2] = 0;
-        }
-        else if (y == -1)
-        {
-            _walls[2] = 0;
-            cell._walls[0] = 0;
-        }
-    }
-
-    public void Reset()
-    {
-        _visited = false;
-    }
 }
