@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4865895454612700}
   - component: {fileID: 114331115543323476}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 33493543083514654}
   - component: {fileID: 23911509266114020}
   - component: {fileID: 65334330833249198}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 33315290330262414}
   - component: {fileID: 23919434761574014}
   - component: {fileID: 65871839015713006}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 33050773634346256}
   - component: {fileID: 23257705415882554}
   - component: {fileID: 65229870862928234}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
