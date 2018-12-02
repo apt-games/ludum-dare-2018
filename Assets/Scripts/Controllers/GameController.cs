@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
 
     private void OnRoomSelected(RoomBehaviour room)
     {
-        if (PlayerController.SelectedCharacter == null) {
+        if (PlayerController.SelectedCharacter == null || PlayerController.SelectedCharacter.IsWalking) {
             return;
         }
 
