@@ -1,17 +1,78 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class CharacterInfo {
-	public string name {get; set; }
-	public Texture2D avatar  {get; set; }
 
-	public CharacterInfo(string characterName, Texture2D characterAvatar) {
-		name = characterName;
-		avatar = characterAvatar;
-	}
+public class CharacterInfo
+{
+    public string name { get; set; }
+    public Sprite avatar { get; set; }
+    public CharacterColors colors { get; set; }
 }
 
+[Serializable]
+public class CharacterColors
+{
+    public Color Head = Color.white;
+    public Color Body = Color.white;
+    public Color Legs = Color.white;
+}
+
+
 static class CharacterInfoGenerator {
-	static string[] femaleNames = new [] {
+
+    public static CharacterInfo getCharacterInfo()
+    {
+        if (Random.Range(0, 2) == 0)
+        {
+            var details = getFemale();
+            return new CharacterInfo()
+            {
+                name = getFemaleName(),
+                avatar = details.Avatar,
+                colors = details.Colors,
+            };
+        }
+        else
+        {
+            var details = getMale();
+            return new CharacterInfo()
+            {
+                name = getMaleName(),
+                avatar = details.Avatar,
+                colors = details.Colors,
+            };
+        }
+    }
+
+    static string getFemaleName()
+    {
+        int index = Random.Range(0, femaleNames.Length);
+
+        return femaleNames[index];
+    }
+
+    static string getMaleName()
+    {
+        int index = Random.Range(0, maleNames.Length);
+
+        return maleNames[index];
+    }
+
+    static CharacterDetails getFemale()
+    {
+        var file = FemaleAvatarFilenames[Random.Range(0, MaleAvatarFilenames.Length)];
+        return Resources.Load<CharacterDetails>(file);
+    }
+
+    static CharacterDetails getMale()
+    {
+        var file = MaleAvatarFilenames[Random.Range(0, MaleAvatarFilenames.Length)];
+        return Resources.Load<CharacterDetails>(file);
+    }
+
+
+    static string[] femaleNames = new [] {
 		"Mary",
 		"Patricia",
 		"Linda",
@@ -545,6 +606,9 @@ static class CharacterInfoGenerator {
 		"Jose",
 		"Larry",
 		"Jeffrey",
+        "Syver",
+        "Anders",
+        "Magnus",
 		"Frank",
 		"Scott",
 		"Eric",
@@ -1017,73 +1081,25 @@ static class CharacterInfoGenerator {
 		"Edmond"
 	};
 
-	static string[] femaleAvatarFilenames = new [] {
-		"Avatars/female 01",
-		"Avatars/female 02",
-		"Avatars/female 03",
+    private static readonly string[] FemaleAvatarFilenames = {
+		"Avatars/female01",
+		"Avatars/female02",
+		"Avatars/female03",
+		"Avatars/female04",
+		"Avatars/female05",
+		"Avatars/female06",
+		"Avatars/female07",
+		"Avatars/female08",
 	};
 
-	static string[] maleAvatarFilenames = new [] {
-		"Avatars/male 01",
-		"Avatars/male 02",
-		"Avatars/male 03",
+    private static readonly string[] MaleAvatarFilenames = {
+		"Avatars/male01",
+		"Avatars/male02",
+		"Avatars/male03",
+		"Avatars/male04",
+		"Avatars/male05",
+		"Avatars/male06",
+		"Avatars/male07",
+		"Avatars/male08",
 	};
-
-	static string getFemaleName() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(femaleNames.Length);
-
-		return femaleNames[index];
-	}
-
-	static string getMaleName() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(maleNames.Length);
-
-		return maleNames[index];
-	}
-
-	static Texture2D getFemaleAvatar() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(femaleAvatarFilenames.Length);
-		string filename = femaleAvatarFilenames[index];
-
-		Texture2D avatar = Resources.Load<Texture2D>(filename);
-
-		return avatar;
-	}
-
-	static Texture2D getMaleAvatar() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(maleAvatarFilenames.Length);
-
-		string filename = maleAvatarFilenames[index];
-
-		Texture2D avatar = Resources.Load<Texture2D>(filename);
-
-		return avatar;
-	}
-
-	public static CharacterInfo getCharacterInfo() {
-		string name;
-		Texture2D avatar;
-
-		System.Random rnd = new System.Random();
-
-		int rand = rnd.Next(1);
-
-		if (rand == 0) {
-			name = getFemaleName();
-			avatar = getFemaleAvatar();
-		} else {
-			name = getMaleName();
-			avatar = getMaleAvatar();
-		}
-
-		return new CharacterInfo(name, avatar);
-	}
 }

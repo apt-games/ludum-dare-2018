@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
     public CameraController CameraController;
     public PlayerController PlayerController;
     public MapController MapController;
+    public UIController UIController;
 
     public RoomBehaviour SelectedRoom;
 
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
         CameraController.ShowRoom(MapController.Current);
         PlayerController.Init(MapController.Current);
         MapController.Current.SetVisited(true);
+        UIController?.UpdateUI();//DO NOT COMMIT
     }
 
     private void OnRoomSelected(RoomBehaviour room)
@@ -44,6 +46,19 @@ public class GameController : MonoBehaviour
             else
                 PlayerController.MoveSelectedCharacterTo(room);
 
+            CharacterBehaviour character;
+            if (room.ContainsCharacter(out character))
+            {
+                if (character.IsAlive)
+                {
+                    PlayerController.AddToParty(character);
+                    // TODO: Update UI here
+                }
+                else
+                {
+                    // TODO: Glow Revive ability
+                }
+            }
         }
     }
 
@@ -52,21 +67,21 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            _toggleAbility = false;
-            _toggleAll = false;
-            SelectCharacter();
-            Debug.Log($"Selected single");
-        }
-
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            _toggleAbility = false;
-            _toggleAll = true;
-            SelectCharacter();
-            Debug.Log($"Selected party");
-        }
+        // if (Input.GetKeyUp(KeyCode.Alpha1))
+        // {
+        //     _toggleAbility = false;
+        //     _toggleAll = false;
+        //     SelectCharacter();
+        //     Debug.Log($"Selected single");
+        // }
+        //
+        // if (Input.GetKeyUp(KeyCode.Alpha2))
+        // {
+        //     _toggleAbility = false;
+        //     _toggleAll = true;
+        //     SelectCharacter();
+        //     Debug.Log($"Selected party");
+        // }
 
         if (Input.GetKeyUp(KeyCode.A))
         {
@@ -76,14 +91,20 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void SelectCharacter()
+    public void SelectCharacter(CharacterBehaviour character)
     {
         // select first which is not current
-        PlayerController.SelectedCharacter = PlayerController.Players.FirstOrDefault(c => c.IsAlive && c != PlayerController.SelectedCharacter);
+        PlayerController.SelectedCharacter = character;
+        SetAbilityActive(false);
+
         if (PlayerController.SelectedCharacter != null)
         {
             MapController.Current = PlayerController.SelectedCharacter.OccupyingRoom;
             CameraController.ShowRoom(PlayerController.SelectedCharacter.OccupyingRoom);
         }
+    }
+
+    public void SetAbilityActive (bool state) {
+        _toggleAbility = state;
     }
 }

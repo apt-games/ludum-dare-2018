@@ -1,21 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class CharacterBehaviour : MonoBehaviour
 {
-    public RoomBehaviour OccupyingRoom;
-    public CharacterInfo CharacterInfo;
+    public RoomBehaviour OccupyingRoom { get; set; }
+
+    public CharacterInfo CharacterInfo
+    {
+        get { return _characterInfo; }
+        set
+        {
+            if (_characterInfo != value)
+            {
+                _characterInfo = value;
+                SetColors(_characterInfo.colors);
+            }
+        }
+    }
+
     public List<AbilityBehaviour> Abilities { get; } = new List<AbilityBehaviour>();
+
+    public CharacterBody CharacterBody;
 
     private NavMeshAgent _agent;
     private Animator _animator;
     private bool _isWalking;
-    public bool IsAlive = true;
+    public bool IsAlive { get; private set; } = true;
 
     Vector2 smoothDeltaPosition = Vector2.zero;
     Vector2 velocity = Vector2.zero;
+    private CharacterInfo _characterInfo;
 
     private void Awake ()
     {
@@ -36,6 +53,14 @@ public class CharacterBehaviour : MonoBehaviour
         {
             SetWalking(false);
         }
+    }
+
+    public void SetColors(CharacterColors colors)
+    {
+        CharacterBody.Body.color = colors.Body;
+        CharacterBody.Head.color = colors.Head;
+        foreach (var leg in CharacterBody.Legs)
+            leg.color = colors.Legs;
     }
 
     public void MoveTo(RoomBehaviour room)
@@ -64,6 +89,13 @@ public class CharacterBehaviour : MonoBehaviour
         IsAlive = false;
         _animator.SetTrigger("die");
         _agent.isStopped = true;
+    }
+
+    public void SetDead(bool dead)
+    {
+        IsAlive = !dead;
+        if (dead)
+            _animator.SetTrigger("die");
     }
 
     public void AddAbility(AbilityBehaviour ability)

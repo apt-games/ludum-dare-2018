@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -27,6 +26,11 @@ public class PlayerController : MonoBehaviour
         var secondChar = CharacterFactory.CreateInitial(new Vector3(position.x - 0.1f, position.y, position.z), transform);
         secondChar.OccupyingRoom = room;
         Players.Add(secondChar);
+    }
+
+    public void AddToParty(CharacterBehaviour character)
+    {
+        Players.Add(character);
     }
 
     public void MoveSelectedCharacterTo(RoomBehaviour room)
