@@ -7,21 +7,30 @@ public class CharacterAvatar : MonoBehaviour {
 
     private Animator _animator;
     public GameObject actions;
+    public UIController UIController;
 
     public void OnMouseEnter () {
-        Debug.Log("Enter!");
-
         _animator.SetTrigger("showactions");
     }
 
     public void OnMouseExit () {
-        Debug.Log("Exit!");
-
         _animator.SetTrigger("hideactions");
     }
 
     private void Awake() {
         _animator = GetComponent<Animator>();
+    }
+
+    public void OnAvatarClick () {
+        UIController.OnAvatarClick(this);
+    }
+
+    public void SetSelected(bool selected) {
+        if (selected) {
+            _animator.SetTrigger("setavatarselected");
+        } else {
+            _animator.SetTrigger("setunavatarselected");
+        }
     }
 
 	// Use this for initialization
