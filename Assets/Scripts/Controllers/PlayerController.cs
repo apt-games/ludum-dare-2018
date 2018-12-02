@@ -6,9 +6,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
-    public CharacterBehaviour CharacterPrefab;
-
     public List<CharacterBehaviour> Players { get; } = new List<CharacterBehaviour>();
+
+    public CharacterBehaviour SelectedCharacter;
 
     public void Init(RoomBehaviour room)
     {
@@ -18,9 +18,10 @@ public class PlayerController : MonoBehaviour
     private void Spawn(RoomBehaviour room)
     {
         var position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
-        var player = Instantiate(CharacterPrefab, position, Quaternion.identity, transform);
+        var initialCharacter = CharacterFactory.CreateInitial(position, transform);
         Debug.Log("Spawned at " + position);
-        Players.Add(player);
+        SelectedCharacter = initialCharacter;
+        Players.Add(initialCharacter);
     }
 
     public void MoveAllPlayersTo(RoomBehaviour room)

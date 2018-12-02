@@ -6,6 +6,10 @@ public class GameController : MonoBehaviour
     public PlayerController PlayerController;
     public MapController MapController;
 
+    public RoomBehaviour SelectedRoom;
+
+    public static GameController Instance => GameObject.FindGameObjectWithTag("GameController")?.GetComponent<GameController>();
+
     private void Awake()
     {
         MapController.RoomSelected += OnRoomSelected;
@@ -22,7 +26,16 @@ public class GameController : MonoBehaviour
 
     private void OnRoomSelected(RoomBehaviour room)
     {
-        WalkToRoom(room);
+        SelectedRoom = room;
+
+        if (_toggleAbility)
+        {
+            PlayerController.SelectedCharacter.UseAbility();
+        }
+        else
+        {
+            WalkToRoom(room);
+        }
     }
 
     private void WalkToRoom(RoomBehaviour room)
@@ -32,5 +45,16 @@ public class GameController : MonoBehaviour
         PlayerController.MoveAllPlayersTo(room);
 
         room.SetVisited(true);
+    }
+
+    private bool _toggleAbility;
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            _toggleAbility = !_toggleAbility;
+
+            Debug.Log($"Toggled: {(_toggleAbility ? "Ability" : "Character")}");
+        }
     }
 }

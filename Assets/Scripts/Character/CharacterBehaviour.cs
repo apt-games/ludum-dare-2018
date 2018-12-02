@@ -30,6 +30,13 @@ public class CharacterBehaviour : MonoBehaviour
         SetWalking(true);
     }
 
+    public void UseAbility()
+    {
+        var ability = GetComponentInChildren<AbilityBehaviour>();
+        if (ability != null)
+            ability.UseAbility();
+    }
+
     public void Die()
     {
         Debug.Log("Died");
@@ -50,5 +57,4 @@ public class CharacterBehaviour : MonoBehaviour
             SetWalking(false);
         }
     }
-
 }

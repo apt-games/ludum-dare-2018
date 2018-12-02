@@ -17,14 +17,12 @@ namespace Assets.Scripts.Factories
             "Rooms/floor06",
         };
 
-        public static RoomBehaviour CreateRoom(global::Room model)
+        public static RoomBehaviour Create(global::Room model)
         {
             var roomBehaviour = Factory.LoadPrefab<RoomBehaviour>("Rooms/RoomPrefab");
             roomBehaviour.transform.position = new Vector3(model.x, -model.y, 0);
             roomBehaviour.name = $"Room ({model.x},{model.y})";
             roomBehaviour.SetModel(model);
-
-            Debug.Log(model.type);
 
             switch (model.type)
             {
@@ -61,7 +59,7 @@ namespace Assets.Scripts.Factories
                     break;
                 case RoomType.UncertainDeath:
                 case RoomType.Death:
-                    var trap = TrapFactory.CreateTrap();
+                    var trap = TrapFactory.Create();
                     trap.transform.SetParent(roomBehaviour.transform, false);
                     break;
                 default:

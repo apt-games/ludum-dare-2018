@@ -17,8 +17,6 @@ public class MapController : MonoBehaviour
     // Use this for initialization
     public void InitiateMap()
     {
-        // var map = JsonUtility.FromJson<MapStructure>(json);
-
         Grid grid = GenerateMap(12);
 
         // foreach (var room in map.Rooms)
@@ -34,7 +32,7 @@ public class MapController : MonoBehaviour
             };
 
             // spawn tiles as children
-            var spawned = RoomFactory.CreateRoom(room);
+            var spawned = RoomFactory.Create(room);
             spawned.transform.parent = transform;
             spawned.Selected += OnRoomClicked;
 

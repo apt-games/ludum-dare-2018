@@ -12,7 +12,7 @@ public static class TrapFactory
         "Traps/FlameTrapEffect",
     };
 
-    public static TrapBehaviour CreateTrap()
+    public static TrapBehaviour Create()
     {
         var trapBehaviour = Factory.LoadPrefab<TrapBehaviour>("Traps/TrapPrefab");
 
