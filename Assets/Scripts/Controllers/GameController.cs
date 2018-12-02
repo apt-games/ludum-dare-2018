@@ -29,6 +29,10 @@ public class GameController : MonoBehaviour
 
     private void OnRoomSelected(RoomBehaviour room)
     {
+        if (PlayerController.SelectedCharacter == null) {
+            return;
+        }
+
         SelectedRoom = room;
 
         if (_toggleAbility)
@@ -60,6 +64,11 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+
+        SelectCharacter(null);
+        SetAbilityActive(false);
+
+        UIController.UpdateUI();
     }
 
     private bool _toggleAbility;

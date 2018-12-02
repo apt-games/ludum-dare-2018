@@ -11,8 +11,9 @@ public class AbilityBehaviour : MonoBehaviour
 
     public void UseAbility()
     {
-        if (Uses >= 0)
+        if (Uses > 0)
         {
+            Uses--;
             Debug.Log($"Using Ability {AbilityUsed != null}");
             AbilityUsed?.Invoke();
         }

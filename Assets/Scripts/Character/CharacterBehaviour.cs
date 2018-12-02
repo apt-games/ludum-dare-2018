@@ -27,7 +27,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private void Start()
     {
-        Abilities.AddRange(GetComponentsInChildren<AbilityBehaviour>());
+        // Abilities.AddRange(GetComponentsInChildren<AbilityBehaviour>());
     }
 
     private void Update()
@@ -75,6 +75,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void AddAbility(AbilityBehaviour ability)
     {
+        Debug.Log("Adding ability");
         ability.transform.SetParent(transform, false);
         ability.transform.localPosition = Vector3.zero;
         Abilities.Add(ability);

@@ -1,3 +1,4 @@
+using System.Linq;
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,26 +18,44 @@ public class UIController : MonoBehaviour {
     public PlayerController PlayerController;
     public CharacterAvatar CharacterAvatarPrefab;
 
+
     public UIController() {
-        _characterAvatarPosX = (_characterAvatarHeight / 2) + _characterAvatarMargin;
-        _initialCharacterAvatarPosY = _characterAvatarPosX * -1;
+        Debug.Log("HEIII");
+        _characterAvatarPosX = (_characterAvatarHeight / 2) - _characterAvatarMargin;
+        _initialCharacterAvatarPosY = (_characterAvatarPosX * -1) + _characterAvatarMargin;
     }
 
 	// Use this for initialization
 	public void UpdateUI () {
+        _activeCharacterAvatar = null;
+        _activeCharacterAbility = null;
+
+        foreach (var characterAvatar in _characterAvatars) {
+            Destroy(characterAvatar.gameObject);
+        }
+
+        _characterAvatars.Clear();
+
+        Debug.Log("This is count: " + _characterAvatars.Count);
+
         int posY = _initialCharacterAvatarPosY;
 
-        foreach (var Player in PlayerController.Players) {
+        foreach (var Player in PlayerController.Players.Where(p => p.IsAlive)) {
             Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
+
+
+            Debug.Log(position);
 
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
 
-            Debug.Log(Player.Abilities);
-
             characterAvatar.gameObject.SetActive(true);
             characterAvatar.Character = Player;
+            RectTransform transform = (RectTransform)  characterAvatar.transform;
 
-            characterAvatar.transform.localPosition = position;
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, _characterAvatarPosX, transform.rect.width);
+            transform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -posY, transform.rect.height);
+
+            // characterAvatar.transform.localPosition = position;
 
             var ImageComponent = characterAvatar.Image.GetComponent<Image>();
             ImageComponent.sprite = Player.CharacterInfo.avatar;
@@ -48,8 +67,11 @@ public class UIController : MonoBehaviour {
 
             characterAvatar.CreateActions();
 
+            _characterAvatars.Add(characterAvatar);
+
             posY = posY - (_characterAvatarHeight + _characterAvatarMargin);
         }
+
     }
 
 	// Update is called once per frame
@@ -58,10 +80,12 @@ public class UIController : MonoBehaviour {
 	}
 
     public void OnAvatarClick (CharacterAvatar CharacterAvatar) {
-        CharacterAvatar.SetSelected(true);
 
         if (_activeCharacterAvatar != null) {
             if (CharacterAvatar == _activeCharacterAvatar) {
+                _activeCharacterAvatar = null;
+                CharacterAvatar.SetSelected(false);
+                GameController.Instance.SelectCharacter(null);
                 return;
             }
 
@@ -74,7 +98,7 @@ public class UIController : MonoBehaviour {
             _activeCharacterAbility = null;
         }
 
-
+        CharacterAvatar.SetSelected(true);
         _activeCharacterAvatar = CharacterAvatar;
         GameController.Instance.SelectCharacter(CharacterAvatar.Character);
     }
@@ -90,25 +114,16 @@ public class UIController : MonoBehaviour {
 
             GameController.Instance.SelectCharacter(characterAbility.CharacterAvatar.Character);
             GameController.Instance.SetAbilityActive(true);
+        } else {
+            _activeCharacterAbility.SetSelected(false);
+            _activeCharacterAbility = null;
+            GameController.Instance.SetAbilityActive(false);
+            GameController.Instance.SelectCharacter(null);
         }
 
         if (_activeCharacterAvatar != null && _activeCharacterAbility != null) {
             _activeCharacterAvatar.SetSelected(false);
             _activeCharacterAvatar = null;
         }
-
-//         if (_activeCharacterAvatar == null) {
-//             if (_activeCharacterAbility != null) {
-//                 GameController.Instance.SelectCharacter(characterAbility.CharacterAvatar.Character);
-//             } else {
-//                 GameController.Instance.SelectCharacter(null);
-//             }
-//         } else if (characterAbility.CharacterAvatar )
-//
-//         characterAbility.SetSelected(_isAbilityActive);
-// ;
-//         GameController.Instance.SetAbilityActive(_isAbilityActive);
-
-
     }
 }
