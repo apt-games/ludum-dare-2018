@@ -13,6 +13,7 @@ public class CharacterAbility : MonoBehaviour {
     [HideInInspector]
     public CharacterAvatar CharacterAvatar;
     public Image Image;
+    public Texture2D texture;
 
     public event Action<CharacterAbility> AbilityClicked;
 
