@@ -9,12 +9,13 @@ public class UIController : MonoBehaviour {
     private int _characterAvatarMargin = 20;
     private int _characterAvatarPosX {get; set;}
     private int _initialCharacterAvatarPosY {get; set;}
+    private CharacterAvatar _activeCharacterAvatar {get; set;}
+    private CharacterAbility _activeCharacterAbility {get; set;}
+    private readonly List<CharacterAvatar> _characterAvatars = new List<CharacterAvatar>();
 
-    private CharacterAvatar ActiveCharacterAvatar {get; set;}
     public GameObject Content;
     public PlayerController PlayerController;
     public CharacterAvatar CharacterAvatarPrefab;
-    private readonly List<CharacterAvatar> _characterAvatars = new List<CharacterAvatar>();
 
     public UIController() {
         _characterAvatarPosX = (_characterAvatarHeight / 2) + _characterAvatarMargin;
@@ -30,8 +31,10 @@ public class UIController : MonoBehaviour {
 
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
 
-            characterAvatar.Character = Player;
+            Debug.Log(Player.Abilities);
 
+            characterAvatar.gameObject.SetActive(true);
+            characterAvatar.Character = Player;
 
             characterAvatar.transform.localPosition = position;
 
@@ -41,6 +44,7 @@ public class UIController : MonoBehaviour {
             avatarName.SetText(Player.CharacterInfo.name);
 
             characterAvatar.AvatarClicked += OnAvatarClick;
+            characterAvatar.CharacterAbilityClicked += OnAbilityClick;
 
             characterAvatar.CreateActions();
 
@@ -54,17 +58,57 @@ public class UIController : MonoBehaviour {
 	}
 
     public void OnAvatarClick (CharacterAvatar CharacterAvatar) {
+        CharacterAvatar.SetSelected(true);
 
-        if (ActiveCharacterAvatar != null) {
-            if (CharacterAvatar == ActiveCharacterAvatar) {
+        if (_activeCharacterAvatar != null) {
+            if (CharacterAvatar == _activeCharacterAvatar) {
                 return;
             }
 
-            Debug.Log(ActiveCharacterAvatar);
-            ActiveCharacterAvatar.SetSelected(false);
+            Debug.Log(_activeCharacterAvatar);
+            _activeCharacterAvatar.SetSelected(false);
         }
 
-        ActiveCharacterAvatar = CharacterAvatar;
-        CharacterAvatar.SetSelected(true);
+        if (_activeCharacterAbility != null) {
+            _activeCharacterAbility.SetSelected(false);
+            _activeCharacterAbility = null;
+        }
+
+
+        _activeCharacterAvatar = CharacterAvatar;
+        GameController.Instance.SelectCharacter(CharacterAvatar.Character);
+    }
+
+    public void OnAbilityClick (CharacterAbility characterAbility) {
+        if (_activeCharacterAbility == null || characterAbility != _activeCharacterAbility) {
+            if (_activeCharacterAbility != null) {
+                _activeCharacterAbility.SetSelected(false);
+            }
+
+            _activeCharacterAbility = characterAbility;
+            characterAbility.SetSelected(true);
+
+            GameController.Instance.SelectCharacter(characterAbility.CharacterAvatar.Character);
+            GameController.Instance.SetAbilityActive(true);
+        }
+
+        if (_activeCharacterAvatar != null && _activeCharacterAbility != null) {
+            _activeCharacterAvatar.SetSelected(false);
+            _activeCharacterAvatar = null;
+        }
+
+//         if (_activeCharacterAvatar == null) {
+//             if (_activeCharacterAbility != null) {
+//                 GameController.Instance.SelectCharacter(characterAbility.CharacterAvatar.Character);
+//             } else {
+//                 GameController.Instance.SelectCharacter(null);
+//             }
+//         } else if (characterAbility.CharacterAvatar )
+//
+//         characterAbility.SetSelected(_isAbilityActive);
+// ;
+//         GameController.Instance.SetAbilityActive(_isAbilityActive);
+
+
     }
 }
