@@ -36,7 +36,7 @@ class Grid {
   }
 
   pickRandomCell() {
-    const filteredCells = this.cells.filter(cell => !cell.blocked);
+    const filteredCells = this.cells.filter(cell => cell.type !== 0);
 
     return filteredCells[randInt(filteredCells.length)];
   }
@@ -49,9 +49,7 @@ class Grid {
 
   reset() {
     for (let i = 0; i < this.cells.length; i++) {
-      const cell = this.cells[i];
-
-      cell.visited = false;
+      this.cells[i].visited = false;
     }
   }
 }
@@ -61,15 +59,11 @@ class Cell {
     this.x = x;
     this.y = y;
 
-    this.start = false;
-    this.exit = false;
-
     this.walls = [1, 1, 1, 1];
-    this.blocked = simplex.noise2D(x * 0.1, y * 0.1) > 0.6;
 
-    if (!this.blocked) {
-      this.type = [0, 1][weightedRandom([60, 40])];
-    }
+    const blocked = simplex.noise2D(x * 0.1, y * 0.1) > 0.45;
+
+    this.type = blocked ? 0 : [3, 4, 5, 6][weightedRandom([10, 40, 10, 40])];
 
     this.visited = false;
   }
@@ -92,7 +86,7 @@ class Cell {
       const [x, y] = neighbors[i];
       const cell = grid.cells[y * grid.width + x];
 
-      if (cell && !cell.blocked) {
+      if (cell && cell.type !== 0) {
         neighborCells.push(cell);
       }
     }
@@ -144,11 +138,9 @@ function generate(size = 10) {
 
   const grid = new Grid(size, size);
 
-  let didSetExit = false;
-
   let current = grid.pickRandomCell();
-  current.start = true;
   // let current = grid.cells[0];
+  current.type = 1;
   current.visited = true;
 
   while (current) {
@@ -163,25 +155,35 @@ function generate(size = 10) {
 
       current = next;
     } else {
-      // if (!didSetExit) {
-      //   current.exit = true;
-      //   didSetExit = true;
-      // }
-
       const prev = stack.pop();
 
       current = prev;
     }
   }
 
-  for (let i = 0; i < Math.floor(grid.cells.length / 2); i++) {
-    const cell = grid.pickRandomCell();
-    const neighbor = cell.getRandomNeighbor(grid);
+  for (let i = 0; i < grid.cells.length; i++) {
+    // const cell = grid.pickRandomCell();
+    const cell = grid.cells[i];
+
+    if (cell.type === 0) continue;
+
+    let neighbor = cell.getRandomNeighbor(grid);
 
     if (neighbor) {
       cell.removeWallsTo(neighbor);
     }
+
+    // if (Math.round(Math.random())) {
+    //   neighbor = cell.getRandomNeighbor(grid);
+
+    //   if (neighbor) {
+    //     cell.removeWallsTo(neighbor);
+    //   }
+    // }
   }
+
+  const endCell = grid.pickRandomCell();
+  endCell.type = 2;
 
   return grid;
 }

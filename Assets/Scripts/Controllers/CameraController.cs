@@ -2,9 +2,10 @@
 
 public class CameraController : MonoBehaviour
 {
-    public void ShowRoom(Transform room)
+    public void ShowRoom(RoomBehaviour room)
     {
-        var target = new Vector3(room.position.x, room.position.y, transform.position.z);
+        var roomPosition = room.transform.position;
+        var target = new Vector3(roomPosition.x, roomPosition.y, transform.position.z);
         iTween.MoveTo(gameObject, target, 2f);
     }
 }

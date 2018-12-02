@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Factories;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class MapController : MonoBehaviour
 {
     public event Action<RoomBehaviour> RoomSelected;
-
-    public RoomBehaviour RoomPrefab;
 
     public RoomBehaviour Current;
 
@@ -15,29 +17,90 @@ public class MapController : MonoBehaviour
     // Use this for initialization
     public void InitiateMap()
     {
-        var map = JsonUtility.FromJson<MapStructure>(json);
+        // var map = JsonUtility.FromJson<MapStructure>(json);
 
-        foreach (var room in map.Rooms)
+        Grid grid = GenerateMap(12);
+
+        // foreach (var room in map.Rooms)
+        foreach (Cell cell in grid._cells)
         {
+            Room room = new Room
+            {
+                x = cell._coord.x,
+                y = cell._coord.y,
+                walls = cell._walls,
+                type = (RoomType)cell._type
+            };
+
             // spawn tiles as children
-            var spawned = CreateRoom(room);
+            var spawned = RoomFactory.CreateRoom(room);
+            spawned.transform.parent = transform;
             spawned.Selected += OnRoomClicked;
 
             _rooms.Add(spawned);
 
             // start room
-            if (room.start)
+            if (room.type == RoomType.Start)
                 Current = spawned;
         }
     }
 
-    private RoomBehaviour CreateRoom(Room room)
+    private void Start()
     {
-        var go = Instantiate(RoomPrefab, new Vector3(room.x, -room.y, 0), Quaternion.identity, transform);
-        go.name = $"Room ({room.x},{room.y})";
-        go.SetModel(room);
+        // add surface mesh on current object and build from this
+        var surface = Current.Floor.gameObject.AddComponent<NavMeshSurface>();
+        surface.BuildNavMesh();
+    }
 
-        return go;
+    public Grid GenerateMap(int size)
+    {
+        Queue<Cell> stack = new Queue<Cell>();
+
+        Grid grid = new Grid(size);
+
+        Cell current = grid.PickRandomCell();
+        // let current = grid.cells[0];
+        current._type = 1;
+        current._visited = true;
+
+        do
+        {
+            Cell next = current.GetRandomAvailableNeighbor(grid);
+
+            if (next != null)
+            {
+                next._visited = true;
+
+                stack.Enqueue(current);
+
+                current.RemoveWallsTo(next);
+
+                current = next;
+            }
+            else
+            {
+                Cell prev = stack.Dequeue();
+
+                current = prev;
+            }
+        } while (stack.Count != 0);
+
+        foreach (var cell in grid._cells)
+        {
+            if (cell._type == 0) continue;
+
+            Cell neighbor = cell.GetRandomNeighbor(grid);
+
+            if (neighbor != null)
+            {
+                cell.RemoveWallsTo(neighbor);
+            }
+        }
+
+        Cell endCell = grid.PickRandomCell();
+        endCell._type = 2;
+
+        return grid;
     }
 
     private void OnRoomClicked(RoomBehaviour room)
@@ -72,11 +135,200 @@ public class MapController : MonoBehaviour
         return false;
     }
 
-    private string json =
-        "{\"Rooms\":[{\"x\":0,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,0],\"type\":0},{\"x\":3,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,0],\"type\":0},{\"x\":4,\"y\":0,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,1],\"type\":1},{\"x\":0,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":1},{\"x\":1,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":3,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":4,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":0,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":0},{\"x\":1,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":2,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":1},{\"x\":3,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":4,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":5,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":0,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":1,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":0},{\"x\":3,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":4,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":5,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":0,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":3,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":4,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":5,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":0,\"y\":5,\"start\":true,\"blocked\":false,\"walls\":[0,1,1,1],\"type\":1},{\"x\":1,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":0},{\"x\":2,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0},{\"x\":3,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,1],\"type\":0},{\"x\":4,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":5,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0}]}";
+    //private string json =
+        //"{\"Rooms\":[{\"x\":0,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,0],\"type\":0},{\"x\":3,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,0],\"type\":0},{\"x\":4,\"y\":0,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":0,\"start\":false,\"blocked\":false,\"walls\":[1,1,1,1],\"type\":1},{\"x\":0,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":1},{\"x\":1,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":1,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":3,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":4,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":5,\"y\":1,\"start\":false,\"blocked\":true,\"walls\":[1,1,1,1]},{\"x\":0,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,0,1],\"type\":0},{\"x\":1,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":2,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":1},{\"x\":3,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":4,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":1},{\"x\":5,\"y\":2,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":1},{\"x\":0,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":1,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":2,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[1,1,0,0],\"type\":0},{\"x\":3,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":4,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":5,\"y\":3,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":0},{\"x\":0,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,1],\"type\":1},{\"x\":1,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[1,0,0,0],\"type\":0},{\"x\":2,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":3,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":1},{\"x\":4,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,0],\"type\":0},{\"x\":5,\"y\":4,\"start\":false,\"blocked\":false,\"walls\":[0,1,0,1],\"type\":1},{\"x\":0,\"y\":5,\"start\":true,\"blocked\":false,\"walls\":[0,1,1,1],\"type\":1},{\"x\":1,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,1],\"type\":0},{\"x\":2,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0},{\"x\":3,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[1,0,1,1],\"type\":0},{\"x\":4,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,0,1,0],\"type\":0},{\"x\":5,\"y\":5,\"start\":false,\"blocked\":false,\"walls\":[0,1,1,0],\"type\":0}]}";
 }
 
 public class MapStructure
 {
     public Room[] Rooms;
+}
+
+public class Grid
+{
+    public List<Cell> _cells = new List<Cell>();
+    public Vector2Int _size = new Vector2Int(0, 0);
+
+    public Grid(int size)
+    {
+        _size.x = size;
+        _size.y = size;
+
+        for (int y = 0; y < _size.y; y++)
+        {
+            for (int x = 0; x < _size.x; x++)
+            {
+                _cells.Add(new Cell(x, y, _size));
+            }
+        }
+    }
+
+    public Cell PickRandomCell()
+    {
+        List<Cell> filteredCells = _cells.FindAll(cell => cell._type != 0);
+
+        int i = Random.Range(0, filteredCells.Count);
+
+        return filteredCells[i];
+    }
+
+    public Cell GetRandomCellByType(int type)
+    {
+        List<Cell> filteredCells = _cells.FindAll(cell => cell._type == type);
+
+        int i = Random.Range(0, filteredCells.Count);
+
+        return filteredCells[i];
+    }
+
+    public void Reset()
+    {
+        foreach (Cell cell in _cells)
+        {
+            cell.Reset();
+        }
+    }
+}
+
+public class Cell
+{
+    public Vector2Int _coord = new Vector2Int(0, 0);
+
+    public bool _start;
+    public bool _exit;
+
+    public int _type;
+
+    public bool _visited;
+
+    public int[] _walls = new[] { 1, 1, 1, 1 };
+
+    public List<Vector2Int> _neighborCoords = new List<Vector2Int>();
+
+    public Cell(int x, int y, Vector2Int size)
+    {
+        _coord.x = x;
+        _coord.y = y;
+
+        if (_coord.x - 1 >= 0)
+            _neighborCoords.Add(new Vector2Int(_coord.x - 1, _coord.y));
+
+        if (_coord.x + 1 < size.x)
+            _neighborCoords.Add(new Vector2Int(_coord.x + 1, _coord.y));
+
+        if (_coord.y - 1 >= 0)
+            _neighborCoords.Add(new Vector2Int(_coord.x, _coord.y - 1));
+
+        if (_coord.y + 1 < size.y)
+            _neighborCoords.Add(new Vector2Int(_coord.x, _coord.y + 1));
+
+        _start = false;
+        _exit = false;
+
+        bool blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
+
+        List<int> types = new List<int>() { 3, 4, 5, 6 };
+        int weighted = WeightedRandom(new List<int>() { 10, 40, 10, 40 });
+
+        _type = blocked ? 0 : types[weighted];
+
+        _visited = false;
+    }
+
+    public int WeightedRandom(List<int> weights)
+    {
+        int total = weights.Sum();
+        int random = Random.Range(0, total);
+
+        for (int i = 0; i < weights.Count; i++)
+        {
+            if (random < weights[i])
+            {
+                return i;
+            }
+
+            random -= weights[i];
+        }
+
+        return 0;
+    }
+
+    public void SetType(int type)
+    {
+        _type = type;
+    }
+
+    public List<Cell> GetNeighbors(Grid grid)
+    {
+        List<Cell> neighborCells = new List<Cell>();
+
+        foreach (Vector2Int coord in _neighborCoords)
+        {
+            Cell cell = grid._cells[coord.y * grid._size.x + coord.x];
+
+            if (cell._type != 0)
+            {
+                neighborCells.Add(cell);
+            }
+        }
+
+        return neighborCells;
+    }
+
+    public Cell GetRandomAvailableNeighbor(Grid grid)
+    {
+        List<Cell> neighbors = GetNeighbors(grid).FindAll(cell => !cell._visited);
+
+        if (neighbors.Count > 0)
+        {
+            int i = Random.Range(0, neighbors.Count);
+
+            return neighbors[i];
+        }
+
+        return null;
+    }
+
+    public Cell GetRandomNeighbor(Grid grid)
+    {
+        List<Cell> neighbors = GetNeighbors(grid);
+
+        int i = Random.Range(0, neighbors.Count);
+
+        return neighbors[i];
+    }
+
+    public void RemoveWallsTo(Cell cell)
+    {
+        int x = _coord.x - cell._coord.x;
+
+        if (x == 1)
+        {
+            _walls[3] = 0;
+            cell._walls[1] = 0;
+        }
+        else if (x == -1)
+        {
+            _walls[1] = 0;
+            cell._walls[3] = 0;
+        }
+
+        int y = _coord.y - cell._coord.y;
+
+        if (y == 1)
+        {
+            _walls[0] = 0;
+            cell._walls[2] = 0;
+        }
+        else if (y == -1)
+        {
+            _walls[2] = 0;
+            cell._walls[0] = 0;
+        }
+    }
+
+    public void Reset()
+    {
+        _visited = false;
+    }
 }

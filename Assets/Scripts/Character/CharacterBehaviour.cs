@@ -1,16 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
-public class CharacterBehaviour : MonoBehaviour {
+[RequireComponent(typeof(NavMeshAgent))]
+public class CharacterBehaviour : MonoBehaviour
+{
+    private NavMeshAgent _agent;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private Animator _animator;
+
+    private bool _isWalking;
+
+    public bool IsAlive = true;
+
+    private void Awake ()
+    {
+        _animator = GetComponentInChildren<Animator>();
+
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.updateRotation = true;
+    }
 
     public void MoveTo(Transform room)
     {
@@ -18,6 +26,29 @@ public class CharacterBehaviour : MonoBehaviour {
 
         var target = new Vector3(room.position.x, room.position.y, transform.position.z);
 
-        iTween.MoveTo(gameObject, target, 1f);
+        _agent.SetDestination(target);
+        SetWalking(true);
     }
+
+    public void Die()
+    {
+        Debug.Log("Died");
+        IsAlive = false;
+        _animator.SetTrigger("die");
+    }
+
+    private void SetWalking(bool walking)
+    {
+        _isWalking = walking;
+        _animator.SetBool("walking", _isWalking);
+    }
+
+    private void Update()
+    {
+        if (_isWalking && !_agent.hasPath)
+        {
+            SetWalking(false);
+        }
+    }
+
 }
