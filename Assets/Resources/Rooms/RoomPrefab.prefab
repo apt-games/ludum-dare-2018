@@ -141,7 +141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4504444309774812}
   - component: {fileID: 114392795578142640}
-  - component: {fileID: 61788178338115844}
+  - component: {fileID: 61067246043907844}
   m_Layer: 0
   m_Name: RoomPrefab
   m_TagString: Untagged
@@ -482,7 +482,7 @@ Transform:
   m_GameObject: {fileID: 1765340181872838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.2}
   m_Children: []
   m_Father: {fileID: 4504444309774812}
   m_RootOrder: 3
@@ -1242,7 +1242,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1298664085411822}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!61 &61788178338115844
+--- !u!61 &61067246043907844
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1485,7 +1485,6 @@ MonoBehaviour:
     y: 0
     walls: 
     blocked: 0
-    start: 0
     type: 0
   Floor: {fileID: 23294206871933080}
 --- !u!114 &114404947231027308

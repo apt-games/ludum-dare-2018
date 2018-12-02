@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Factories;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -8,8 +9,6 @@ using Random = UnityEngine.Random;
 public class MapController : MonoBehaviour
 {
     public event Action<RoomBehaviour> RoomSelected;
-
-    public RoomBehaviour RoomPrefab;
 
     public RoomBehaviour Current;
 
@@ -34,13 +33,14 @@ public class MapController : MonoBehaviour
             };
 
             // spawn tiles as children
-            var spawned = CreateRoom(room);
+            var spawned = RoomFactory.CreateRoom(room);
+            spawned.transform.parent = transform;
             spawned.Selected += OnRoomClicked;
 
             _rooms.Add(spawned);
 
             // start room
-            if (room.type == 0)
+            if (room.type == RoomType.Start)
                 Current = spawned;
         }
     }
@@ -101,15 +101,6 @@ public class MapController : MonoBehaviour
         endCell._type = 2;
 
         return grid;
-    }
-
-    private RoomBehaviour CreateRoom(Room room)
-    {
-        var go = Instantiate(RoomPrefab, new Vector3(room.x, -room.y, 0), Quaternion.identity, transform);
-        go.name = $"Room ({room.x},{room.y})";
-        go.SetModel(room);
-
-        return go;
     }
 
     private void OnRoomClicked(RoomBehaviour room)
