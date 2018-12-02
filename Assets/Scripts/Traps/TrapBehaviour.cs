@@ -1,34 +1,41 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class TrapBehaviour : MonoBehaviour
 {
     private TrapEffectBehaviour _effect;
     public TrapType TrapType { get; private set; }
 
-    public int Uses = 1;
-
     public void TrapTriggered(CharacterBehaviour character = null)
     {
-        if (Uses > 0)
+        if (_effect.Uses > 0)
         {
             // kill potential character
             if (character != null)
-                GameController.Instance.PlayerController.KillCharacter(character);
+            {
+                StartCoroutine(KillCharacterAfterDelay(character));
+            }
 
             // show effect
             _effect.TriggerEffectEvent.Invoke();
 
             //decrement uses
-            Uses --;
+            _effect.Uses--;
         }
+    }
+
+    private IEnumerator KillCharacterAfterDelay(CharacterBehaviour character)
+    {
+        yield return new WaitForSeconds(_effect.Delay);
+        GameController.Instance.PlayerController.KillCharacter(character);
     }
 
     public void Trap()
     {
-        if (Uses > 0)
+        if (_effect.Uses > 0)
         {
             _effect.TriggerEffectEvent.Invoke();
-            Uses--;
+            _effect.Uses--;
         }
     }
 
