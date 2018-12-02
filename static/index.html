@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
     <title>Altruist Project</title>
-    <link rel="shortcut icon" href="/TemplateData/favicon.ico">
+
+    <meta name="description" property="og:description" content="Altruist Project is a sci-fi roguelite game where you try to guide a group of survivors through a deadly maze as part of a cruel experiment. Along the way you will have to make tough choices on who gets to go on and who gets sacrificed for the greater good.">
+
+    <meta property="og:title" content="Altruist Project">
+    <meta property="og:url" content="altruist-project.com">
+    <meta property="og:image" content="https://altruist-project.com/share.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fe0468">
+
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="theme-color" content="#000000">
+
     <style>
       *,::after,::before{background-repeat:no-repeat;box-sizing:border-box}::after,::before{text-decoration:inherit;vertical-align:inherit}html{cursor:default;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";line-height:1.15;-moz-tab-size:4;tab-size:4;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;word-break:break-word}body{margin:0}h1{font-size:2em;margin:.67em 0}hr{height:0;overflow:visible}main{display:block}nav ol,nav ul{list-style:none}pre{font-family:Menlo,Consolas,Roboto Mono,Ubuntu Monospace,Noto Mono,Oxygen Mono,Liberation Mono,monospace;font-size:1em}a{background-color:transparent}abbr[title]{text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:Menlo,Consolas,Roboto Mono,Ubuntu Monospace,Noto Mono,Oxygen Mono,Liberation Mono,monospace;font-size:1em}small{font-size:80%}::-moz-selection{background-color:#b3d4fc;color:#000;text-shadow:none}::selection{background-color:#b3d4fc;color:#000;text-shadow:none}audio,canvas,iframe,img,svg,video{vertical-align:middle}audio,video{display:inline-block}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not([fill]){fill:currentColor}svg:not(:root){overflow:hidden}table{border-collapse:collapse}button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}button,input,select{margin:0}button{overflow:visible;text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}fieldset{padding:.35em .75em .625em}input{overflow:visible}legend{color:inherit;display:table;max-width:100%;white-space:normal}progress{display:inline-block;vertical-align:baseline}select{text-transform:none}textarea{margin:0;overflow:auto;resize:vertical}[type=checkbox],[type=radio]{padding:0}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}details{display:block}dialog{background-color:#fff;border:solid;color:#000;display:block;height:-moz-fit-content;height:-webkit-fit-content;height:fit-content;left:0;margin:auto;padding:1em;position:absolute;right:0;width:-moz-fit-content;width:-webkit-fit-content;width:fit-content}dialog:not([open]){display:none}summary{display:list-item}canvas{display:inline-block}template{display:none}[tabindex],a,area,button,input,label,select,summary,textarea{-ms-touch-action:manipulation;touch-action:manipulation}[hidden]{display:none}[aria-busy=true]{cursor:progress}[aria-controls]{cursor:pointer}[aria-disabled=true],[disabled]{cursor:not-allowed}[aria-hidden=false][hidden]:not(:focus){clip:rect(0,0,0,0);display:inherit;position:absolute}
     </style>
@@ -17,17 +35,45 @@
         background-color: #000;
       }
 
+      .header { position: absolute; top: 0; right: 0; left: 0; }
+      .header img { display: block; width: 280px; height: auto; margin: 2em auto; }
+
+      .footer { position: absolute; right: 0; bottom: 0; left: 0; }
+      .credits-button { display: block; font-size: 1em; font-weight: 400; margin: 1em auto; padding: 0.5em 1em; color: #fff; text-decoration: underline; border-radius: 0; border: none; background: transparent; }
+      .close-credits-button { position: absolute; top: 0.5em; right: 0.5em; display: block; font-size: 1em; font-weight: 400; margin: 1em auto; padding: 0.5em 1em; color: #fff; border-radius: 0; border: none; background: transparent; }
+
+      .credits { position: absolute; top: 50%; left: 50%; padding: 2em;  width: 80%; max-width: 640px; background: rgba(0, 0, 0, 0.9); opacity: 0; transform: translate3d(-50%, calc(-50% + 100px), 0); -webkit-transform: translate3d(-50%, calc(-50% + 100px), 0); transition: transform 250ms 100ms ease-in, opacity 250ms; }
+      .credits.visible { opacity: 1; transform: translate3d(-50%, -50%, 0); -webkit-transform: translate3d(-50%, -50%, 0); transition: transform 250ms ease-out, opacity 250ms 100ms; }
+
       .webgl-content * {border: 0; margin: 0; padding: 0; background-color: #000;}
       .webgl-content {position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
-
       .webgl-content .progress {position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); height: 18px; width: 141px; margin-top: 90px;}
       .webgl-content .progress .empty {background: url('/TemplateData/progressEmpty.Dark.png') no-repeat right / cover; float: right; width: 100%; height: 100%; display: inline-block;}
       .webgl-content .progress .full {background: url('/TemplateData/progressFull.Dark.png') no-repeat left / cover; float: left; width: 0%; height: 100%; display: inline-block;}
     </style>
   </head>
   <body>
+    <header class="header">
+      <img src="/logo.png" alt="Altruist Project logo">
+    </header>
+    <footer class="footer">
+      <button class="credits-button">credits</button>
+    </footer>
     <div class="webgl-content">
       <div id="gameContainer" style="width: 960px; height: 600px"></div>
+    </div>
+
+    <div class="credits">
+      <article>
+        <header>
+          <h1>Credits</h1>
+        </header>
+        <p>Anders Havskjold - Tech Lead</p>
+        <p>Syver Lauritzen - Art direction</p>
+        <p>Daniel Skogly - Development</p>
+        <p>Magnus Bergman - Development</p>
+      </article>
+      <button class="close-credits-button">X</button>
     </div>
 
     <script src="/Build/UnityLoader.js"></script>
@@ -54,6 +100,38 @@
           gameInstance.progress.style.display = "none";
         }
       }
+
+      var credits = document.querySelector('.credits');
+      credits.style.display = 'none';
+
+      function handleCreditsTransitionEnd() {
+        if (!credits.classList.contains('visible')) {
+          credits.style.display = 'none';
+        }
+      }
+
+      credits.addEventListener('transitionend', handleCreditsTransitionEnd)
+
+      function toggleCredits() {
+        if (credits.classList.contains('visible')) {
+          credits.classList.remove('visible');
+        } else {
+          credits.style.display = 'block';
+          setTimeout(() => { credits.classList.add('visible'); }, 10);
+        }
+      }
+
+      var creditsButton = document.querySelector('.credits-button');
+
+      creditsButton.addEventListener('click', toggleCredits);
+
+      function closeCredits() {
+        credits.classList.remove('visible');
+      }
+
+      var closeCreditsButton = document.querySelector('.close-credits-button');
+
+      closeCreditsButton.addEventListener('click', closeCredits);
 
       var gameInstance = UnityLoader.instantiate("gameContainer", "/Build/dist.json", {onProgress: UnityProgress});
     </script>
