@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
     {
         CameraController.ShowRoom(MapController.Current);
         PlayerController.Init(MapController.Current);
-        MapController.Current.SetVisited(true);
+        MapController.Current.SetVisited();
         UIController?.UpdateUI(); //DO NOT COMMIT
     }
 
@@ -44,9 +44,10 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            MapController.Current = room;
+            MapController.SetCurrentRoom(room);
             CameraController.ShowRoom(room);
-            room.SetVisited(true);
+
+            MapController.SetCurrentRoom(room);
 
             if (_toggleAll)
                 PlayerController.MovePartyTo(room);
@@ -93,7 +94,7 @@ public class GameController : MonoBehaviour
 
         if (PlayerController.SelectedCharacter != null)
         {
-            MapController.Current = PlayerController.SelectedCharacter.OccupyingRoom;
+            MapController.SetCurrentRoom(PlayerController.SelectedCharacter.OccupyingRoom);
             CameraController.ShowRoom(PlayerController.SelectedCharacter.OccupyingRoom);
         }
     }
