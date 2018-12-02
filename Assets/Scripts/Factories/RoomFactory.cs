@@ -6,10 +6,7 @@ namespace Assets.Scripts.Factories
 {
     public static class RoomFactory
     {
-        private static readonly Random _rnd = new Random();
-        private static readonly int[] _rotations = new[] { 0, 90, 180, 270 };
-        private static readonly string[] _floors = new[]
-        {
+        private static readonly string[] _floors = {
             "Rooms/floor03",
             "Rooms/floor08",
             "Rooms/floor07",
@@ -22,9 +19,8 @@ namespace Assets.Scripts.Factories
 
         public static RoomBehaviour CreateRoom(global::Room model)
         {
-            var prefab = Resources.Load("Rooms/RoomPrefab");
-
-            var roomBehaviour = (GameObject.Instantiate(prefab, new Vector3(model.x, -model.y, 0), Quaternion.identity) as GameObject).GetComponent<RoomBehaviour>();
+            var roomBehaviour = Factory.LoadPrefab<RoomBehaviour>("Rooms/RoomPrefab");
+            roomBehaviour.transform.position = new Vector3(model.x, -model.y, 0);
             roomBehaviour.name = $"Room ({model.x},{model.y})";
             roomBehaviour.SetModel(model);
 
@@ -40,12 +36,12 @@ namespace Assets.Scripts.Factories
                     break;
                 case RoomType.Safe:
                     roomBehaviour.Floor.material = Resources.Load<Material>(_floors[1]);
-                    roomBehaviour.Floor.transform.Rotate(Vector3.up, RandomRotation);
+                    roomBehaviour.Floor.transform.Rotate(Vector3.up, Factory.RandomRotation);
                     break;
                 case RoomType.UncertainSafe:
                 case RoomType.UncertainDeath:
                     roomBehaviour.Floor.material = Resources.Load<Material>(_floors[Random.Range(3, _floors.Length)]);
-                    roomBehaviour.Floor.transform.Rotate(Vector3.up, RandomRotation);
+                    roomBehaviour.Floor.transform.Rotate(Vector3.up, Factory.RandomRotation);
                     break;
                 case RoomType.Death:
                     roomBehaviour.Floor.material = Resources.Load<Material>(_floors[2]);
@@ -65,7 +61,8 @@ namespace Assets.Scripts.Factories
                     break;
                 case RoomType.UncertainDeath:
                 case RoomType.Death:
-                    // add trap
+                    var trap = TrapFactory.CreateTrap();
+                    trap.transform.SetParent(roomBehaviour.transform, false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -73,6 +70,5 @@ namespace Assets.Scripts.Factories
 
             return roomBehaviour;
         }
-        private static int RandomRotation => _rotations[Random.Range(0, _rotations.Length)];
     }
 }

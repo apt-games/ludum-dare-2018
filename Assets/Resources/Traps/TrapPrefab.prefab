@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4762753199884522}
   - component: {fileID: 114561442389265128}
   m_Layer: 0
-  m_Name: TrapBehaviour
+  m_Name: TrapPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
