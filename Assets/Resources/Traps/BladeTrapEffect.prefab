@@ -206,6 +206,8 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  Uses: 1
+  Delay: 0.2
 --- !u!198 &198673454785827768
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -3784,7 +3786,7 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 55
+      m_Bits: 567
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
