@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
@@ -34,27 +35,55 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            WalkToRoom(room);
+            MapController.Current = room;
+            CameraController.ShowRoom(room);
+            room.SetVisited(true);
+
+            if (_toggleAll)
+                PlayerController.MovePartyTo(room);
+            else
+                PlayerController.MoveSelectedCharacterTo(room);
+
         }
     }
 
-    private void WalkToRoom(RoomBehaviour room)
-    {
-        MapController.Current = room;
-        CameraController.ShowRoom(room);
-        PlayerController.MoveAllPlayersTo(room);
-
-        room.SetVisited(true);
-    }
-
     private bool _toggleAbility;
+    private bool _toggleAll;
+
     private void Update()
     {
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            _toggleAbility = false;
+            _toggleAll = false;
+            SelectCharacter();
+            Debug.Log($"Selected single");
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            _toggleAbility = false;
+            _toggleAll = true;
+            SelectCharacter();
+            Debug.Log($"Selected party");
+        }
+
         if (Input.GetKeyUp(KeyCode.A))
         {
             _toggleAbility = !_toggleAbility;
 
-            Debug.Log($"Toggled: {(_toggleAbility ? "Ability" : "Character")}");
+            Debug.Log($"Ability {_toggleAbility}");
+        }
+    }
+
+    private void SelectCharacter()
+    {
+        // select first which is not current
+        PlayerController.SelectedCharacter = PlayerController.Players.FirstOrDefault(c => c.IsAlive && c != PlayerController.SelectedCharacter);
+        if (PlayerController.SelectedCharacter != null)
+        {
+            MapController.Current = PlayerController.SelectedCharacter.OccupyingRoom;
+            CameraController.ShowRoom(PlayerController.SelectedCharacter.OccupyingRoom);
         }
     }
 }

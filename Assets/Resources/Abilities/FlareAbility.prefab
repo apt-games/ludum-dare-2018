@@ -80,4 +80,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2d1c0360bc4264588880c396df6cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 1677700817803234, guid: 6cc25fdc2dfd8e04f8d18abc880e96df, type: 2}
+  Prefab: {fileID: 1289798362711286, guid: bd1daa86e2b0542b9b62e5b2f1d64de3, type: 2}

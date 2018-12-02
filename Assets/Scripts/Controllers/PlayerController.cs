@@ -19,16 +19,26 @@ public class PlayerController : MonoBehaviour
     {
         var position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
         var initialCharacter = CharacterFactory.CreateInitial(position, transform);
+        initialCharacter.OccupyingRoom = room;
         Debug.Log("Spawned at " + position);
         SelectedCharacter = initialCharacter;
         Players.Add(initialCharacter);
+
+        var secondChar = CharacterFactory.CreateInitial(new Vector3(position.x - 0.1f, position.y, position.z), transform);
+        secondChar.OccupyingRoom = room;
+        Players.Add(secondChar);
     }
 
-    public void MoveAllPlayersTo(RoomBehaviour room)
+    public void MoveSelectedCharacterTo(RoomBehaviour room)
+    {
+        SelectedCharacter?.MoveTo(room);
+    }
+
+    public void MovePartyTo(RoomBehaviour room)
     {
         foreach (var player in Players.Where(player => player.IsAlive))
         {
-            player.MoveTo(room.transform);
+            player.MoveTo(room);
         }
     }
 
@@ -36,5 +46,6 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Killing char");
         character.Die();
+        SelectedCharacter = null;
     }
 }
