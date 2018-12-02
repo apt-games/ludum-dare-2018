@@ -206,6 +206,8 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  Uses: 1
+  Delay: 0.2
 --- !u!198 &198673454785827768
 ParticleSystem:
   m_ObjectHideFlags: 1

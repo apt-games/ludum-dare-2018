@@ -67,11 +67,7 @@ public class RoomBehaviour : MonoBehaviour
     public void SetModel(Room room)
     {
         Model = room;
-
         SetWalls(room.walls);
-
-        if (room.type == RoomType.Death)
-            Floor.material.color = Color.red;
     }
 
     private void SetWalls(int[] roomWalls)
@@ -90,15 +86,20 @@ public class RoomBehaviour : MonoBehaviour
 
     public bool ContainsCharacter(out CharacterBehaviour character)
     {
+        character = null;
+
         foreach (var item in Items)
         {
             var behaviour = item as CharacterBehaviour;
             if (behaviour == null) continue;
             character = behaviour;
-            return true;
         }
 
-        character = null;
+        if (character != null)
+        {
+            Items.Remove(character);
+            return true;
+        }
         return false;
     }
 }
