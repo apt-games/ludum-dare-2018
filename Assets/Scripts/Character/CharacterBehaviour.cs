@@ -5,6 +5,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class CharacterBehaviour : MonoBehaviour
 {
+    public int ID;
+
     public RoomBehaviour OccupyingRoom { get; set; }
 
     public CharacterInfo CharacterInfo

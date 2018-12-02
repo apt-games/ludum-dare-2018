@@ -13,7 +13,8 @@ public class CharacterAvatar : MonoBehaviour {
     private Dictionary<AbilityType, Texture2D> _abilityTextures = new Dictionary<AbilityType, Texture2D>();
     private Dictionary<AbilityType, Sprite> _abilityIcons = new Dictionary<AbilityType, Sprite>();
 
-    private Animator _animator;
+    [HideInInspector]
+    public Animator _animator;
 
     public event Action<CharacterAvatar> AvatarClicked;
     public event Action<CharacterAbility> CharacterAbilityClicked;
@@ -23,6 +24,7 @@ public class CharacterAvatar : MonoBehaviour {
     [HideInInspector]
     public CharacterBehaviour Character;
     public CharacterAbility CharacterAbilityPrefab;
+    public GameObject Selected;
 
     public CharacterAvatar() {
         _characterAbilityPosY = 0;
@@ -63,10 +65,14 @@ public class CharacterAvatar : MonoBehaviour {
     }
 
     public void SetSelected(bool selected) {
+        CanvasGroup SelectedCanvasGroup = Selected.GetComponent<CanvasGroup>();
+
         if (selected) {
-            _animator.SetTrigger("setavatarselected");
+            // _animator.SetTrigger("setavatarselected");
+            SelectedCanvasGroup.alpha = 1f;
         } else {
-            _animator.SetTrigger("setunavatarselected");
+            // _animator.SetTrigger("setunavatarselected");
+            SelectedCanvasGroup.alpha = 0f;
         }
     }
 

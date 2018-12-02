@@ -7,6 +7,8 @@ public static class CharacterFactory
         "Characters/CharacterPrefab"
     };
 
+    public static int ID = 1;
+
     public static CharacterBehaviour Create()
     {
         var character = Factory.LoadPrefab<CharacterBehaviour>("Characters/CharacterPrefab");
@@ -23,6 +25,8 @@ public static class CharacterFactory
     public static CharacterBehaviour CreateInitial(Vector3 position, Transform parent)
     {
         var character = Factory.LoadPrefab<CharacterBehaviour>(_characters[0], position, parent);
+
+        character.ID = ID++;
 
         // fill with initial info
         character.CharacterInfo = CharacterInfoGenerator.getCharacterInfo();
