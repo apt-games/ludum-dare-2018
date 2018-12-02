@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour {
     private int _characterAvatarHeight = 128;
@@ -20,15 +22,27 @@ public class UIController : MonoBehaviour {
     }
 
 	// Use this for initialization
-	private void Start () {
+	public void UpdateUI () {
         int posY = _initialCharacterAvatarPosY;
 
         foreach (var Player in PlayerController.Players) {
             Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
+
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
+
+            characterAvatar.Character = Player;
+
+
             characterAvatar.transform.localPosition = position;
 
+            var ImageComponent = characterAvatar.Image.GetComponent<Image>();
+            ImageComponent.sprite = Player.CharacterInfo.avatar;
+            TextMeshProUGUI avatarName = characterAvatar.AvatarName.GetComponent<TextMeshProUGUI>();
+            avatarName.SetText(Player.CharacterInfo.name);
+
             characterAvatar.AvatarClicked += OnAvatarClick;
+
+            characterAvatar.CreateActions();
 
             posY = posY - (_characterAvatarHeight + _characterAvatarMargin);
         }

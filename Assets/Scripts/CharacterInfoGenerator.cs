@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class CharacterInfo {
 	public string name {get; set; }
-	public Texture2D avatar  {get; set; }
+	public Sprite avatar  {get; set; }
 
-	public CharacterInfo(string characterName, Texture2D characterAvatar) {
+	public CharacterInfo(string characterName, Sprite characterAvatar) {
 		name = characterName;
 		avatar = characterAvatar;
 	}
@@ -545,6 +545,9 @@ static class CharacterInfoGenerator {
 		"Jose",
 		"Larry",
 		"Jeffrey",
+        "Syver",
+        "Anders",
+        "Magnus",
 		"Frank",
 		"Scott",
 		"Eric",
@@ -1040,51 +1043,41 @@ static class CharacterInfoGenerator {
 	};
 
 	static string getFemaleName() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(femaleNames.Length);
+		int index = Random.Range(0, femaleNames.Length);
 
 		return femaleNames[index];
 	}
 
 	static string getMaleName() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(maleNames.Length);
+		int index = Random.Range(0, maleNames.Length);
 
 		return maleNames[index];
 	}
 
-	static Texture2D getFemaleAvatar() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(femaleAvatarFilenames.Length);
+	static Sprite getFemaleAvatar() {
+		int index = Random.Range(0, femaleAvatarFilenames.Length);
 		string filename = femaleAvatarFilenames[index];
 
-		Texture2D avatar = Resources.Load<Texture2D>(filename);
+		Sprite avatar = Resources.Load<Sprite>(filename);
 
 		return avatar;
 	}
 
-	static Texture2D getMaleAvatar() {
-		System.Random rnd = new System.Random();
-
-		int index = rnd.Next(maleAvatarFilenames.Length);
+	static Sprite getMaleAvatar() {
+		int index = Random.Range(0, maleAvatarFilenames.Length);
 
 		string filename = maleAvatarFilenames[index];
 
-		Texture2D avatar = Resources.Load<Texture2D>(filename);
+		Sprite avatar = Resources.Load<Sprite>(filename);
 
 		return avatar;
 	}
 
 	public static CharacterInfo getCharacterInfo() {
 		string name;
-		Texture2D avatar;
+		Sprite avatar;
 
-		System.Random rnd = new System.Random();
-
-		int rand = rnd.Next(1);
+		int rand = Random.Range(0, 2);
 
 		if (rand == 0) {
 			name = getFemaleName();

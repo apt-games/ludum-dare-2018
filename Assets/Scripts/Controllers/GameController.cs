@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
     public CameraController CameraController;
     public PlayerController PlayerController;
     public MapController MapController;
+    public UIController UIController;
 
     public RoomBehaviour SelectedRoom;
 
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
         CameraController.ShowRoom(MapController.Current);
         PlayerController.Init(MapController.Current);
         MapController.Current.SetVisited(true);
+        UIController.UpdateUI();
     }
 
     private void OnRoomSelected(RoomBehaviour room)
