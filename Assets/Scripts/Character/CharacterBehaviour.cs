@@ -26,7 +26,8 @@ public class CharacterBehaviour : MonoBehaviour
 
     private NavMeshAgent _agent;
     private Animator _animator;
-    private bool _isWalking;
+
+    public bool IsWalking { get; private set; }
     public bool IsAlive { get; private set; } = true;
 
     private CharacterInfo _characterInfo;
@@ -41,9 +42,15 @@ public class CharacterBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (_isWalking && !_agent.hasPath)
+        if (IsWalking)
         {
-            SetWalking(false);
+            float dist = _agent.remainingDistance;
+            if (dist != Mathf.Infinity && _agent.pathStatus == NavMeshPathStatus.PathComplete &&
+                _agent.remainingDistance < _agent.stoppingDistance)
+            {
+                // reached target
+                SetWalking(false);
+            }
         }
     }
 
@@ -77,7 +84,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Died");
+        IsWalking = false;
         IsAlive = false;
         _animator.SetTrigger("die");
         _agent.isStopped = true;
@@ -92,7 +99,6 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void AddAbility(AbilityBehaviour ability)
     {
-        Debug.Log("Adding ability");
         ability.transform.SetParent(transform, false);
         ability.transform.localPosition = Vector3.zero;
         Abilities.Add(ability);
@@ -100,7 +106,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private void SetWalking(bool walking)
     {
-        _isWalking = walking;
-        _animator.SetBool("walking", _isWalking);
+        IsWalking = walking;
+        _animator.SetBool("walking", IsWalking);
     }
 }

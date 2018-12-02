@@ -10,6 +10,7 @@ public class CharacterAvatar : MonoBehaviour {
     private int _characterAbilityMargin = 20;
     private int _initialCharacterAbilityPosX {get; set;}
     private int _characterAbilityPosY {get; set;}
+    private Dictionary<AbilityType, Texture2D> _abilityTextures = new Dictionary<AbilityType, Texture2D>();
     private Dictionary<AbilityType, Sprite> _abilityIcons = new Dictionary<AbilityType, Sprite>();
 
     private Animator _animator;
@@ -34,15 +35,23 @@ public class CharacterAvatar : MonoBehaviour {
 
         Sprite clairvoyanceIcon = Resources.Load<Sprite>("UI/clairvoyance");
         _abilityIcons.Add(AbilityType.Clairvoyance, clairvoyanceIcon );
+        Texture2D clairvoyanceIconTexture = Resources.Load<Texture2D>("UI/cursors/clairvoyance");
+        _abilityTextures.Add(AbilityType.Clairvoyance, clairvoyanceIconTexture );
 
         Sprite flareIcon = Resources.Load<Sprite>("UI/flare");
         _abilityIcons.Add(AbilityType.Flare, flareIcon );
+        Texture2D flareIconTexture = Resources.Load<Texture2D>("UI/cursors/flare");
+        _abilityTextures.Add(AbilityType.Flare, flareIconTexture );
 
         Sprite stoneIcon = Resources.Load<Sprite>("UI/stone");
         _abilityIcons.Add(AbilityType.Stone, stoneIcon );
+        Texture2D stoneIconTexture = Resources.Load<Texture2D>("UI/cursors/stone");
+        _abilityTextures.Add(AbilityType.Stone, stoneIconTexture );
 
         Sprite reviveIcon = Resources.Load<Sprite>("UI/medikit");
         _abilityIcons.Add(AbilityType.Revive, reviveIcon );
+        Texture2D reviveIconTexture = Resources.Load<Texture2D>("UI/cursors/medikit");
+        _abilityTextures.Add(AbilityType.Revive, reviveIconTexture );
     }
 
     public void OnAvatarClick () {
@@ -64,13 +73,8 @@ public class CharacterAvatar : MonoBehaviour {
     public void CreateActions() {
         int posX = _initialCharacterAbilityPosX;
 
-
-        Debug.Log("Character.Abilities.Count: " + Character.Abilities.Count);
-
         foreach (var Ability in Character.Abilities) {
             var type = Ability.Ability.Type;
-
-            Debug.Log("Uses: " + Ability.Uses);
 
             for (int i = 0; i < Ability.Uses; i++) {
                 Vector3 position = new Vector3(posX, _characterAbilityPosY, 0);
@@ -85,6 +89,7 @@ public class CharacterAvatar : MonoBehaviour {
                 characterAbility.transform.localPosition = position;
 
                 characterAbility.Image.sprite = _abilityIcons[type];
+                characterAbility.texture = _abilityTextures[type];
 
                 characterAbility.AbilityClicked += OnAbilityClick;
 
