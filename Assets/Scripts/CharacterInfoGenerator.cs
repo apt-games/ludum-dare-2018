@@ -1025,12 +1025,22 @@ static class CharacterInfoGenerator {
 		"Avatars/female 01",
 		"Avatars/female 02",
 		"Avatars/female 03",
+		"Avatars/female 04",
+		"Avatars/female 05",
+		"Avatars/female 06",
+		"Avatars/female 07",
+		"Avatars/female 08",
 	};
 
 	static string[] maleAvatarFilenames = new [] {
 		"Avatars/male 01",
 		"Avatars/male 02",
 		"Avatars/male 03",
+		"Avatars/male 04",
+		"Avatars/male 05",
+		"Avatars/male 06",
+		"Avatars/male 07",
+		"Avatars/male 08",
 	};
 
 	static string getFemaleName() {

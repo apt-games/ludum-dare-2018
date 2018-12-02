@@ -1,13 +1,13 @@
+using System;
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof (Animator))]
 public class CharacterAvatar : MonoBehaviour {
-
+    public event Action<CharacterAvatar> AvatarClicked;
     private Animator _animator;
     public GameObject actions;
-    public UIController UIController;
 
     public void OnMouseEnter () {
         _animator.SetTrigger("showactions");
@@ -22,7 +22,7 @@ public class CharacterAvatar : MonoBehaviour {
     }
 
     public void OnAvatarClick () {
-        UIController.OnAvatarClick(this);
+        AvatarClicked?.Invoke(this);
     }
 
     public void SetSelected(bool selected) {
