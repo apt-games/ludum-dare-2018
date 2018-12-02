@@ -62,19 +62,31 @@ window.draw = () => {
     line(cell.x * scale, (cell.y + 1) * scale, cell.x * scale, cell.y * scale);
 
     switch (cell.type) {
-      case 0:
-        fill(255, 80);
+      case 0: // Blocked
+        fill(0);
         break;
 
-      case 1:
+      case 1: // Start
+        fill(255);
+        break;
+
+      case 2: // Exit
         fill(255, 0, 255);
         break;
 
-      case 2:
+      case 3: // Safe
+        fill(0, 255, 0, 200);
+        break;
+
+      case 4: // Uncertain Safe
         fill(0, 255, 0, 80);
         break;
 
-      case 3:
+      case 5: // Death
+        fill(255, 0, 0, 200);
+        break;
+
+      case 6: // Uncertain Death
         fill(255, 0, 0, 80);
         break;
 
@@ -83,7 +95,6 @@ window.draw = () => {
     }
 
     if (cell.blocked) {
-      fill(0);
     }
 
     noStroke();

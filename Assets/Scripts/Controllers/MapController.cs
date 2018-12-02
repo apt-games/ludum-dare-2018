@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -29,7 +30,6 @@ public class MapController : MonoBehaviour
                 x = cell._coord.x,
                 y = cell._coord.y,
                 walls = cell._walls,
-                blocked = cell._blocked,
                 type = (RoomType)cell._type
             };
 
@@ -60,10 +60,8 @@ public class MapController : MonoBehaviour
 
         Cell current = grid.PickRandomCell();
         // let current = grid.cells[0];
-        current._type = 0;
+        current._type = 1;
         current._visited = true;
-
-        int i = 0;
 
         do
         {
@@ -77,25 +75,7 @@ public class MapController : MonoBehaviour
 
                 current.RemoveWallsTo(next);
 
-                if (i > 3)
-                {
-                    List<Cell> neighbors = current.GetNeighbors(grid);
-                    List<Cell> dangerousNeighbors = neighbors.FindAll(neighbor => neighbor._type == 3);
-
-                    if (dangerousNeighbors.Count < 1)
-                    {
-                        Cell neighbor = current.GetRandomNeighbor(grid);
-
-                        if (neighbor._type != 0)
-                        {
-                            neighbor._type = 3;
-                        }
-                    }
-                }
-
                 current = next;
-
-                i++;
             }
             else
             {
@@ -107,7 +87,7 @@ public class MapController : MonoBehaviour
 
         foreach (var cell in grid._cells)
         {
-            if (cell._blocked) continue;
+            if (cell._type == 0) continue;
 
             Cell neighbor = cell.GetRandomNeighbor(grid);
 
@@ -118,7 +98,7 @@ public class MapController : MonoBehaviour
         }
 
         Cell endCell = grid.PickRandomCell();
-        endCell._type = 1;
+        endCell._type = 2;
 
         return grid;
     }
@@ -194,7 +174,7 @@ public class Grid
 
     public Cell PickRandomCell()
     {
-        List<Cell> filteredCells = _cells.FindAll(cell => !cell._blocked);
+        List<Cell> filteredCells = _cells.FindAll(cell => cell._type != 0);
 
         int i = Random.Range(0, filteredCells.Count);
 
@@ -226,7 +206,6 @@ public class Cell
     public bool _start;
     public bool _exit;
 
-    public bool _blocked;
     public int _type;
 
     public bool _visited;
@@ -255,11 +234,32 @@ public class Cell
         _start = false;
         _exit = false;
 
-        _type = 2;
+        bool blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
 
-        _blocked = Mathf.PerlinNoise((float)(x * 0.1), (float)(y * 0.1)) > 0.45;
+        List<int> types = new List<int>() { 3, 4, 5, 6 };
+        int weighted = WeightedRandom(new List<int>() { 10, 40, 10, 40 });
+
+        _type = blocked ? 0 : types[weighted];
 
         _visited = false;
+    }
+
+    public int WeightedRandom(List<int> weights)
+    {
+        int total = weights.Sum();
+        int random = Random.Range(0, total);
+
+        for (int i = 0; i < weights.Count; i++)
+        {
+            if (random < weights[i])
+            {
+                return i;
+            }
+
+            random -= weights[i];
+        }
+
+        return 0;
     }
 
     public void SetType(int type)
@@ -275,7 +275,7 @@ public class Cell
         {
             Cell cell = grid._cells[coord.y * grid._size.x + coord.x];
 
-            if (!cell._blocked)
+            if (cell._type != 0)
             {
                 neighborCells.Add(cell);
             }

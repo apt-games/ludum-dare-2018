@@ -15,8 +15,11 @@ public class Room
 
 public enum RoomType
 {
-    Start = 0,
-    Exit = 1,
-    Normal = 2,
-    Death = 3,
+    Blocked = 0,
+    Start = 1,
+    Exit = 2,
+    Safe = 3,
+    UncertainSafe = 4,
+    Death = 5,
+    UncertainDeath = 6,
 }
