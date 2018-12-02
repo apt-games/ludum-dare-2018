@@ -5,12 +5,31 @@ public class TrapBehaviour : MonoBehaviour
     private TrapEffectBehaviour _effect;
     public TrapType TrapType { get; private set; }
 
-    public void TrapTriggered(CharacterBehaviour character)
-    {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerController
-            .KillCharacter(character);
+    public int Uses = 1;
 
-        _effect.TriggerEffectEvent.Invoke();
+    public void TrapTriggered(CharacterBehaviour character = null)
+    {
+        if (Uses > 0)
+        {
+            // kill potential character
+            if (character != null)
+                GameController.Instance.PlayerController.KillCharacter(character);
+
+            // show effect
+            _effect.TriggerEffectEvent.Invoke();
+
+            //decrement uses
+            Uses --;
+        }
+    }
+
+    public void Trap()
+    {
+        if (Uses > 0)
+        {
+            _effect.TriggerEffectEvent.Invoke();
+            Uses--;
+        }
     }
 
     public void SetEffect(TrapEffectBehaviour effect)

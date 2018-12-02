@@ -153,8 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4590c92d105d42e458c8113f4befdfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 114170491595489030, guid: 540c66250ce1df84bb5b066cfdd52277,
-    type: 2}
+  SelectedCharacter: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +214,7 @@ Camera:
   far clip plane: 20
   field of view: 60
   orthographic: 1
-  orthographic size: 1
+  orthographic size: 1.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -357,3 +356,4 @@ MonoBehaviour:
   CameraController: {fileID: 519420030}
   PlayerController: {fileID: 367920721}
   MapController: {fileID: 1781157867}
+  SelectedRoom: {fileID: 0}

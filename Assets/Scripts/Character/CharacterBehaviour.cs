@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -12,6 +13,12 @@ public class CharacterBehaviour : MonoBehaviour
 
     public bool IsAlive = true;
 
+    public RoomBehaviour OccupyingRoom;
+
+    public CharacterInfo CharacterInfo;
+
+    public List<AbilityBehaviour> Abilities { get; } = new List<AbilityBehaviour>();
+
     private void Awake ()
     {
         _animator = GetComponentInChildren<Animator>();
@@ -20,14 +27,29 @@ public class CharacterBehaviour : MonoBehaviour
         _agent.updateRotation = true;
     }
 
-    public void MoveTo(Transform room)
+    private void Start()
     {
-        Debug.Log("Moving character to " + room.position);
+        Abilities.AddRange(GetComponentsInChildren<AbilityBehaviour>());
+    }
 
-        var target = new Vector3(room.position.x, room.position.y, transform.position.z);
+    public void MoveTo(RoomBehaviour room)
+    {
+        var p = room.transform.position;
+        OccupyingRoom = room;
+
+        Debug.Log("Moving character to " + p);
+
+        var target = new Vector3(p.x, p.y, transform.position.z);
 
         _agent.SetDestination(target);
         SetWalking(true);
+    }
+
+    public void UseAbility()
+    {
+        var ability = GetComponentInChildren<AbilityBehaviour>();
+        if (ability != null)
+            ability.UseAbility();
     }
 
     public void Die()
@@ -35,6 +57,7 @@ public class CharacterBehaviour : MonoBehaviour
         Debug.Log("Died");
         IsAlive = false;
         _animator.SetTrigger("die");
+        _agent.isStopped = true;
     }
 
     private void SetWalking(bool walking)
@@ -50,5 +73,4 @@ public class CharacterBehaviour : MonoBehaviour
             SetWalking(false);
         }
     }
-
 }
