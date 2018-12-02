@@ -12,6 +12,7 @@ public static class CharacterFactory
         var character = Factory.LoadPrefab<CharacterBehaviour>("Characters/CharacterPrefab");
 
         // fill with random info
+        character.CharacterInfo = CharacterInfoGenerator.getCharacterInfo();
 
         var ability = AbilityFactory.Create();
         ability.transform.SetParent(character.transform, false);
@@ -24,6 +25,7 @@ public static class CharacterFactory
         var character = Factory.LoadPrefab<CharacterBehaviour>(_characters[0], position, parent);
 
         // fill with initial info
+        character.CharacterInfo = CharacterInfoGenerator.getCharacterInfo();
 
         var ability = AbilityFactory.Create();
         ability.transform.SetParent(character.transform, false);

@@ -1,8 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using SimpleJSON;
 
 public class CharacterInfo {
 	public string name {get; set; }

@@ -7,11 +7,26 @@ public class TrapBehaviour : MonoBehaviour
 
     public int Uses = 1;
 
-    public void TrapTriggered(CharacterBehaviour character)
+    public void TrapTriggered(CharacterBehaviour character = null)
     {
         if (Uses > 0)
         {
-            GameController.Instance.PlayerController.KillCharacter(character);
+            // kill potential character
+            if (character != null)
+                GameController.Instance.PlayerController.KillCharacter(character);
+
+            // show effect
+            _effect.TriggerEffectEvent.Invoke();
+
+            //decrement uses
+            Uses --;
+        }
+    }
+
+    public void Trap()
+    {
+        if (Uses > 0)
+        {
             _effect.TriggerEffectEvent.Invoke();
             Uses--;
         }

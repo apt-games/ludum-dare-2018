@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4258203099731272}
   - component: {fileID: 114236364093928008}
-  - component: {fileID: 114620740405760780}
+  - component: {fileID: 114559170572488746}
   m_Layer: 0
-  m_Name: FlareAbility
+  m_Name: StoneAbility
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ Transform:
   m_GameObject: {fileID: 1600845932410528}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   AbilityUsed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114620740405760780}
+      - m_Target: {fileID: 114559170572488746}
         m_MethodName: Use
         m_Mode: 1
         m_Arguments:
@@ -69,8 +69,8 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Uses: 2
-  Ability: {fileID: 114620740405760780}
---- !u!114 &114620740405760780
+  Ability: {fileID: 114559170572488746}
+--- !u!114 &114559170572488746
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,7 +78,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1600845932410528}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d2d1c0360bc4264588880c396df6cf2, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b1b16a52a6ca3c4d86287e2a7dde5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 1289798362711286, guid: bd1daa86e2b0542b9b62e5b2f1d64de3, type: 2}
+  Type: 1
+  Prefab: {fileID: 1468474154266318, guid: 023dd5cfe545bfd40ad2759c64b35b37, type: 2}
