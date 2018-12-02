@@ -14,6 +14,6 @@ MonoBehaviour:
   Avatar: {fileID: 21300000, guid: a6e3ccfb1f118cf4fbe8c779d0f3bb2f, type: 3}
   Sex: 0
   Colors:
-    Head: {r: 1, g: 0, b: 0, a: 1}
-    Body: {r: 0.039849162, g: 1, b: 0, a: 1}
-    Legs: {r: 0.9433962, g: 0, b: 0.7234618, a: 1}
+    Head: {r: 0.39607847, g: 0.45098042, b: 0.28627452, a: 1}
+    Body: {r: 0.26666668, g: 0.098039225, b: 0.31764707, a: 1}
+    Legs: {r: 0.3803922, g: 0.13725491, b: 0.45882356, a: 1}

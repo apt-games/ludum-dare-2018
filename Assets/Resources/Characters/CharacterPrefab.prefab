@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4832261835148546}
   - component: {fileID: 95076430993404428}
   - component: {fileID: 114148324644783352}
-  - component: {fileID: 114346949608110860}
+  - component: {fileID: 114353528748568938}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -320,8 +320,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33d1b7d55d4974ea933b70288e5388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OccupyingRoom: {fileID: 0}
-  IsAlive: 1
+  CharacterBody: {fileID: 114353528748568938}
+--- !u!114 &114353528748568938
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1463734534254394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138f327bb18df4642b934f3a2dcc82a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Head: {fileID: 212694170710132884}
+  Body: {fileID: 212434356826912432}
+  Legs:
+  - {fileID: 212259293721454228}
+  - {fileID: 212561947742824394}
 --- !u!114 &114424684962689664
 MonoBehaviour:
   m_ObjectHideFlags: 1
