@@ -21,8 +21,8 @@ public class SpeechDisplay : MonoBehaviour
 
     void Awake()
     {
-        _bubbles = CreateBubbles(Texts);
         _layout = GetComponent<VerticalLayoutGroup>();
+        _bubbles = CreateBubbles(Texts);
     }
 
     public void StartAnimatedTexts()
@@ -63,8 +63,6 @@ public class SpeechDisplay : MonoBehaviour
                 transform.localPosition = p;
                 yield return null;
             }
-
-            Debug.Log("Animate Next");
             StartCoroutine(AnimateBubble(++i));
         }
         else
@@ -97,6 +95,8 @@ public class SpeechDisplay : MonoBehaviour
 
             list.Add(go);
         }
+
+        _layout.SetLayoutVertical();
 
         return list;
     }
