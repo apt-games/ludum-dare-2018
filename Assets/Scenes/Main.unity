@@ -1242,7 +1242,7 @@ MonoBehaviour:
   m_text: TRY AGAIN >>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca0b06266e6bb4243af03bb84561b5f0, type: 2}
-  m_sharedMaterial: {fileID: 21734572642297276, guid: b8c8ac7747185c84ebc8e3bfd4702e20,
+  m_sharedMaterial: {fileID: 21714687955266310, guid: ca0b06266e6bb4243af03bb84561b5f0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1316,11 +1316,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 1
   m_subTextObjects:
@@ -1551,7 +1551,7 @@ RectTransform:
   m_GameObject: {fileID: 1079226355}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4.470923, y: 4.470923, z: 4.470923}
   m_Children: []
   m_Father: {fileID: 2128638560}
   m_RootOrder: 1
@@ -1559,7 +1559,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 149.3}
-  m_SizeDelta: {x: 1000, y: 500}
+  m_SizeDelta: {x: 232, y: 94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1079226357
 MonoBehaviour:
@@ -1983,7 +1983,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 833907840}
   m_HandleRect: {fileID: 833907839}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 0.5
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2246,7 +2246,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3c4252fdd7cdc4a0f86f10ec13a6161a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 99f985ca11b45455ba99765850eddde7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2596,7 +2596,7 @@ MonoBehaviour:
   m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca0b06266e6bb4243af03bb84561b5f0, type: 2}
-  m_sharedMaterial: {fileID: 21734572642297276, guid: b8c8ac7747185c84ebc8e3bfd4702e20,
+  m_sharedMaterial: {fileID: 21714687955266310, guid: ca0b06266e6bb4243af03bb84561b5f0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2662,19 +2662,19 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1557034732}
-    characterCount: 41
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 8
-    wordCount: 9
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 1
   m_subTextObjects:
@@ -3479,7 +3479,7 @@ RectTransform:
   m_GameObject: {fileID: 1974549807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3.2359, y: 3.2359, z: 3.2359}
   m_Children: []
   m_Father: {fileID: 2138921668}
   m_RootOrder: 4
@@ -3487,7 +3487,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 400}
+  m_SizeDelta: {x: 232, y: 94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1974549809
 MonoBehaviour:
