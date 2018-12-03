@@ -809,11 +809,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46756cdc4f18244bba1baf4712066c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  electroTrap: {fileID: 1460124051178284, guid: 6544551f803104d2981a0254a2217940,
-    type: 2}
-  bladeTrap: {fileID: 1345602190775712, guid: d0a7689fe575d45c89a28b86e477a72f, type: 2}
-  flameThrower: {fileID: 0}
-  gasTrap: {fileID: 0}
 --- !u!1 &523025054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2656,7 +2651,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 833907839}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999976
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
