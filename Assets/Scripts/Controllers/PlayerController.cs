@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
 
         var secondChar = CharacterFactory.Create(new Vector3(- 0.2f, 0, 0), transform);
         Characters.Add(secondChar);
+
+        PlayersChanged?.Invoke();
     }
 
     public void PlaceCharactersInRoom(RoomBehaviour room)
@@ -39,6 +41,8 @@ public class PlayerController : MonoBehaviour
         character.transform.SetParent(transform);
         Characters.Add(character);
         newCharAudio.PlayDelayed(1.0f);
+
+        PlayersChanged?.Invoke();
     }
 
     public void MoveSelectedCharacterTo(RoomBehaviour room)
@@ -68,7 +72,12 @@ public class PlayerController : MonoBehaviour
     public void KillCharacter(CharacterBehaviour character)
     {
         character.Die();
-        SelectedCharacter = null;
-        PlayersChanged?.Invoke();
+
+        // if a part of party
+        if (Characters.Contains(character))
+        {
+            SelectedCharacter = null;
+            PlayersChanged?.Invoke();
+        }
     }
 }

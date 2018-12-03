@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,7 +14,8 @@ public class GameController : MonoBehaviour
 
     public UnityEvent OnPlayIntro;
     public UnityEvent OnStartTutorial;
-    public UnityEvent OnStartLevel1;
+    public UnityEvent OnStartNormal;
+    public UnityEvent OnPlayerDied;
 
     [HideInInspector]
     public RoomBehaviour SelectedRoom;
@@ -25,9 +27,18 @@ public class GameController : MonoBehaviour
         PlayerController.PlayersChanged += OnPlayersChanged;
         MapController.RoomSelected += OnRoomSelected;
 
-        PlayerController.Init();
+        RestartPlayer();
 
         StartIntro();
+    }
+
+    public void RestartPlayer()
+    {
+        foreach (var child in PlayerController.Characters)
+            Destroy(child.gameObject);
+        PlayerController.Characters.Clear();
+
+        PlayerController.Init();
     }
 
     public void StartIntro()
@@ -38,24 +49,22 @@ public class GameController : MonoBehaviour
 
     public void StartTutorial()
     {
-        OnStartTutorial?.Invoke();
-        StartLevel1();
-    }
-
-    private void StartLevel0()
-    {
         TrapEffectsEnabled = false;
-        MapController.InitiateLevel0();
+        MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial 
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
+
+        OnStartTutorial?.Invoke();
     }
 
-    private void StartLevel1()
+    public void StartNormal()
     {
         TrapEffectsEnabled = false;
         MapController.InitiateLevel1();
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
+
+        OnStartNormal?.Invoke();
     }
 
     private void OnRoomSelected(RoomBehaviour room)
@@ -133,5 +142,8 @@ public class GameController : MonoBehaviour
     public void OnPlayersChanged()
     {
         UIController?.UpdateUI();
+
+        if (!PlayerController.Characters.Any(p => p.IsAlive))
+            OnPlayerDied?.Invoke();
     }
 }
