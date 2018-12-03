@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
             SelectedCharacter.MoveTo(room);
             _targetRoom = room;
 
-            if (room.Visibility != RoomVisibilityStatus.Visited)
+            if (room.Visibility != RoomVisibilityStatus.Visited && room.IsSafe)
             {
                 //TODO: Improve this
                 StartCoroutine(WaitForSafe());
