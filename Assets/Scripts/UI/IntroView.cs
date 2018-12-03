@@ -11,6 +11,8 @@ public class IntroView : MonoBehaviour
 
     public SpeechDisplay SpeechDisplay;
 
+    private bool _audioFinished = false;
+
 	// Use this for initialization
 	void Awake ()
 	{
@@ -39,10 +41,16 @@ public class IntroView : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    if (_audio.time > 20.0f)
+	    if (!_audioFinished && _audio.time > 20.0f)
 	    {
-	        SpeechDisplay.StartAnimatedTexts();
-            StartCoroutine(ViewUtils.FadeOut(Title));
-        }
+	        AudioFinished();
+	    }
+    }
+
+    private void AudioFinished()
+    {
+        _audioFinished = true;
+        SpeechDisplay.StartAnimatedTexts();
+        StartCoroutine(ViewUtils.FadeOut(Title));
     }
 }
