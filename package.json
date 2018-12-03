@@ -14,8 +14,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "cpy static/* dist",
-    "publish": "gh-pages -d dist"
+    "predeploy": "cpy static/* dist",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "cpy-cli": "^2.0.0",
