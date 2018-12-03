@@ -45,6 +45,12 @@ public class MapController : MonoBehaviour
         }
 
         SetCurrentRoom(Current);
+
+        // add surface mesh on current object and build from this
+        var surface = Current.Floor.gameObject.AddComponent<NavMeshSurface>();
+        surface.BuildNavMesh();
+
+        RoomFactory.PlaceItems(_rooms);
     }
 
     public void SetCurrentRoom(RoomBehaviour room)
@@ -52,13 +58,6 @@ public class MapController : MonoBehaviour
         Current = room;
         Current.SetVisited();
         ShowNeighbours(room);
-    }
-
-    private void Start()
-    {
-        // add surface mesh on current object and build from this
-        var surface = Current.Floor.gameObject.AddComponent<NavMeshSurface>();
-        surface.BuildNavMesh();
     }
 
     private void OnRoomClicked(RoomBehaviour room)

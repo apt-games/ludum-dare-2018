@@ -19,12 +19,16 @@ public class GameController : MonoBehaviour
     {
         PlayerController.PlayersChanged += OnPlayersChanged;
         MapController.RoomSelected += OnRoomSelected;
-
-        MapController.InitiateMap();
     }
 
     private void Start()
     {
+        StartLevel1();
+    }
+
+    private void StartLevel1()
+    {
+        MapController.InitiateMap();
         CameraController.ShowRoom(MapController.Current);
         PlayerController.Init(MapController.Current);
         MapController.Current.SetVisited();
@@ -59,6 +63,7 @@ public class GameController : MonoBehaviour
                 PlayerController.MoveSelectedCharacterTo(room);
 
             CharacterBehaviour character;
+
             if (room.ContainsCharacter(out character))
             {
                 if (character.IsAlive)
@@ -82,12 +87,6 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            _toggleAbility = !_toggleAbility;
-
-            Debug.Log($"Ability {_toggleAbility}");
-        }
     }
 
     public void SelectCharacter(CharacterBehaviour character)
