@@ -3688,7 +3688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bb1e1fa0d1c144b805a9bd28ec9522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 1
+  Speed: 0.6
   Left: {fileID: 114986491647075304, guid: 265a2f0c78e943142aeffc12661db632, type: 2}
   Right: {fileID: 114986491647075304, guid: 59438e67c76b9cd4785ece0ae2fa484a, type: 2}
   Texts:
