@@ -29,7 +29,6 @@ public class PlayerController : MonoBehaviour
         foreach (var character in Characters)
         {
             character.TeleportToWorldPositions(position);
-            Debug.LogWarning($"{character.transform.position} + {position}");
             character.OccupyingRoom = room;
         }
     }
