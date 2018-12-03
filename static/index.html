@@ -69,16 +69,16 @@
 
         pointer-events: none;
 
-        transform: translate3d(0, calc(50vh - 50% - 8em), 0) scale(2);
-        -webkit-transform: translate3d(0, calc(50vh - 50% - 8em), 0) scale(2);
+        transform: translate3d(0, calc(50vh - 50% - 6em), 0);
+        -webkit-transform: translate3d(0, calc(50vh - 50% - 6em), 0);
 
         transition: transform 400ms ease-out;
         -webkit-transition: transform 400ms ease-out;
       }
 
       .loaded .header {
-        transform: translate3d(0, 0, 0) scale(1);
-        -webkit-transform: translate3d(0, 0, 0) scale(1);
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
       }
 
       .header img {
@@ -88,6 +88,34 @@
         height: auto;
 
         margin: 2em auto;
+
+        transform: scale(2);
+        -webkit-transform: scale(2);
+
+        transition: transform 400ms ease-out;
+        -webkit-transition: transform 400ms ease-out;
+      }
+
+      .audio-hint {
+        margin: 2em auto 1em;
+
+        text-align: center;
+
+        animation: pulse 2s infinite alternate;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .loaded .header img {
+        transform: scale(1);
+        -webkit-transform: scale(1);
       }
 
       .start-button {
@@ -96,6 +124,8 @@
         left: 50%;
 
         pointer-events: auto;
+
+        font-size: 1.5em;
 
         border-radius: 0;
         border: none;
@@ -154,12 +184,14 @@
         right: 0;
         bottom: 0;
         left: 0;
+
+        padding: 1em;
       }
 
       .about-button {
         display: block;
 
-        margin: 1em auto;
+        margin: 0 auto;
         padding: 0.5em 1em;
 
         color: #fff;
@@ -170,6 +202,14 @@
         border: none;
 
         background: transparent;
+      }
+
+      .meta {
+        margin: 0 auto;
+
+        font-size: 1em;
+
+        text-align: center;
       }
 
       .close-about-button {
@@ -249,6 +289,7 @@
   <body>
     <header class="header">
       <img src="/logo.png" alt="Altruist Project logo">
+      <p class="audio-hint">Turn up the volume</p>
       <button class="start-button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
           <circle cx="100" cy="100" r="90" fill="none"/>
@@ -259,6 +300,7 @@
     </header>
     <footer class="footer">
       <button class="about-button">about</button>
+      <p class="meta">Apt Games 2018</p>
     </footer>
     <div class="webgl-content">
       <div id="gameContainer" style="width: 960px; height: 600px"></div>
@@ -270,8 +312,11 @@
           <header>
             <h1>What is this?</h1>
           </header>
-          <p>This game was made during the weekend between 1-3 December 2018, for <a href="https://ldjam.com/" target="_blank" rel="noopener noreferrer">Ludum Dare</a> which is one of the world's largest and longest running Game Jam events.</p>
-          <p>Altruist Project is a sci-fi roguelite where you try to guide a group of survivors through a deadly maze as part of a cruel experiment. Along the way you will have to make tough choices on who gets to go on and who gets sacrificed for the greater good.</p>
+          <p>
+            This game was made in three days for <a href="https://ldjam.com/" target="_blank" rel="noopener noreferrer">Ludum Dare 43</a><br>
+            The theme was "Sacrifices must be made".
+          </p>
+          <p>Guide a group of survivors through a deadly maze as part of a cruel experiment. Along the way you will have to make tough choices on who gets to go on and who gets sacrificed for the greater good.</p>
         </section>
         <section>
           <header>
@@ -295,6 +340,7 @@
     <script src="/Build/UnityLoader.js"></script>
     <script>
       var startButton = document.querySelector('.start-button');
+      var audioHint = document.querySelector('.audio-hint');
       var startButtonBar = document.querySelector('.start-button-bar');
       var startButtonText = document.querySelector('.start-button-text');
 
@@ -314,6 +360,7 @@
 
         if (progress === 1) {
           startButton.style.display = "none";
+          audioHint.style.display = "none";
           document.body.classList.remove('loading');
           document.body.classList.add('loaded');
         }
