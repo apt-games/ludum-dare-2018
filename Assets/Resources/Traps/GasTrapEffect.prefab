@@ -83,7 +83,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eb33bcf6943b843dcbc956f046fd1e7c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.856
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -206,6 +206,8 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  Uses: 1
+  Delay: 0.2
 --- !u!198 &198479915058477244
 ParticleSystem:
   m_ObjectHideFlags: 1
