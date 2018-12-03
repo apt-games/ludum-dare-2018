@@ -1,12 +1,19 @@
-﻿using System.Linq;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
+    public static bool TrapEffectsEnabled { get; private set; } = false;
+
     public CameraController CameraController;
     public PlayerController PlayerController;
     public MapController MapController;
     public UIController UIController;
+
+    public UnityEvent OnPlayIntro;
+    public UnityEvent OnStartTutorial;
+    public UnityEvent OnStartLevel1;
 
     [HideInInspector]
     public RoomBehaviour SelectedRoom;
@@ -18,19 +25,44 @@ public class GameController : MonoBehaviour
         PlayerController.PlayersChanged += OnPlayersChanged;
         MapController.RoomSelected += OnRoomSelected;
 
-        MapController.InitiateMap();
+        PlayerController.Init();
+
+        StartIntro();
     }
 
-    private void Start()
+    public void StartIntro()
     {
-        CameraController.ShowRoom(MapController.Current);
-        PlayerController.Init(MapController.Current);
-        MapController.Current.SetVisited();
-        UIController?.UpdateUI(); //DO NOT COMMIT
+        // play intro
+        OnPlayIntro?.Invoke();
+    }
+
+    public void StartTutorial()
+    {
+        OnStartTutorial?.Invoke();
+        StartLevel1();
+    }
+
+    private void StartLevel0()
+    {
+        TrapEffectsEnabled = false;
+        MapController.InitiateLevel0();
+        PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
+        CameraController.ShowRoom(MapController.CurrentRoom);
+    }
+
+    private void StartLevel1()
+    {
+        TrapEffectsEnabled = false;
+        MapController.InitiateLevel1();
+        PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
+        CameraController.ShowRoom(MapController.CurrentRoom);
     }
 
     private void OnRoomSelected(RoomBehaviour room)
     {
+        if (!TrapEffectsEnabled)
+            TrapEffectsEnabled = true;
+
         if (PlayerController.SelectedCharacter == null || PlayerController.SelectedCharacter.IsWalking) {
             return;
         }
@@ -44,10 +76,10 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            MapController.SetCurrentRoom(room);
+            MapController.SelectRoom(room);
             CameraController.ShowRoom(room);
 
-            MapController.SetCurrentRoom(room);
+            MapController.SelectRoom(room);
 
             if (_toggleAll)
                 PlayerController.MovePartyTo(room);
@@ -55,6 +87,7 @@ public class GameController : MonoBehaviour
                 PlayerController.MoveSelectedCharacterTo(room);
 
             CharacterBehaviour character;
+
             if (room.ContainsCharacter(out character))
             {
                 if (character.IsAlive)
@@ -78,12 +111,6 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            _toggleAbility = !_toggleAbility;
-
-            Debug.Log($"Ability {_toggleAbility}");
-        }
     }
 
     public void SelectCharacter(CharacterBehaviour character)
@@ -94,7 +121,7 @@ public class GameController : MonoBehaviour
 
         if (PlayerController.SelectedCharacter != null)
         {
-            MapController.SetCurrentRoom(PlayerController.SelectedCharacter.OccupyingRoom);
+            MapController.SelectRoom(PlayerController.SelectedCharacter.OccupyingRoom);
             CameraController.ShowRoom(PlayerController.SelectedCharacter.OccupyingRoom);
         }
     }

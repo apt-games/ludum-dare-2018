@@ -12,6 +12,7 @@ public static class CharacterFactory
     public static CharacterBehaviour Create(Vector3 position, Transform parent)
     {
         var character = Factory.LoadPrefab<CharacterBehaviour>(_characters[0], position, parent);
+        character.transform.eulerAngles = new Vector3(-90, 0, 0);
 
         character.ID = ID++;
 

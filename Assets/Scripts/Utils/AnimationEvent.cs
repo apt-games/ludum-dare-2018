@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class AnimationEvent : MonoBehaviour
 {
@@ -8,6 +7,7 @@ public class AnimationEvent : MonoBehaviour
 
     public void TriggerEvent()
     {
-        Event?.Invoke();
+        if (GameController.TrapEffectsEnabled)
+            Event?.Invoke();
     }
 }

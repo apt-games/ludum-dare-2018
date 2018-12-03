@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public List<CharacterBehaviour> Players { get; } = new List<CharacterBehaviour>();
+    public List<CharacterBehaviour> Characters { get; } = new List<CharacterBehaviour>();
     public event Action PlayersChanged;
 
     public CharacterBehaviour SelectedCharacter;
@@ -14,27 +14,30 @@ public class PlayerController : MonoBehaviour
 
     private RoomBehaviour _targetRoom;
 
-    public void Init(RoomBehaviour room)
+    public void Init()
     {
-        Spawn(room);
+        var initialCharacter = CharacterFactory.Create(Vector3.zero, transform);
+        Characters.Add(initialCharacter);
+
+        var secondChar = CharacterFactory.Create(new Vector3(- 0.2f, 0, 0), transform);
+        Characters.Add(secondChar);
     }
 
-    private void Spawn(RoomBehaviour room)
+    public void PlaceCharactersInRoom(RoomBehaviour room)
     {
         var position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
-        var initialCharacter = CharacterFactory.Create(position, transform);
-        initialCharacter.OccupyingRoom = room;
-        Players.Add(initialCharacter);
 
-        var secondChar = CharacterFactory.Create(new Vector3(position.x - 0.1f, position.y, position.z), transform);
-        secondChar.OccupyingRoom = room;
-        Players.Add(secondChar);
+        foreach (var character in Characters)
+        {
+            character.TeleportToWorldPositions(position);
+            character.OccupyingRoom = room;
+        }
     }
 
     public void AddToParty(CharacterBehaviour character)
     {
         character.transform.SetParent(transform);
-        Players.Add(character);
+        Characters.Add(character);
         newCharAudio.PlayDelayed(1.0f);
     }
 
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
         SelectedCharacter?.MoveTo(room);
         _targetRoom = room;
 
+        //TODO: Improve this
         StartCoroutine(WaitForSafe());
     }
 
@@ -55,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
     public void MovePartyTo(RoomBehaviour room)
     {
-        foreach (var player in Players.Where(player => player.IsAlive))
+        foreach (var player in Characters.Where(player => player.IsAlive))
         {
             player.MoveTo(room);
         }
@@ -63,7 +67,6 @@ public class PlayerController : MonoBehaviour
 
     public void KillCharacter(CharacterBehaviour character)
     {
-        Debug.Log("Killing char");
         character.Die();
         SelectedCharacter = null;
         PlayersChanged?.Invoke();

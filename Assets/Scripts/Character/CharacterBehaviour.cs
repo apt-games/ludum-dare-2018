@@ -7,6 +7,8 @@ public class CharacterBehaviour : MonoBehaviour
 {
     public int ID;
 
+    public Light Light;
+
     public RoomBehaviour OccupyingRoom { get; set; }
 
     public CharacterInfo CharacterInfo
@@ -58,6 +60,13 @@ public class CharacterBehaviour : MonoBehaviour
         }
     }
 
+    public void TeleportToWorldPositions(Vector3 position)
+    {
+        _agent.enabled = false;
+        transform.position = position;
+        _agent.enabled = true;
+    }
+
     public void SetColors(CharacterColors colors)
     {
         CharacterBody.Body.color = colors.Body;
@@ -93,16 +102,7 @@ public class CharacterBehaviour : MonoBehaviour
         _animator.SetTrigger("die");
         _agent.isStopped = true;
         _collider.enabled = false;
-    }
-
-    public void SetDead(bool dead)
-    {
-        IsAlive = !dead;
-        if (dead)
-        {
-            _animator.SetTrigger("die");
-            _collider.enabled = false;
-        }
+        Light.intensity = 0;
     }
 
     public void AddAbility(AbilityBehaviour ability)

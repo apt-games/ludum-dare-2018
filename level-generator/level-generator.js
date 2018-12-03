@@ -119,7 +119,7 @@ class Cell {
 
     this.walls = [1, 1, 1, 1];
 
-    const blocked = simplex.noise2D(x * 0.5, y * 0.5) > 0.2;
+    const blocked = simplex.noise2D(x * 0.15, y * 0.15) > 0.15;
 
     this.type = blocked ? 0 : [3, 4, 5, 6][weightedRandom([10, 50, 10, 30])];
     this.item = blocked ? 0 : [0, 1, 2][weightedRandom([85, 15])];
@@ -252,48 +252,6 @@ function generate(size = 10) {
   start.item = 0;
   start.visited = true;
 
-  let current = start;
-
-  while (current) {
-    const next = current.getRandomAvailableNeighbor(grid);
-
-    if (next) {
-      next.visited = true;
-
-      stack.push(current);
-
-      current.removeWallsTo(next);
-
-      current = next;
-    } else {
-      const prev = stack.pop();
-
-      current = prev;
-    }
-  }
-
-  // for (let i = 0; i < grid.cells.length; i += 3) {
-  //   // const cell = grid.pickRandomCell();
-  //   const cell = grid.cells[i];
-
-  //   if (cell.type === 0) continue;
-
-  //   let neighbor = cell.getRandomNeighborNotBlocked(grid);
-
-  //   if (neighbor) {
-  //     cell.removeWallsTo(neighbor);
-  //   }
-
-  //   // if (Math.round(Math.random())) {
-  //   //   neighbor = cell.getRandomNeighbor(grid);
-
-  //   //   if (neighbor) {
-  //   //     cell.removeWallsTo(neighbor);
-  //   //   }
-  //   // }
-  // }
-
-  // const exit = grid.pickRandomCell();
   const endX = startX === 0 || startX === grid.width - 1 ? (startX === 0 ? grid.width - 1 : 0) : (startX + Math.floor(grid.width / 3 + grid.width)) % grid.width;
   const endY = startY === 0 || startY === grid.height - 1 ? (startY === 0 ? grid.height - 1 : 0) : (startY + Math.floor(grid.height / 3 + grid.height)) % grid.height;
   const exit = grid.getCellAt(endX, endY);
@@ -386,6 +344,50 @@ function generate(size = 10) {
 
     prev = node.cell;
   }
+
+  let current = start;
+
+  while (current) {
+    const next = current.getRandomAvailableNeighbor(grid);
+
+    if (next) {
+      next.visited = true;
+
+      stack.push(current);
+
+      current.removeWallsTo(next);
+
+      current = next;
+    } else {
+      const prev = stack.pop();
+
+      current = prev;
+    }
+  }
+
+  // for (let i = 0; i < grid.cells.length; i += 3) {
+  //   // const cell = grid.pickRandomCell();
+  //   const cell = grid.cells[i];
+
+  //   if (cell.type === 0) continue;
+
+  //   let neighbor = cell.getRandomNeighborNotBlocked(grid);
+
+  //   if (neighbor) {
+  //     cell.removeWallsTo(neighbor);
+  //   }
+
+  //   // if (Math.round(Math.random())) {
+  //   //   neighbor = cell.getRandomNeighbor(grid);
+
+  //   //   if (neighbor) {
+  //   //     cell.removeWallsTo(neighbor);
+  //   //   }
+  //   // }
+  // }
+
+  // const exit = grid.pickRandomCell();
+
 
   // grid.reset();
   // // console.log(start);
