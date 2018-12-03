@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 519420030}
   - component: {fileID: 519420034}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420035}
   m_Layer: 0
   m_Name: CameraController
   m_TagString: MainCamera
@@ -797,6 +798,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: cce891da4306b4cdd87fe43bd26b3e5b, type: 2}
+--- !u!114 &519420035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46756cdc4f18244bba1baf4712066c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  electroTrap: {fileID: 1460124051178284, guid: 6544551f803104d2981a0254a2217940,
+    type: 2}
+  bladeTrap: {fileID: 1345602190775712, guid: d0a7689fe575d45c89a28b86e477a72f, type: 2}
+  flameThrower: {fileID: 0}
+  gasTrap: {fileID: 0}
 --- !u!1 &523025054
 GameObject:
   m_ObjectHideFlags: 0
