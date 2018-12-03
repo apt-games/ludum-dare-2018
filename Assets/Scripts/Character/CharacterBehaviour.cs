@@ -124,7 +124,8 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void Die()
     {
-        IsWalking = false;
+        SetWalking(false);
+
         IsAlive = false;
         _animator.SetTrigger("die");
         _agent.isStopped = true;
