@@ -4,7 +4,8 @@
 public class IntroView : MonoBehaviour
 {
     private CanvasGroup _group;
-    private AudioSource _audio;
+    public AudioSource ZurichAudio;
+    public AudioSource SpeechDisplayAudio;
 
     public CanvasGroup Title;
     public CanvasGroup WakeUp;
@@ -17,8 +18,7 @@ public class IntroView : MonoBehaviour
 	void Awake ()
 	{
 	    _group = GetComponent<CanvasGroup>();
-	    _audio = GetComponent<AudioSource>();
-	    _audio.Play();
+	    ZurichAudio.Play();
 
 	    _group.alpha = 1;
 
@@ -37,11 +37,11 @@ public class IntroView : MonoBehaviour
     {
         StartCoroutine(ViewUtils.FadeOut(_group, () => { gameObject.SetActive(false); }));
     }
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-	    if (!_audioFinished && _audio.time > 20.0f)
+	    if (!_audioFinished && ZurichAudio.time > 20.0f)
 	    {
 	        AudioFinished();
 	    }
@@ -49,6 +49,7 @@ public class IntroView : MonoBehaviour
 
     private void AudioFinished()
     {
+        SpeechDisplayAudio.Play();
         _audioFinished = true;
         SpeechDisplay.StartAnimatedTexts();
         StartCoroutine(ViewUtils.FadeOut(Title));

@@ -13,6 +13,8 @@ public class UIController : MonoBehaviour {
     private CharacterAbility _activeCharacterAbility {get; set;}
     private readonly List<CharacterAvatar> _characterAvatars = new List<CharacterAvatar>();
 
+    public IntroView IntroView;
+
     public GameObject Content;
     public PlayerController PlayerController;
     public CharacterAvatar CharacterAvatarPrefab;

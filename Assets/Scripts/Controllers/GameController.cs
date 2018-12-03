@@ -53,11 +53,13 @@ public class GameController : MonoBehaviour
     public void StartTutorial()
     {
         TrapEffectsEnabled = false;
-        MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial 
+        MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
 
         OnStartTutorial?.Invoke();
+
+        StartCoroutine (AudioFadeOut.FadeOut (UIController.IntroView.SpeechDisplayAudio, 0.25f));
     }
 
     public void StartNormal()
