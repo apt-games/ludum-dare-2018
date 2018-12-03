@@ -80,7 +80,7 @@ public class SpeechDisplay : MonoBehaviour
     private IEnumerator FadeOut(TextMeshProUGUI text)
     {
         // fade out
-        for (var t = 0.0f; t < 0.8f; t += Time.deltaTime * Speed)
+        for (var t = 0.0f; t < 0.5f; t += Time.deltaTime * Speed)
         {
             text.alpha = 1-t;
             yield return null;
