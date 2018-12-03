@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 519420030}
   - component: {fileID: 519420034}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420035}
   m_Layer: 0
   m_Name: CameraController
   m_TagString: MainCamera
@@ -797,6 +798,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: cce891da4306b4cdd87fe43bd26b3e5b, type: 2}
+--- !u!114 &519420035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46756cdc4f18244bba1baf4712066c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  electroTrap: {fileID: 1460124051178284, guid: 6544551f803104d2981a0254a2217940,
+    type: 2}
+  bladeTrap: {fileID: 1345602190775712, guid: d0a7689fe575d45c89a28b86e477a72f, type: 2}
+  flameThrower: {fileID: 0}
+  gasTrap: {fileID: 0}
 --- !u!1 &523025054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2830,7 +2847,6 @@ GameObject:
   - component: {fileID: 1401959563}
   - component: {fileID: 1401959567}
   - component: {fileID: 1401959562}
-  - component: {fileID: 1401959564}
   m_Layer: 5
   m_Name: IntroView
   m_TagString: Untagged
@@ -2879,101 +2895,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1401959560}
   m_CullTransparentMesh: 0
---- !u!82 &1401959564
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1401959560}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e86d64cbf0e994386b07022cc33b13e7, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &1401959566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2985,8 +2906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9957cc15696ed5a4b8edc9d74ea4297d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZurichAudio: {fileID: 1401959567}
-  SpeechDisplayAudio: {fileID: 1401959564}
+  ZurichAudio: {fileID: 0}
+  SpeechDisplayAudio: {fileID: 0}
   Title: {fileID: 262154469}
   WakeUp: {fileID: 514118155}
   SpeechDisplay: {fileID: 636318859}
@@ -4450,7 +4371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec2835b8c9cf9564e959a5ab41aceffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IntroView: {fileID: 1401959566}
+  IntroView: {fileID: 0}
   Content: {fileID: 1973395393}
   PlayerController: {fileID: 367920721}
   CharacterAvatarPrefab: {fileID: 114874050046789338, guid: 48fd3e17d3f424d41a21af216a82fddf,

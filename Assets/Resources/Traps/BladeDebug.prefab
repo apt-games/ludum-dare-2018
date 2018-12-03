@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 199558531454587886}
   - component: {fileID: 198701771939966094}
   m_Layer: 0
-  m_Name: Effect
+  m_Name: BladeDebug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ ParticleSystem:
   stopAction: 0
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
