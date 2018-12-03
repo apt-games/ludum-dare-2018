@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof (Animator))]
 public class CharacterAvatar : MonoBehaviour {
-    private int _characterAbilityHeight = 48;
+    private int _characterAbilityHeight = 96;
     private int _characterAbilityMargin = 20;
     private int _initialCharacterAbilityPosX {get; set;}
     private int _characterAbilityPosY {get; set;}

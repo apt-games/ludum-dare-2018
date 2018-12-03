@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class UIController : MonoBehaviour {
-    private int _characterAvatarHeight = 128;
+    private int _characterAvatarHeight = 256;
     private int _characterAvatarMargin = 20;
     private int _characterAvatarPosX {get; set;}
     private int _initialCharacterAvatarPosY {get; set;}
@@ -24,8 +24,8 @@ public class UIController : MonoBehaviour {
     private Texture2D _walkCursor;
 
     public UIController() {
-        _characterAvatarPosX = (_characterAvatarHeight / 2) - _characterAvatarMargin;
-        _initialCharacterAvatarPosY = (_characterAvatarPosX * -1) + _characterAvatarMargin;
+        _characterAvatarPosX = (_characterAvatarHeight / 2) - (_characterAvatarMargin * 2);
+        _initialCharacterAvatarPosY = _characterAvatarPosX * -1;
     }
 
     public void Awake() {
