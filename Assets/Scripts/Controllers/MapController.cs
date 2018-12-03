@@ -13,7 +13,10 @@ public class MapController : MonoBehaviour
         private set
         {
             if (_currentMap != null)
+            {
+                _currentMap.gameObject.SetActive(false);
                 _currentMap.RoomSelected -= RoomSelected;
+            }
             _currentMap = value;
             _currentMap.RoomSelected += RoomSelected;
         }
@@ -21,6 +24,12 @@ public class MapController : MonoBehaviour
 
     public RoomBehaviour CurrentRoom => CurrentMap?.Current;
 
+
+    public void InitiateLevel0()
+    {
+        //TODO make tutorial map    
+        //CurrentMap = new Map(MapGenerator.CreateGeneratedMap(12), 12, transform);
+    }
 
     public void InitiateLevel1()
     {

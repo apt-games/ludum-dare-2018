@@ -16,20 +16,22 @@ namespace Assets.Scripts.MapGenerator
 
         private readonly int Size;
 
+        public GameObject gameObject { get; private set; }
+
         // Use this for initialization
         public Map(IEnumerable<Room> rooms, int size, Transform parent)
         {
             Size = size;
 
-            var mapGameObject = new GameObject($"Map ({size}, {size})");
-            mapGameObject.transform.SetParent(parent, false);
-            mapGameObject.transform.localPosition = Vector3.zero;
+            gameObject = new GameObject($"Map ({size}, {size})");
+            gameObject.transform.SetParent(parent, false);
+            gameObject.transform.localPosition = Vector3.zero;
 
             foreach (var room in rooms)
             {
                 // spawn tiles as children
                 var spawned = RoomFactory.Create(room);
-                spawned.transform.parent = mapGameObject.transform;
+                spawned.transform.parent = gameObject.transform;
                 spawned.Selected += OnRoomClicked;
 
                 _rooms.Add(spawned);

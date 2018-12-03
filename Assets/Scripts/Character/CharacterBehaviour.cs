@@ -60,6 +60,13 @@ public class CharacterBehaviour : MonoBehaviour
         }
     }
 
+    public void TeleportToWorldPositions(Vector3 position)
+    {
+        _agent.enabled = false;
+        transform.position = position;
+        _agent.enabled = true;
+    }
+
     public void SetColors(CharacterColors colors)
     {
         CharacterBody.Body.color = colors.Body;

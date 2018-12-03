@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
     {
         PlayerController.PlayersChanged += OnPlayersChanged;
         MapController.RoomSelected += OnRoomSelected;
+
+        PlayerController.Init();
     }
 
     private void Start()
@@ -28,14 +30,18 @@ public class GameController : MonoBehaviour
 
     private void StartLevel0()
     {
+        TrapEffectsEnabled = false;
+        MapController.InitiateLevel0();
+        PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
+        CameraController.ShowRoom(MapController.CurrentRoom);
     }
 
     private void StartLevel1()
     {
+        TrapEffectsEnabled = false;
         MapController.InitiateLevel1();
+        PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
-        PlayerController.Init(MapController.CurrentRoom);
-        MapController.CurrentRoom.SetVisited();
     }
 
     private void OnRoomSelected(RoomBehaviour room)
