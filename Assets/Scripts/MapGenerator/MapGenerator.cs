@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -35,23 +36,29 @@ public static class MapGenerator
     {
         Grid grid = new Grid(size);
 
-        //Cell start = grid.PickRandomCell();
+        // Cell start = grid.PickRandomCell();
 
-        bool startAtXEdge = Random.Range(0, 2) == 1;
-        int startX = startAtXEdge ? Random.Range(0, 2) == 1 ? 0 : size - 1 : Random.Range(1, size - 1);
-        int startY = startAtXEdge ? Random.Range(1, size - 1) : Random.Range(0, 2) == 1 ? 0 : size - 1;
+        int[] edgeCoords = { 1, size - 2 };
 
-        Cell start = grid.GetCellAtCoord(new Vector2Int(startX, startY));
+        int startX = edgeCoords[Random.Range(0, 2)];
+        int startY = edgeCoords[Random.Range(0, 2)];
+
+        Vector2Int startCoord = new Vector2Int(startX, startY);
+        Cell start = grid.GetCellAtCoord(startCoord);
 
         start._type = RoomType.Start;
         start._item = RoomItem.None;
 
-        //Cell exit = grid.PickRandomCell();
+        Cell exit = grid.PickRandomCell();
+        int endTries = 0;
 
-        int endX = startX == 0 || startX == size - 1 ? (startX == 0 ? size - 1 : 0) : (startX + (int)Math.Round(size / 3.0) + size) % size;
-        int endY = startY == 0 || startY == size - 1 ? (startY == 0 ? size - 1 : 0) : (startY + (int)Math.Round(size / 3.0) + size) % size;
+        while (Vector2Int.Distance(startCoord, exit._coord) < size - 1.5)
+        {
+            exit = grid.PickRandomCell();
+            endTries++;
+        }
 
-        Cell exit = grid.GetCellAtCoord(new Vector2Int(endX, endY));
+        Debug.Log("Tried to find an exit " + endTries + " times, the distance is " + Vector2Int.Distance(startCoord, exit._coord).ToString());
 
         exit._type = RoomType.Exit;
         exit._item = RoomItem.None;
@@ -63,19 +70,6 @@ public static class MapGenerator
             Node node = new Node(cell);
             graph.AddNode(node);
         }
-
-        //foreach (Node node in graph._nodes)
-        //{
-        //    List<Cell> neighbors = node._cell.GetNeighbors(grid);
-
-        //    foreach (Cell neighbor in neighbors)
-        //    {
-        //        string neighborId = Node.GetIdFromCell(neighbor);
-        //        Node neighborNode = graph.GetNode(neighborId);
-        //        node.AddEdge(neighborNode);
-        //        neighborNode.AddEdge(node);
-        //    }
-        //}
 
         foreach (Cell cell in grid._cells)
         {
@@ -120,6 +114,8 @@ public static class MapGenerator
 
             List<Node> edges = curr._edges;
 
+            edges = edges.OrderBy(x => Random.value).ToList();
+
             foreach (Node edge in edges)
             {
                 if (!edge._searched)
@@ -141,7 +137,6 @@ public static class MapGenerator
         };
 
         Node nextNode = endNode._parent;
-        Node prevNode = null;
 
         while (nextNode != null)
         {
@@ -165,46 +160,13 @@ public static class MapGenerator
                     RoomType.UncertainDeath,
                 };
 
-                int weightedTypeIndex = cell.WeightedRandom(new List<int>() { 10, 55, 10, 25 });
+                int weightedTypeIndex = cell.WeightedRandom(new List<int>() { 10, 50, 10, 30 });
 
                 // Make two first tiles in optimal path safe.
-                cell._type = i >= optimalPath.Count - 3 ? RoomType.Safe : types[weightedTypeIndex];
+                cell._type = i >= optimalPath.Count - 3 ? RoomType.UncertainSafe : types[weightedTypeIndex];
             }
-
-            if (prevNode != null)
-            {
-                cell.RemoveWallsTo(prevNode._cell);
-            }
-
-            prevNode = node;
         }
 
-        Queue<Cell> stack = new Queue<Cell>();
-
-        Cell current = start;
-        current._visited = true;
-
-        do
-        {
-            Cell next = current.GetRandomNeighborNotVisited(grid);
-
-            if (next != null)
-            {
-                next._visited = true;
-
-                stack.Enqueue(current);
-
-                current.RemoveWallsTo(next);
-
-                current = next;
-            }
-            else
-            {
-                Cell prev = stack.Dequeue();
-
-                current = prev;
-            }
-        } while (stack.Count > 0);
 
         foreach (var cell in grid._cells)
         {
@@ -221,11 +183,14 @@ public static class MapGenerator
             }
             else
             {
-                Cell neighbor = cell.GetRandomNeighbor(grid);
+                List<Cell> neighbors = cell.GetNeighbors(grid);
 
-                if (neighbor._type != RoomType.Blocked)
+                foreach (Cell neighbor in neighbors)
                 {
-                    cell.RemoveWallsTo(neighbor);
+                    if (neighbor._type != RoomType.Blocked)
+                    {
+                        cell.RemoveWallsTo(neighbor);
+                    }
                 }
             }
         }
