@@ -417,6 +417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33d1b7d55d4974ea933b70288e5388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
+  Light: {fileID: 108355761028214068}
   CharacterBody: {fileID: 114353528748568938}
 --- !u!114 &114353528748568938
 MonoBehaviour:
