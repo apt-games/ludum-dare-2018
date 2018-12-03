@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public event Action PlayersChanged;
 
     public CharacterBehaviour SelectedCharacter;
+    public AudioSource newCharAudio;
 
     private RoomBehaviour _targetRoom;
 
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         character.transform.SetParent(transform);
         Players.Add(character);
+        newCharAudio.PlayDelayed(1.0f);
     }
 
     public void MoveSelectedCharacterTo(RoomBehaviour room)
