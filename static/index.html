@@ -188,10 +188,21 @@
         padding: 1em;
       }
 
-      .about-button {
+      .footer-controls {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+      }
+
+      .about-button,
+      .help-button {
         display: block;
 
-        margin: 0 auto;
+        margin: 0;
         padding: 0.5em 1em;
 
         color: #fff;
@@ -212,33 +223,63 @@
         text-align: center;
       }
 
-      .close-about-button {
+      .close-about-button,
+      .close-help-button {
         position: absolute;
-        top: 0.5em;
-        right: 0.5em;
+        top: 1em;
+        right: 1.5em;
 
-        display: block;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
 
-        margin: 1em auto;
-        padding: 0.5em 1em;
+        width: 2em;
+        height: 2em;
+
+        margin: 0;
+        padding: 0;
+
+        line-height: 1;
 
         color: #fff;
 
-        border-radius: 0;
-        border: none;
+        border: 1px solid #fff;
+        /* border-radius: 50%; */
 
         background: transparent;
       }
 
-      .about {
+      .close-about-button svg,
+      .close-help-button svg {
+        width: 80%;
+        height: 80%;
+      }
+
+      .about,
+      .help {
         position: absolute;
-        top: 50%;
-        left: 50%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
 
-        width: 100%;
-        max-width: 800px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
 
-        padding: 2em;
+        padding: 4em 2em;
 
         z-index: 1;
 
@@ -246,25 +287,35 @@
 
         opacity: 0;
 
-        transform: translate3d(-50%, calc(-50% + 100px), 0);
-        -webkit-transform: translate3d(-50%, calc(-50% + 100px), 0);
+        transform: translate3d(0, 100px, 0);
+        -webkit-transform: translate3d(0, 100px, 0);
 
         transition: transform 250ms 100ms ease-in, opacity 250ms ease-in-out;
         -webkit-transition: transform 250ms 100ms ease-in, opacity 250ms ease-in-out;
       }
 
-      .about-inner {
-
+      .about-inner,
+      .help-inner {
+        width: 100%;
+        max-width: 800px;
       }
 
-      .about.visible {
+      .about.visible,
+      .help.visible {
         opacity: 1;
 
-        transform: translate3d(-50%, -50%, 0);
-        -webkit-transform: translate3d(-50%, -50%, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
 
         transition: transform 250ms ease-out, opacity 250ms 100ms ease-in-out;
         -webkit-transition: transform 250ms ease-out, opacity 250ms 100ms ease-in-out;
+      }
+
+      .instructions-image {
+        display: block;
+
+        width: 100%;
+        height: auto;
       }
 
       .webgl-content * {
@@ -299,7 +350,10 @@
       </button>
     </header>
     <footer class="footer">
-      <button class="about-button">about</button>
+      <div class="footer-controls">
+        <button class="help-button">help</button>
+        <button class="about-button">about</button>
+      </div>
       <p class="meta">Apt Games 2018</p>
     </footer>
     <div class="webgl-content">
@@ -307,10 +361,13 @@
     </div>
 
     <div class="about">
-      <article>
+      <article class="about-inner">
+        <header>
+          <h1>Altruist Project</h1>
+        </header>
         <section>
           <header>
-            <h1>What is this?</h1>
+            <h2>What is this?</h2>
           </header>
           <p>
             This game was made in three days for <a href="https://ldjam.com/" target="_blank" rel="noopener noreferrer">Ludum Dare 43</a><br>
@@ -320,7 +377,7 @@
         </section>
         <section>
           <header>
-            <h1>Team Credits</h1>
+            <h2>Team Credits</h2>
           </header>
           <p>Anders Havskjold - Tech Lead</p>
           <p>Syver Lauritzen - Art direction</p>
@@ -329,12 +386,32 @@
         </section>
         <section>
           <header>
-            <h1>External Credits</h1>
+            <h2>External Credits</h2>
           </header>
           <p>Sound Effects - Eric Matyas <a href="https://soundimage.org/" target="_blank" rel="noopener noreferrer">https://soundimage.org/</a></p>
         </section>
       </article>
-      <button class="close-about-button">x</button>
+      <button class="close-about-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+          <path d="M137.051 128l75.475-75.475c2.5-2.5 2.5-6.551 0-9.051s-6.551-2.5-9.051 0L128 118.949 52.525 43.475c-2.5-2.5-6.551-2.5-9.051 0s-2.5 6.551 0 9.051L118.949 128l-75.475 75.475a6.399 6.399 0 0 0 4.525 10.926 6.38 6.38 0 0 0 4.525-1.875L128 137.051l75.475 75.475c1.25 1.25 2.888 1.875 4.525 1.875s3.275-.625 4.525-1.875c2.5-2.5 2.5-6.551 0-9.051L137.051 128z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="help">
+      <article class="help-inner">
+        <header>
+          <h1>Altruist Project</h1>
+        </header>
+        <section>
+          <img class="instructions-image" src="/instructions.jpg" alt="Game instructions">
+        </section>
+      </article>
+      <button class="close-help-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+          <path d="M137.051 128l75.475-75.475c2.5-2.5 2.5-6.551 0-9.051s-6.551-2.5-9.051 0L128 118.949 52.525 43.475c-2.5-2.5-6.551-2.5-9.051 0s-2.5 6.551 0 9.051L118.949 128l-75.475 75.475a6.399 6.399 0 0 0 4.525 10.926 6.38 6.38 0 0 0 4.525-1.875L128 137.051l75.475 75.475c1.25 1.25 2.888 1.875 4.525 1.875s3.275-.625 4.525-1.875c2.5-2.5 2.5-6.551 0-9.051L137.051 128z"/>
+        </svg>
+      </button>
     </div>
 
     <script src="/Build/UnityLoader.js"></script>
@@ -381,7 +458,8 @@
         if (about.classList.contains('visible')) {
           about.classList.remove('visible');
         } else {
-          about.style.display = 'block';
+          closeHelp();
+          about.style.display = 'flex';
           setTimeout(() => { about.classList.add('visible'); }, 10);
         }
       }
@@ -397,6 +475,39 @@
       var closeAboutButton = document.querySelector('.close-about-button');
 
       closeAboutButton.addEventListener('click', closeAbout);
+
+      var help = document.querySelector('.help');
+      help.style.display = 'none';
+
+      function handleHelpTransitionEnd() {
+        if (!help.classList.contains('visible')) {
+          help.style.display = 'none';
+        }
+      }
+
+      help.addEventListener('transitionend', handleHelpTransitionEnd)
+
+      function toggleHelp() {
+        if (help.classList.contains('visible')) {
+          help.classList.remove('visible');
+        } else {
+          closeAbout();
+          help.style.display = 'flex';
+          setTimeout(() => { help.classList.add('visible'); }, 10);
+        }
+      }
+
+      var helpButton = document.querySelector('.help-button');
+
+      helpButton.addEventListener('click', toggleHelp);
+
+      function closeHelp() {
+        help.classList.remove('visible');
+      }
+
+      var closeHelpButton = document.querySelector('.close-help-button');
+
+      closeHelpButton.addEventListener('click', closeHelp);
 
       function start() {
         document.body.classList.add('loading');
