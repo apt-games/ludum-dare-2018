@@ -39,10 +39,10 @@ public class IntroView : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    if (!_audio.isPlaying)
+	    if (_audio.time > 26.0f)
 	    {
 	        SpeechDisplay.gameObject.SetActive(true);
 	        StartCoroutine(ViewUtils.FadeOut(Title));
         }
-	}
+    }
 }

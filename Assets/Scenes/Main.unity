@@ -334,7 +334,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 478530bdccd63cb4d82aaec506c16af9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d08a1951ed73f4c46acf90e8c1b72c3c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.716
   m_Pitch: 1
@@ -1018,13 +1018,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ac4c2c1dbee4994cbe54e211b59accd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 0.8
+  Speed: 0.6
   Left: {fileID: 114986491647075304, guid: 265a2f0c78e943142aeffc12661db632, type: 2}
   Right: {fileID: 114986491647075304, guid: 59438e67c76b9cd4785ece0ae2fa484a, type: 2}
   Texts:
-  - '"You see the news last night? They''re deporting American immigrants now."'
-  - '"I know, it''s sick. You know Cedric from HR? His grandparents came here in the
-    2030''s. Cedric hasn''t even been to the US and they''re telling him to pack up
+  - '"You see the news last night? They''re deporting Americans who came here as refugees
+    now."'
+  - '"I know. Cedric from HR''s grandfather was American and now he has to pack up
     and leave."'
   - '"Crazy times"'
   - '"Yep."'
@@ -2131,7 +2131,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 833907839}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3272,7 +3272,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7cf607aa3626a46c8a3c2e94dc619455, type: 3}
+  m_audioClip: {fileID: 8300000, guid: e8c5ccbf36a5a4d33a23186e902f6b41, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.796
   m_Pitch: 1
