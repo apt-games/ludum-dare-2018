@@ -8,8 +8,8 @@ public class FlareAbility : BaseAbility
 {
     public GameObject Prefab;
 
-    [HideInInspector]
-    private AudioSource _audioSource;
+    public AudioSource ThrowAudioSource;
+    public AudioSource SmallHitAudioSource;
 
     public override void Use()
     {
@@ -34,21 +34,17 @@ public class FlareAbility : BaseAbility
             "position", target
         }};
 
+        ThrowAudioSource.Play();
+
         iTween.MoveTo(flare, hashtable);
 
-        _audioSource = GetComponent<AudioSource>();
-        StartCoroutine(PlaySoundOnComplete(_audioSource));
+        StartCoroutine(PlaySmallHitSoundOnComplete());
     }
 
-    private IEnumerator PlaySoundOnComplete(AudioSource audioSource) {
+    private IEnumerator PlaySmallHitSoundOnComplete() {
         yield return new WaitForSeconds(0.325f);
 
-        Debug.Log("Yo COMPLETE");
-
-        audioSource.volume = 2f;
-        audioSource.Play();
-
-        Debug.Log(audioSource);
+        SmallHitAudioSource.Play();
     }
 
 }
