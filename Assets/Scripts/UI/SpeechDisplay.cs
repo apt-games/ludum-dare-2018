@@ -49,20 +49,22 @@ public class SpeechDisplay : MonoBehaviour
         yield return new WaitForSeconds(s);
         
         var from = transform.localPosition;
+        var offset = (_layout.spacing + _bubbles[i].rectTransform.sizeDelta.y);
 
         if (i < _bubbles.Count - 1)
         {
             // animate up and show next
             for (var t = 0.0f; t < 1.0f; t += Time.deltaTime * 2f * Speed)
             {
-                var d = (t * (_layout.spacing + _bubbles[i].rectTransform.sizeDelta.y));
                 var p = new Vector3(
                     from.x,
-                    from.y + d,
+                    from.y + (t * offset),
                     from.z);
                 transform.localPosition = p;
                 yield return null;
             }
+
+            Debug.Log("Animate Next");
             StartCoroutine(AnimateBubble(++i));
         }
         else

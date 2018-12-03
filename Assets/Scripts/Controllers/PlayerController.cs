@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     public CharacterBehaviour SelectedCharacter;
     public AudioSource newCharAudio;
 
-    private RoomBehaviour _targetRoom;
-
     public void Init()
     {
         var initialCharacter = CharacterFactory.Create(Vector3.zero, transform);
@@ -50,25 +48,24 @@ public class PlayerController : MonoBehaviour
         if (SelectedCharacter != null)
         {
             SelectedCharacter.MoveTo(room);
-            _targetRoom = room;
 
-            if (room.Visibility != RoomVisibilityStatus.Visited)
+            if (room.Visibility != RoomVisibilityStatus.Visited && room.IsSafe)
             {
                 //TODO: Improve this
-                StartCoroutine(WaitForSafe());
+                StartCoroutine(WaitForSafe(room));
             }
             else
             {
-                MovePartyTo(_targetRoom);
+                MovePartyTo(room);
             }
         }
     }
 
-    private IEnumerator WaitForSafe()
+    private IEnumerator WaitForSafe(RoomBehaviour room)
     {
         yield return new WaitForSeconds(3);
-        if (_targetRoom != null)
-            MovePartyTo(_targetRoom);
+        if (room != null)
+            MovePartyTo(room);
     }
 
     public void MovePartyTo(RoomBehaviour room)

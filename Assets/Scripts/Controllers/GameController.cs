@@ -53,11 +53,13 @@ public class GameController : MonoBehaviour
     public void StartTutorial()
     {
         TrapEffectsEnabled = false;
-        MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial 
+        MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
 
         OnStartTutorial?.Invoke();
+
+        StartCoroutine (AudioFadeOut.FadeOut (UIController.IntroView.SpeechDisplayAudio, 0.25f));
     }
 
     public void StartNormal()
@@ -89,12 +91,10 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            MapController.SelectRoom(room);
-            CameraController.ShowRoom(room);
-
-            MapController.SelectRoom(room);
-
             PlayerController.MoveSelectedCharacterTo(room);
+
+            CameraController.ShowRoom(room);
+            MapController.SelectRoom(room);
 
             // Player entered win zone
             if (room.Model.type == RoomType.Exit)
