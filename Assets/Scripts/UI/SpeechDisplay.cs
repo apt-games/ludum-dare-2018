@@ -25,12 +25,6 @@ public class SpeechDisplay : MonoBehaviour
         _layout = GetComponent<VerticalLayoutGroup>();
     }
 
-	// Use this for initialization
-	void Start ()
-	{
-	    StartAnimatedTexts();
-	}
-
     public void StartAnimatedTexts()
     {
         StartCoroutine(AnimateBubble(0));
@@ -39,7 +33,7 @@ public class SpeechDisplay : MonoBehaviour
     private IEnumerator AnimateBubble(int i)
     {
         if (i > 0)
-            StartCoroutine(FadeOut(_bubbles[i - 1]));
+            StartCoroutine(AlmostFadeOut(_bubbles[i - 1]));
 
         var c = _bubbles[i];
         var l = _bubbles[i].text.Length;
@@ -77,10 +71,10 @@ public class SpeechDisplay : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeOut(TextMeshProUGUI text)
+    private IEnumerator AlmostFadeOut(TextMeshProUGUI text)
     {
         // fade out
-        for (var t = 0.0f; t < 0.5f; t += Time.deltaTime * Speed)
+        for (var t = 0.0f; t < 0.7f; t += Time.deltaTime * Speed)
         {
             text.alpha = 1-t;
             yield return null;
@@ -97,11 +91,13 @@ public class SpeechDisplay : MonoBehaviour
 
             var go = Instantiate(left ? Left : Right, transform);
             go.alpha = 0;
-            go.text = texts[i];
+            go.text = ParseText(texts[i]);;
 
             list.Add(go);
         }
 
         return list;
     }
+
+    protected virtual string ParseText(string text) => text;
 }
