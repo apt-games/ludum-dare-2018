@@ -10,7 +10,7 @@ public class VideoPlayerBehaviour : MonoBehaviour
 	void Awake ()
 	{
 	    _videoPlayer = GetComponent<VideoPlayer>();
-	    _videoPlayer.seekCompleted += OnCompleted;
+	    _videoPlayer.loopPointReached += OnCompleted;
 
         _videoPlayer.url = Application.streamingAssetsPath + "/splash.mp4";
 
