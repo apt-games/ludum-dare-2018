@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,9 +28,15 @@ public class UIController : MonoBehaviour {
     private Texture2D _defaultCursor;
     private Texture2D _walkCursor;
 
+    private int _previousAlivePlayersCount = -1;
+    private int _contentMinHeight = 1080;
+    private bool _shouldUpdateContentHeight = true;
+
     public UIController() {
         _characterAvatarPosX = (_characterAvatarHeight / 2) - (_characterAvatarMargin * 2);
         _initialCharacterAvatarPosY = _characterAvatarPosX * -1;
+
+        // _contentMinHeight = 4 * (_characterAvatarHeight + _characterAvatarMargin);
     }
 
     public void Awake() {
@@ -52,7 +59,10 @@ public class UIController : MonoBehaviour {
         int posY = _initialCharacterAvatarPosY;
         bool stillHaveActiveCharacterAvatar = false;
 
+        int alivePlayersCount = 0;
         foreach (var Character in PlayerController.Characters.Where(p => p.IsAlive)) {
+            alivePlayersCount++;
+
             Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
 
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
@@ -90,6 +100,15 @@ public class UIController : MonoBehaviour {
 
         if (_activeCharacterAvatar == null || !stillHaveActiveCharacterAvatar) {
             Cursor.SetCursor(_defaultCursor, hotSpot, cursorMode);
+        }
+
+        if (_previousAlivePlayersCount != alivePlayersCount) {
+            var contentRectTransform = Content.GetComponent<RectTransform>();
+            int contentHeight = Math.Max((posY * -1), _contentMinHeight);
+
+            contentRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, contentRectTransform.rect.width);
+            contentRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, contentHeight);
+            _previousAlivePlayersCount = alivePlayersCount;
         }
     }
 
