@@ -195,6 +195,28 @@ public static class MapGenerator
             }
         }
 
+        List<Cell> startNeighbors = start.GetNeighbors(grid);
+
+        startNeighbors = startNeighbors.OrderBy(x => Random.value).ToList();
+
+        start.RemoveWallsTo(startNeighbors[0]);
+        startNeighbors[0]._type = RoomType.UncertainSafe;
+        startNeighbors[0]._item = RoomItem.Person;
+
+        start.RemoveWallsTo(startNeighbors[1]);
+        startNeighbors[1]._type = RoomType.UncertainSafe;
+        startNeighbors[1]._item = RoomItem.Person;
+
+        if (startNeighbors[2]._type != RoomType.Blocked)
+        {
+            startNeighbors[2]._item = RoomItem.None;
+        }
+
+        if (startNeighbors[3]._type != RoomType.Blocked)
+        {
+            startNeighbors[3]._item = RoomItem.None;
+        }
+
         return grid;
     }
 }
