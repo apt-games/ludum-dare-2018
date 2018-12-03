@@ -11,14 +11,13 @@ public class PlayerController : MonoBehaviour
 
     public CharacterBehaviour SelectedCharacter;
     public AudioSource newCharAudio;
+    public static bool HasWokenFirstCharacter = false;
 
     public void Init()
     {
+        HasWokenFirstCharacter = false;
         var initialCharacter = CharacterFactory.Create(Vector3.zero, transform);
         Characters.Add(initialCharacter);
-
-        var secondChar = CharacterFactory.Create(new Vector3(- 0.2f, 0, 0), transform);
-        Characters.Add(secondChar);
 
         PlayersChanged?.Invoke();
     }

@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
         if (!TrapEffectsEnabled)
             TrapEffectsEnabled = true;
 
-        if (PlayerController.SelectedCharacter == null || PlayerController.SelectedCharacter.IsWalking) {
+        if (PlayerController.SelectedCharacter == null || PlayerController.SelectedCharacter.IsWalking || !PlayerController.SelectedCharacter.CanWalk) {
             return;
         }
 

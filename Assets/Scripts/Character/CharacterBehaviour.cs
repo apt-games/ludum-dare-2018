@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -34,6 +35,7 @@ public class CharacterBehaviour : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
     private CapsuleCollider _collider;
+    public bool CanWalk = false;
 
     public bool IsWalking { get; private set; }
     public bool IsAlive { get; private set; } = true;
@@ -51,6 +53,22 @@ public class CharacterBehaviour : MonoBehaviour
         int footStepAudioIndex = Random.Range(0, AllFootSteps.Length);
         var _footStepsAudio = AllFootSteps[footStepAudioIndex];
         FootStepsAudioSource.clip = _footStepsAudio;
+
+        if (!PlayerController.HasWokenFirstCharacter) {
+            _animator.SetTrigger("dead");
+            PlayerController.HasWokenFirstCharacter = true;
+
+            StartCoroutine(WakeCharacter());
+        } else {
+            CanWalk = true;
+        }
+    }
+
+    private IEnumerator WakeCharacter() {
+        yield return new WaitForSeconds(5f);
+        _animator.SetTrigger("wake");
+        yield return new WaitForSeconds(0.5f);
+        CanWalk = true;
     }
 
     private void Update()
