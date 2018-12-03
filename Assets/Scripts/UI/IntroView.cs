@@ -29,7 +29,7 @@ public class IntroView : MonoBehaviour
 	    };
 
 	    StartCoroutine(ViewUtils.FadeIn(Title));
-	}
+    }
 
     public void FadeOut()
     {
@@ -41,8 +41,8 @@ public class IntroView : MonoBehaviour
 	{
 	    if (_audio.time > 20.0f)
 	    {
-	        SpeechDisplay.gameObject.SetActive(true);
-	        StartCoroutine(ViewUtils.FadeOut(Title));
+	        SpeechDisplay.StartAnimatedTexts();
+            StartCoroutine(ViewUtils.FadeOut(Title));
         }
     }
 }

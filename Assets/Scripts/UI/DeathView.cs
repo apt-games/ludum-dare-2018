@@ -1,7 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 
-
 [RequireComponent(typeof(CanvasGroup))]
 public class DeathView : MonoBehaviour
 {

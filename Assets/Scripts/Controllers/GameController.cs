@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
+    public static DateTime LevelStarted;
+
     public static bool TrapEffectsEnabled { get; private set; } = false;
 
     public CameraController CameraController;
@@ -16,6 +18,7 @@ public class GameController : MonoBehaviour
     public UnityEvent OnStartTutorial;
     public UnityEvent OnStartNormal;
     public UnityEvent OnPlayerDied;
+    public UnityEvent OnPlayerWon;
 
     [HideInInspector]
     public RoomBehaviour SelectedRoom;
@@ -59,6 +62,7 @@ public class GameController : MonoBehaviour
 
     public void StartNormal()
     {
+        LevelStarted = DateTime.Now;
         TrapEffectsEnabled = false;
         MapController.InitiateLevel1();
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
@@ -90,10 +94,11 @@ public class GameController : MonoBehaviour
 
             MapController.SelectRoom(room);
 
-            if (_toggleAll)
-                PlayerController.MovePartyTo(room);
-            else
-                PlayerController.MoveSelectedCharacterTo(room);
+            PlayerController.MoveSelectedCharacterTo(room);
+
+            // Player entered win zone
+            if (room.Model.type == RoomType.Exit)
+                OnPlayerWon?.Invoke();
 
             CharacterBehaviour character;
 
@@ -116,11 +121,6 @@ public class GameController : MonoBehaviour
     }
 
     private bool _toggleAbility;
-    private bool _toggleAll;
-
-    private void Update()
-    {
-    }
 
     public void SelectCharacter(CharacterBehaviour character)
     {
