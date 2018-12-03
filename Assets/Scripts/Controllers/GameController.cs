@@ -26,12 +26,16 @@ public class GameController : MonoBehaviour
         StartLevel1();
     }
 
+    private void StartLevel0()
+    {
+    }
+
     private void StartLevel1()
     {
-        MapController.InitiateMap();
-        CameraController.ShowRoom(MapController.Current);
-        PlayerController.Init(MapController.Current);
-        MapController.Current.SetVisited();
+        MapController.InitiateLevel1();
+        CameraController.ShowRoom(MapController.CurrentRoom);
+        PlayerController.Init(MapController.CurrentRoom);
+        MapController.CurrentRoom.SetVisited();
     }
 
     private void OnRoomSelected(RoomBehaviour room)
@@ -52,10 +56,10 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            MapController.SetCurrentRoom(room);
+            MapController.SelectRoom(room);
             CameraController.ShowRoom(room);
 
-            MapController.SetCurrentRoom(room);
+            MapController.SelectRoom(room);
 
             if (_toggleAll)
                 PlayerController.MovePartyTo(room);
@@ -97,7 +101,7 @@ public class GameController : MonoBehaviour
 
         if (PlayerController.SelectedCharacter != null)
         {
-            MapController.SetCurrentRoom(PlayerController.SelectedCharacter.OccupyingRoom);
+            MapController.SelectRoom(PlayerController.SelectedCharacter.OccupyingRoom);
             CameraController.ShowRoom(PlayerController.SelectedCharacter.OccupyingRoom);
         }
     }
