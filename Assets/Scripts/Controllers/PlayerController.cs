@@ -47,11 +47,21 @@ public class PlayerController : MonoBehaviour
 
     public void MoveSelectedCharacterTo(RoomBehaviour room)
     {
-        SelectedCharacter?.MoveTo(room);
-        _targetRoom = room;
+        if (SelectedCharacter != null)
+        {
+            SelectedCharacter.MoveTo(room);
+            _targetRoom = room;
 
-        //TODO: Improve this
-        StartCoroutine(WaitForSafe());
+            if (room.Visibility != RoomVisibilityStatus.Visited)
+            {
+                //TODO: Improve this
+                StartCoroutine(WaitForSafe());
+            }
+            else
+            {
+                MovePartyTo(_targetRoom);
+            }
+        }
     }
 
     private IEnumerator WaitForSafe()

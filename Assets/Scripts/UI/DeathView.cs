@@ -11,10 +11,13 @@ public class DeathView : MonoBehaviour
 
     public string[] DeathTexts;
 
-    // Update is called once per frame
     void Awake()
     {
         _group = GetComponent<CanvasGroup>();
+    }
+
+    void OnEnable()
+    {
         FadeIn();
     }
 
