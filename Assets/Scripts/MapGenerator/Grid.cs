@@ -114,7 +114,7 @@ public class Cell
         List<RoomItem> items = new List<RoomItem>() { RoomItem.None, RoomItem.Person };
         int weightedItemIndex = WeightedRandom(new List<int>() { 85, 15 });
 
-        _item = blocked ? 0 : items[weightedItemIndex];
+        _item = blocked || _type == RoomType.Death ? 0 : items[weightedItemIndex];
         // _item = items[weightedItemIndex];
 
         _visited = false;
