@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
 
     public void MovePartyTo(RoomBehaviour room)
     {
-        foreach (var player in Characters.Where(player => player.IsAlive))
+        foreach (var player in Characters.Where(player => player.IsAlive && player.ID != SelectedCharacter.ID))
         {
             player.MoveTo(room);
         }

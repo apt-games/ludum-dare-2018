@@ -7,6 +7,9 @@ public class CharacterBehaviour : MonoBehaviour
 {
     public int ID;
 
+    public AudioClip[] AllFootSteps;
+    public AudioSource FootStepsAudioSource;
+
     public Light Light;
 
     public RoomBehaviour OccupyingRoom { get; set; }
@@ -44,12 +47,17 @@ public class CharacterBehaviour : MonoBehaviour
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = true;
+
+        int footStepAudioIndex = Random.Range(0, AllFootSteps.Length);
+        var _footStepsAudio = AllFootSteps[footStepAudioIndex];
+        FootStepsAudioSource.clip = _footStepsAudio;
     }
 
     private void Update()
     {
         if (IsWalking)
         {
+            FootStepsAudioSource.loop = true;
             float dist = _agent.remainingDistance;
             if (dist != Mathf.Infinity && _agent.pathStatus == NavMeshPathStatus.PathComplete &&
                 _agent.remainingDistance < _agent.stoppingDistance)
@@ -116,5 +124,11 @@ public class CharacterBehaviour : MonoBehaviour
     {
         IsWalking = walking;
         _animator.SetBool("walking", IsWalking);
+
+        if (walking) {
+            FootStepsAudioSource.Play();
+        } else {
+            FootStepsAudioSource.Stop();
+        }
     }
 }
