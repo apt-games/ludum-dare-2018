@@ -78,7 +78,7 @@ QualitySettings:
     - WebGL
   - serializedVersion: 2
     name: Medium
-    pixelLightCount: 2
+    pixelLightCount: 3
     shadows: 1
     shadowResolution: 0
     shadowProjection: 1
@@ -108,7 +108,7 @@ QualitySettings:
     particleRaycastBudget: 64
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
-    resolutionScalingFixedDPIFactor: 0.25
+    resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: High
