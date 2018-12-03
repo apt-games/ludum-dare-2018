@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4663976072865614}
+  - component: {fileID: 114105393121909624}
   - component: {fileID: 199180827938007962}
   - component: {fileID: 198639342891762120}
   m_Layer: 0
@@ -167,6 +168,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &114105393121909624
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941960570218572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c850594f9231bb448b56e0b350cb210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114294452293960516
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -182,8 +194,8 @@ MonoBehaviour:
   TriggerEffectEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 198639342891762120}
-        m_MethodName: Play
+      - m_Target: {fileID: 114105393121909624}
+        m_MethodName: PlayParticleEffect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
