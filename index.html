@@ -46,6 +46,11 @@
 
       a { color: #fff;
         transition: color 200 ease-in-out;
+        -webkit-transition: color 200 ease-in-out;
+      }
+
+      *:focus {
+        outline: 0;
       }
 
       a:hover { color: #ddd; }
@@ -79,6 +84,67 @@
         height: auto;
 
         margin: 2em auto;
+      }
+
+      .start-button {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+
+        pointer-events: auto;
+
+        cursor: pointer;
+
+        border-radius: 0;
+        border: none;
+
+        color: #fff;
+
+        background-color: transparent;
+
+        transform: translate3d(-50%, 0, 0);
+        -webkit-transform: translate3d(-50%, 0, 0);
+      }
+
+      .start-button:hover {
+        color: #000;
+      }
+
+      .start-button svg {
+        width: 4em;
+        height: 4em;
+
+        transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+      }
+
+      .start-button svg circle {
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 100ms linear;
+        stroke: rgba(255, 255, 255, 0.25);
+        /* stroke: #fff; */
+        stroke-width: 4px;
+      }
+
+      .start-button:hover svg circle {
+        fill: #fe0468;
+      }
+
+      .start-button circle.start-button-bar {
+        stroke: #fe0468;
+      }
+
+      .start-button-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        white-space: nowrap;
+
+        text-transform: uppercase;
+
+        transform: translate3d(-50%, -50%, 0);
+        -webkit-transform: translate3d(-50%, -50%, 0);
       }
 
       .footer {
@@ -171,90 +237,21 @@
         top: 50%;
         left: 50%;
 
-        -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
-      }
-
-      .progress {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-
-        height: 18px;
-        width: 141px;
-
         -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-      }
-
-      .progress .empty {
-        float: right;
-        width: 100%;
-        height: 100%;
-
-        display: inline-block;
-
-        background: url('/TemplateData/progressEmpty.Dark.png') no-repeat right / cover;
-      }
-
-      .progress .full {
-        display: inline-block;
-
-        float: left;
-        width: 0%;
-        height: 100%;
-
-        background: url('/TemplateData/progressFull.Dark.png') no-repeat left / cover;
-      }
-
-      .loader {
-        position: absolute;
-        top: 100%;
-        left: 50%;
-
-        transform: translate3d(-50%, 0, 0);
-      }
-
-      .loader svg {
-        width: 4em;
-        height: 4em;
-
-        transform: rotate(-90deg);
-      }
-
-      .loader svg circle {
-        stroke-dashoffset: 0;
-        transition: stroke-dashoffset 100ms linear;
-        /* stroke: rgba(255, 255, 255, 0.25); */
-        stroke: #fff;
-        stroke-width: 4px;
-      }
-
-      .loader svg .bar {
-        stroke: #fe0468;
-      }
-
-      .loader-percentage {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-
-        white-space: nowrap;
-
-        transform: translate3d(-50%, -50%, 0);
       }
     </style>
   </head>
   <body>
     <header class="header">
       <img src="/logo.png" alt="Altruist Project logo">
-      <div class="loader">
+      <button class="start-button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
           <circle cx="100" cy="100" r="90" fill="none"/>
-          <circle class="bar" cx="100" cy="100" r="90" fill="none"/>
+          <circle class="start-button-bar" cx="100" cy="100" r="90" fill="none"/>
         </svg>
-        <span class="loader-percentage">0%</span>
-      </div>
+        <span class="start-button-text">Start</span>
+      </button>
     </header>
     <footer class="footer">
       <button class="about-button">about</button>
@@ -293,24 +290,27 @@
 
     <script src="/Build/UnityLoader.js"></script>
     <script>
-      var loader = document.querySelector('.loader');
-      var bar = document.querySelector('.loader .bar');
-      var percentage = document.querySelector('.loader-percentage');
+      var startButton = document.querySelector('.start-button');
+      var startButtonBar = document.querySelector('.start-button-bar');
+      var startButtonText = document.querySelector('.start-button-text');
 
-      var r = bar.getAttribute('r');
+      var r = startButtonBar.getAttribute('r');
       var c = Math.PI * (r * 2);
 
-      bar.style.strokeDasharray = c;
-      bar.style.strokeDashoffset = 0;
+      startButtonBar.style.strokeDasharray = c;
+      startButtonBar.style.strokeDashoffset = 0.001;
+      startButtonBar.style.opacity = 0;
 
-      function UnityProgress(gameInstance, progress) {
+      function onProgress(gameInstance, progress) {
         if (!gameInstance.Module) return;
 
-        bar.style.strokeDashoffset = ((1 - progress) / 1) * c;
-        percentage.textContent = `${Math.floor(100 * progress)}%`;
+        startButtonBar.style.opacity = 1;
+        startButtonBar.style.strokeDashoffset = ((1 - progress) / 1) * c;
+        startButtonText.textContent = `${Math.floor(100 * progress)}%`;
 
         if (progress === 1) {
-          loader.style.display = "none";
+          startButton.style.display = "none";
+          document.body.classList.remove('loading');
           document.body.classList.add('loaded');
         }
       }
@@ -347,7 +347,19 @@
 
       closeAboutButton.addEventListener('click', closeAbout);
 
-      var gameInstance = UnityLoader.instantiate("gameContainer", "/Build/dist.json", {onProgress: UnityProgress});
+      function start() {
+        document.body.classList.add('loading');
+        startButton.removeEventListener('click', start);
+
+        startButton.style.pointerEvents = 'none';
+        startButton.style.cursor = 'auto';
+
+        gameInstance = UnityLoader.instantiate("gameContainer", "/Build/dist.json", {onProgress: onProgress});
+      }
+
+      startButton.addEventListener('click', start);
+
+      var gameInstance = null;
     </script>
   </body>
 </html>
