@@ -3731,7 +3731,14 @@ MonoBehaviour:
   FadeInDelay: 3
   Text: {fileID: 1557034732}
   DeathTexts:
-  - '''Damn for a second I thought they had it'''
+  - "\u201CYou owe me.\u201D"
+  - "\u201CDamn. For a second I thought they had it.\u201D"
+  - "\u201CMaybe tomorrow.\u201D"
+  - "\u201CYou\u2019re buying lunch\u201D"
+  - "\u201COne of these days.\u201D"
+  - "\u201CWhat\u2019s on the news?\u201D"
+  - "\u201CAnd I was just starting to like them\u201D"
+  - "\u201CWhat did I tell you?\u201D"
 --- !u!225 &2128638562
 CanvasGroup:
   m_ObjectHideFlags: 0
