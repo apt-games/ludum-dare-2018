@@ -17,9 +17,6 @@ public class PlayerController : MonoBehaviour
         var initialCharacter = CharacterFactory.Create(Vector3.zero, transform);
         Characters.Add(initialCharacter);
 
-        var secondChar = CharacterFactory.Create(new Vector3(- 0.2f, 0, 0), transform);
-        Characters.Add(secondChar);
-
         PlayersChanged?.Invoke();
     }
 
