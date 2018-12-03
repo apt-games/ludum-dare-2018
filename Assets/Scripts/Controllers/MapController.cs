@@ -6,21 +6,7 @@ public class MapController : MonoBehaviour
 {
     public event Action<RoomBehaviour> RoomSelected;
 
-    private Map _currentMap;
-    public Map CurrentMap
-    {
-        get { return _currentMap; }
-        private set
-        {
-            if (_currentMap != null)
-            {
-                _currentMap.gameObject.SetActive(false);
-                _currentMap.RoomSelected -= RoomSelected;
-            }
-            _currentMap = value;
-            _currentMap.RoomSelected += RoomSelected;
-        }
-    }
+    public Map CurrentMap { get; private set; }
 
     public RoomBehaviour CurrentRoom => CurrentMap?.Current;
 
@@ -33,7 +19,15 @@ public class MapController : MonoBehaviour
 
     public void InitiateLevel1()
     {
+        if (CurrentMap != null)
+        {
+            CurrentMap.RoomSelected -= RoomSelected;
+            CurrentMap.gameObject.SetActive(false);
+            Destroy(CurrentMap.gameObject);
+        }
+
         CurrentMap = new Map(MapGenerator.CreateGeneratedMap(12), 12, transform);
+        CurrentMap.RoomSelected += RoomSelected;
     }
 
     public void SelectRoom(RoomBehaviour room)
