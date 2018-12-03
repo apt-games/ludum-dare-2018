@@ -1029,7 +1029,7 @@ MonoBehaviour:
   - '"Crazy times"'
   - '"Yep."'
   - '"I''m guessing it was a decent catch earlier today though."'
-  - '"Not bad. A couple dozen from the riot and a few unwanteds from the old station."'
+  - '"Not bad. A couple dozen from the riot and a few junkheads from the old station."'
   - '"What do you reckon?"'
   - '"Eh. A few of them seemed decent enough."'
   - '"Guess we''ll just have to wait for them to wake up"'
@@ -2130,8 +2130,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 833907840}
   m_HandleRect: {fileID: 833907839}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 0.5
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
