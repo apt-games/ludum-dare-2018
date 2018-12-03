@@ -90,7 +90,8 @@ public class CharacterBehaviour : MonoBehaviour
 
         Debug.Log("Moving character to " + p);
 
-        var target = new Vector3(p.x, p.y, transform.position.z);
+        const float randomRadius = 0.1f;
+        var target = new Vector3(p.x + Random.Range(-randomRadius, randomRadius), p.y + Random.Range(-randomRadius, randomRadius), transform.position.z);
 
         _agent.SetDestination(target);
         SetWalking(true);
