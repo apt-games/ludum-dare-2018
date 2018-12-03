@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 
 public class UIController : MonoBehaviour {
+    public static bool IsHoveringOverUIElement = false;
+
     private int _characterAvatarHeight = 256;
     private int _characterAvatarMargin = 20;
     private int _characterAvatarPosX {get; set;}

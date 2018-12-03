@@ -59,7 +59,7 @@ namespace Assets.Scripts.MapGenerator
 
         private void OnRoomClicked(RoomBehaviour room)
         {
-            if (CanMoveToRoom(room.Model))
+            if (CanMoveToRoom(room.Model) && !UIController.IsHoveringOverUIElement)
             {
                 RoomSelected?.Invoke(room);
             }

@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof (Animator))]
-public class CharacterAbility : MonoBehaviour {
+public class CharacterAbility : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
     private Animator _animator;
     [HideInInspector]
@@ -19,6 +20,14 @@ public class CharacterAbility : MonoBehaviour {
 
     public void OnAbilityClick () {
         AbilityClicked?.Invoke(this);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        UIController.IsHoveringOverUIElement = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        UIController.IsHoveringOverUIElement = false;
     }
 
     public void SetSelected(bool selected) {
