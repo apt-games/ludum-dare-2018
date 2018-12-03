@@ -102,6 +102,8 @@ public class RoomBehaviour : MonoBehaviour
         }
         return false;
     }
+
+    public bool IsSafe => !Model.type.IsOneOf(RoomType.Death, RoomType.UncertainDeath);
 }
 
 public enum RoomVisibilityStatus

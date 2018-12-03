@@ -91,12 +91,10 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            MapController.SelectRoom(room);
-            CameraController.ShowRoom(room);
-
-            MapController.SelectRoom(room);
-
             PlayerController.MoveSelectedCharacterTo(room);
+
+            CameraController.ShowRoom(room);
+            MapController.SelectRoom(room);
 
             // Player entered win zone
             if (room.Model.type == RoomType.Exit)
