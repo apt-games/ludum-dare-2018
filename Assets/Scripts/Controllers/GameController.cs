@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class GameController : MonoBehaviour
     public PlayerController PlayerController;
     public MapController MapController;
     public UIController UIController;
+
+    public UnityEvent OnPlayIntro;
+    public UnityEvent OnStartTutorial;
+    public UnityEvent OnStartLevel1;
 
     [HideInInspector]
     public RoomBehaviour SelectedRoom;
@@ -21,10 +26,19 @@ public class GameController : MonoBehaviour
         MapController.RoomSelected += OnRoomSelected;
 
         PlayerController.Init();
+
+        StartIntro();
     }
 
-    private void Start()
+    public void StartIntro()
     {
+        // play intro
+        OnPlayIntro?.Invoke();
+    }
+
+    public void StartTutorial()
+    {
+        OnStartTutorial?.Invoke();
         StartLevel1();
     }
 
