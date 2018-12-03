@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public static bool TrapEffectsEnabled { get; private set; } = false;
+
     public CameraController CameraController;
     public PlayerController PlayerController;
     public MapController MapController;
@@ -26,11 +28,13 @@ public class GameController : MonoBehaviour
         CameraController.ShowRoom(MapController.Current);
         PlayerController.Init(MapController.Current);
         MapController.Current.SetVisited();
-        UIController?.UpdateUI(); //DO NOT COMMIT
     }
 
     private void OnRoomSelected(RoomBehaviour room)
     {
+        if (!TrapEffectsEnabled)
+            TrapEffectsEnabled = true;
+
         if (PlayerController.SelectedCharacter == null || PlayerController.SelectedCharacter.IsWalking) {
             return;
         }

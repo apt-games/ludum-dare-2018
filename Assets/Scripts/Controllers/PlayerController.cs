@@ -15,11 +15,6 @@ public class PlayerController : MonoBehaviour
 
     public void Init(RoomBehaviour room)
     {
-        Spawn(room);
-    }
-
-    private void Spawn(RoomBehaviour room)
-    {
         var position = new Vector3(room.transform.position.x, room.transform.position.y, transform.position.z);
         var initialCharacter = CharacterFactory.Create(position, transform);
         initialCharacter.OccupyingRoom = room;

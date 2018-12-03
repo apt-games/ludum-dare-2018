@@ -16,8 +16,11 @@ public class TrapBehaviour : MonoBehaviour
                 StartCoroutine(KillCharacterAfterDelay(character));
             }
 
-            // show effect
-            _effect.TriggerEffectEvent.Invoke();
+            if (GameController.TrapEffectsEnabled)
+            {
+                // show effect
+                _effect.TriggerEffectEvent.Invoke();
+            }
 
             //decrement uses
             _effect.Uses--;
