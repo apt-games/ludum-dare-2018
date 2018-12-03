@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4636074194265228}
+  - component: {fileID: 114698927449881390}
   - component: {fileID: 199332323779160970}
   - component: {fileID: 198479915058477244}
   m_Layer: 0
@@ -182,8 +183,8 @@ MonoBehaviour:
   TriggerEffectEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 198479915058477244}
-        m_MethodName: Play
+      - m_Target: {fileID: 114698927449881390}
+        m_MethodName: PlayParticleEffect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -208,6 +209,17 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   Uses: 1
   Delay: 0.2
+--- !u!114 &114698927449881390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788460547696392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c850594f9231bb448b56e0b350cb210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &198479915058477244
 ParticleSystem:
   m_ObjectHideFlags: 1
