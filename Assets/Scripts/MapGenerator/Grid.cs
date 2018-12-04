@@ -104,7 +104,7 @@ public class Cell
             RoomType.Death,
             RoomType.UncertainDeath,
         };
-        int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 55, 10, 25 });
+        int weightedTypeIndex = WeightedRandom(new List<int>() { 10, 50, 10, 30 });
 
         // Debug.Log("X: " + _coord.x + ", Y: " + _coord.y + ", blocked: " + blocked);
 
