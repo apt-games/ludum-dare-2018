@@ -52,6 +52,7 @@ public class GameController : MonoBehaviour
 
     public void StartTutorial()
     {
+        LevelStarted = DateTime.Now;
         TrapEffectsEnabled = false;
         MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial
         RestartPlayer();
