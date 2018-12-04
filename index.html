@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130383809-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-130383809-1');
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -11,7 +20,7 @@
 
     <meta property="og:title" content="Altruist Project">
     <meta property="og:url" content="altruist-project.com">
-    <meta property="og:image" content="https://altruist-project.com/share.png">
+    <meta property="og:image" content="https://altruist-project.com/share.jpg">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -74,6 +83,19 @@
 
         transition: transform 400ms ease-out;
         -webkit-transition: transform 400ms ease-out;
+      }
+
+      .header-start { display: block; }
+      .header-fallback {
+        display: none;
+
+        text-align: center;
+
+        margin: 0 auto;
+        padding: 1em;
+
+        width: 100%;
+        max-width: 480px;
       }
 
       .loaded .header {
@@ -340,14 +362,19 @@
   <body>
     <header class="header">
       <img src="/logo.png" alt="Altruist Project logo">
-      <p class="audio-hint">Turn up the volume</p>
-      <button class="start-button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="90" fill="none"/>
-          <circle class="start-button-bar" cx="100" cy="100" r="90" fill="none"/>
-        </svg>
-        <span class="start-button-text">Start</span>
-      </button>
+      <div class="header-start">
+        <p class="audio-hint">Turn up the volume</p>
+        <button class="start-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="90" fill="none"/>
+            <circle class="start-button-bar" cx="100" cy="100" r="90" fill="none"/>
+          </svg>
+          <span class="start-button-text">Start</span>
+        </button>
+      </div>
+      <div class="header-fallback">
+        <p>We've had to sacrifice compatibilty with your device/browser, please try on desktop using chrome/firefox.</p>
+      </div>
     </header>
     <footer class="footer">
       <div class="footer-controls">
@@ -379,16 +406,21 @@
           <header>
             <h2>Team Credits</h2>
           </header>
-          <p>Anders Havskjold - Tech Lead</p>
-          <p>Syver Lauritzen - Art direction</p>
-          <p>Daniel Skogly - Development</p>
-          <p>Magnus Bergman - Development</p>
+          <p>
+            Anders Havskjold - Concept, Lead Dev<br>
+            Syver Lauritzen - Concept, Story, Art & Design<br>
+            Daniel Skogly - Concept, Dev<br>
+            Magnus Bergman - Concept, Dev
+          </p>
         </section>
         <section>
           <header>
             <h2>External Credits</h2>
           </header>
-          <p>Sound Effects - Eric Matyas <a href="https://soundimage.org/" target="_blank" rel="noopener noreferrer">https://soundimage.org/</a></p>
+          <p>
+            Soundtrack - Eric Matyas <a href="https://soundimage.org/" target="_blank" rel="noopener noreferrer">https://soundimage.org/</a><br>
+            Sound effects - <a href="http://freesound.org" target="_blank" rel="noopener noreferrer">freesound.org</a>
+          </p>
         </section>
       </article>
       <button class="close-about-button">
@@ -416,112 +448,283 @@
 
     <script src="/Build/UnityLoader.js"></script>
     <script>
-      var startButton = document.querySelector('.start-button');
-      var audioHint = document.querySelector('.audio-hint');
-      var startButtonBar = document.querySelector('.start-button-bar');
-      var startButtonText = document.querySelector('.start-button-text');
+      (() => {
+        function getDeviceInfo() {
+          var unknown = '-';
 
-      var r = startButtonBar.getAttribute('r');
-      var c = Math.PI * (r * 2);
+          // browser
+          var nVer = window.navigator.appVersion;
+          var userAgent = window.navigator.userAgent;
+          let browser = window.navigator.appName;
+          let version = parseFloat(window.navigator.appVersion).toString();
+          let majorVersion = parseInt(window.navigator.appVersion, 10);
+          let nameOffset;
+          let verOffset;
+          let ix;
 
-      startButtonBar.style.strokeDasharray = c;
-      startButtonBar.style.strokeDashoffset = 0.001;
-      startButtonBar.style.opacity = 0;
+          // Opera
+          if (userAgent.indexOf('Opera') !== -1) {
+            verOffset = userAgent.indexOf('Opera');
+            browser = 'Opera';
+            version = userAgent.substring(verOffset + 6);
 
-      function onProgress(gameInstance, progress) {
-        if (!gameInstance.Module) return;
+            if (userAgent.indexOf('Version') !== -1) {
+              verOffset = userAgent.indexOf('Version');
+              version = userAgent.substring(verOffset + 8);
+            }
+          }
 
-        startButtonBar.style.opacity = 1;
-        startButtonBar.style.strokeDashoffset = ((1 - progress) / 1) * c;
-        startButtonText.textContent = `${Math.floor(100 * progress)}%`;
+          // Opera Next
+          if (userAgent.indexOf('OPR') !== -1) {
+            verOffset = userAgent.indexOf('OPR');
+            browser = 'Opera';
+            version = userAgent.substring(verOffset + 4);
+          } else if (userAgent.indexOf('Edge') !== -1) {
+            verOffset = userAgent.indexOf('Edge');
+            browser = 'Edge';
+            version = userAgent.substring(verOffset + 5);
+          } else if (userAgent.indexOf('MSIE') !== -1) {
+            verOffset = userAgent.indexOf('MSIE');
+            browser = 'IE';
+            version = userAgent.substring(verOffset + 5);
+          } else if (userAgent.indexOf('Chrome') !== -1) {
+            verOffset = userAgent.indexOf('Chrome');
+            browser = 'Chrome';
+            version = userAgent.substring(verOffset + 7);
+          } else if (userAgent.indexOf('Safari') !== -1) {
+            verOffset = userAgent.indexOf('Safari');
+            browser = 'Safari';
+            version = userAgent.substring(verOffset + 7);
+            if (userAgent.indexOf('Version') !== -1) {
+              verOffset = userAgent.indexOf('Version');
+              version = userAgent.substring(verOffset + 8);
+            }
+          } else if (userAgent.indexOf('Firefox') !== -1) {
+            verOffset = userAgent.indexOf('Firefox');
+            browser = 'Firefox';
+            version = userAgent.substring(verOffset + 8);
+          } else if (userAgent.indexOf('Trident/') !== -1) {
+            browser = 'IE';
+            version = userAgent.substring(userAgent.indexOf('rv:') + 3);
+          } else if (userAgent.lastIndexOf(' ') + 1 < userAgent.lastIndexOf('/')) {
+            nameOffset = userAgent.lastIndexOf(' ') + 1;
+            verOffset = userAgent.lastIndexOf('/');
+            browser = userAgent.substring(nameOffset, verOffset);
+            version = userAgent.substring(verOffset + 1);
+            if (browser.toLowerCase() === browser.toUpperCase()) {
+              browser = window.navigator.appName;
+            }
+          }
 
-        if (progress === 1) {
-          startButton.style.display = "none";
-          audioHint.style.display = "none";
-          document.body.classList.remove('loading');
-          document.body.classList.add('loaded');
+          // trim the version string
+          if (version.indexOf(';') !== -1) {
+            ix = version.indexOf(';');
+            version = version.substring(0, ix);
+          }
+          if (version.indexOf(' ') !== -1) {
+            ix = version.indexOf(' ');
+            version = version.substring(0, ix);
+          }
+          if (version.indexOf(')') !== -1) {
+            ix = version.indexOf(')');
+            version = version.substring(0, ix);
+          }
+
+          majorVersion = parseInt(`${version}`, 10);
+          if (isNaN(majorVersion)) {
+            version = `${parseFloat(window.navigator.appVersion)}`;
+            majorVersion = parseInt(window.navigator.appVersion, 10);
+          }
+
+          // mobile version
+          var isMobile = /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(nVer);
+
+          // system
+          let os = unknown;
+          var clientStrings = [
+            { s: 'Windows', r: /(Windows 10.0|Windows NT 10.0)/ }, // Windows 10
+            { s: 'Windows', r: /(Windows 8.1|Windows NT 6.3)/ }, // Windows 8.1
+            { s: 'Windows', r: /(Windows 8|Windows NT 6.2)/ }, // Windows8
+            { s: 'Windows', r: /(Windows 7|Windows NT 6.1)/ }, // Windows7
+            { s: 'Windows', r: /Windows NT 6.0/ }, // Windows Vista
+            { s: 'Windows', r: /Windows NT 5.2/ }, // Windows Server 2003
+            { s: 'Windows', r: /(Windows NT 5.1|Windows XP)/ }, // Windows XP
+            { s: 'Windows', r: /(Windows NT 5.0|Windows 2000)/ }, // Windows 2000
+            { s: 'Windows', r: /Windows NT/ },
+            { s: 'Windows', r: /(Win 9x 4.90|Windows ME)/ }, // Windows ME
+            { s: 'Windows', r: /(Windows 98|Win98)/ }, // Windows 98
+            { s: 'Windows', r: /(Windows 95|Win95|Windows_95)/ }, // Windows 95
+            { s: 'Windows', r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/ }, // Windows NT 4.0
+            { s: 'Windows', r: /Windows CE/ }, // Windows CE
+            { s: 'Windows', r: /Windows/ },
+            { s: 'Windows', r: /Win64/ },
+            { s: 'Windows', r: /Win16/ }, // Windows 3.11
+            { s: 'Android', r: /Android/ },
+            { s: 'Open-BSD', r: /OpenBSD/ },
+            { s: 'Sun-OS', r: /SunOS/ },
+            { s: 'Linux', r: /(Linux|X11)/ },
+            { s: 'iOS', r: /(iPhone|iPad|iPod)/ },
+            { s: 'Mac', r: /Mac OS X/ }, // Mac OS X
+            { s: 'Mac', r: /(MacPPC|MacIntel|Mac_PowerPC|Macintosh)/ }, // Mac OS
+            { s: 'QNX', r: /QNX/ },
+            { s: 'UNIX', r: /UNIX/ },
+            { s: 'BeOS', r: /BeOS/ },
+            { s: 'OS2', r: /OS\/2/ },
+            {
+              s: 'Search-Bot',
+              r: /(nuhk|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/,
+            },
+          ];
+
+          for (let i = 0; i < clientStrings.length; i++) {
+            var cs = clientStrings[i];
+
+            if (cs.r.test(userAgent)) {
+              os = cs.s;
+              break;
+            }
+          }
+
+          return {
+            browser,
+            browserVersion: version,
+            browserMajorVersion: majorVersion,
+            isMobile,
+            os,
+          };
+        };
+
+        var defaults = {
+          browser: '',
+          browserVersion: '',
+          browserMajorVersion: 0,
+          mobile: false,
+          os: '',
+        };
+
+        window.deviceInfo = (window.navigator ? getDeviceInfo() : defaults);
+      })();
+    </script>
+    <script>
+      (() => {
+        var hasSupport = true;
+
+        if (deviceInfo.mobile || /(IE|Safari)/.test(deviceInfo.browser)) {
+          document.querySelector('.header-fallback').style.display = 'block';
+          document.querySelector('.header-start').style.display = 'none';
+
+          hasSupport = false;
         }
-      }
 
-      var about = document.querySelector('.about');
-      about.style.display = 'none';
+        var about = document.querySelector('.about');
+        about.style.display = 'none';
 
-      function handleAboutTransitionEnd() {
-        if (!about.classList.contains('visible')) {
-          about.style.display = 'none';
+        function handleAboutTransitionEnd() {
+          if (!about.classList.contains('visible')) {
+            about.style.display = 'none';
+          }
         }
-      }
 
-      about.addEventListener('transitionend', handleAboutTransitionEnd)
+        about.addEventListener('transitionend', handleAboutTransitionEnd)
 
-      function toggleAbout() {
-        if (about.classList.contains('visible')) {
+        function toggleAbout() {
+          if (about.classList.contains('visible')) {
+            about.classList.remove('visible');
+          } else {
+            closeHelp();
+            about.style.display = 'flex';
+            setTimeout(() => { about.classList.add('visible'); }, 10);
+          }
+        }
+
+        var aboutButton = document.querySelector('.about-button');
+
+        aboutButton.addEventListener('click', toggleAbout);
+
+        function closeAbout() {
           about.classList.remove('visible');
-        } else {
-          closeHelp();
-          about.style.display = 'flex';
-          setTimeout(() => { about.classList.add('visible'); }, 10);
         }
-      }
 
-      var aboutButton = document.querySelector('.about-button');
+        var closeAboutButton = document.querySelector('.close-about-button');
 
-      aboutButton.addEventListener('click', toggleAbout);
+        closeAboutButton.addEventListener('click', closeAbout);
 
-      function closeAbout() {
-        about.classList.remove('visible');
-      }
+        var help = document.querySelector('.help');
+        help.style.display = 'none';
 
-      var closeAboutButton = document.querySelector('.close-about-button');
-
-      closeAboutButton.addEventListener('click', closeAbout);
-
-      var help = document.querySelector('.help');
-      help.style.display = 'none';
-
-      function handleHelpTransitionEnd() {
-        if (!help.classList.contains('visible')) {
-          help.style.display = 'none';
+        function handleHelpTransitionEnd() {
+          if (!help.classList.contains('visible')) {
+            help.style.display = 'none';
+          }
         }
-      }
 
-      help.addEventListener('transitionend', handleHelpTransitionEnd)
+        help.addEventListener('transitionend', handleHelpTransitionEnd)
 
-      function toggleHelp() {
-        if (help.classList.contains('visible')) {
+        function toggleHelp() {
+          if (help.classList.contains('visible')) {
+            help.classList.remove('visible');
+          } else {
+            closeAbout();
+            help.style.display = 'flex';
+            setTimeout(() => { help.classList.add('visible'); }, 10);
+          }
+        }
+
+        var helpButton = document.querySelector('.help-button');
+
+        helpButton.addEventListener('click', toggleHelp);
+
+        function closeHelp() {
           help.classList.remove('visible');
-        } else {
-          closeAbout();
-          help.style.display = 'flex';
-          setTimeout(() => { help.classList.add('visible'); }, 10);
         }
-      }
 
-      var helpButton = document.querySelector('.help-button');
+        var closeHelpButton = document.querySelector('.close-help-button');
 
-      helpButton.addEventListener('click', toggleHelp);
+        closeHelpButton.addEventListener('click', closeHelp);
 
-      function closeHelp() {
-        help.classList.remove('visible');
-      }
+        if (hasSupport) {
+          var startButton = document.querySelector('.start-button');
+          var audioHint = document.querySelector('.audio-hint');
+          var startButtonBar = document.querySelector('.start-button-bar');
+          var startButtonText = document.querySelector('.start-button-text');
 
-      var closeHelpButton = document.querySelector('.close-help-button');
+          var r = startButtonBar.getAttribute('r');
+          var c = Math.PI * (r * 2);
 
-      closeHelpButton.addEventListener('click', closeHelp);
+          startButtonBar.style.strokeDasharray = c;
+          startButtonBar.style.strokeDashoffset = 0.001;
+          startButtonBar.style.opacity = 0;
 
-      function start() {
-        document.body.classList.add('loading');
-        startButton.removeEventListener('click', start);
+          function onProgress(gameInstance, progress) {
+            if (!gameInstance.Module) return;
 
-        startButton.style.pointerEvents = 'none';
-        startButton.style.cursor = 'auto';
+            startButtonBar.style.opacity = 1;
+            startButtonBar.style.strokeDashoffset = ((1 - progress) / 1) * c;
+            startButtonText.textContent = `${Math.floor(100 * progress)}%`;
 
-        gameInstance = UnityLoader.instantiate("gameContainer", "/Build/dist.json", {onProgress: onProgress});
-      }
+            if (progress === 1) {
+              startButton.style.display = "none";
+              audioHint.style.display = "none";
+              document.body.classList.remove('loading');
+              document.body.classList.add('loaded');
+            }
+          }
 
-      startButton.addEventListener('click', start);
+          function start() {
+            document.body.classList.add('loading');
+            startButton.removeEventListener('click', start);
 
-      var gameInstance = null;
+            startButton.style.pointerEvents = 'none';
+            startButton.style.cursor = 'auto';
+
+            gameInstance = UnityLoader.instantiate("gameContainer", "/Build/dist.json", {onProgress: onProgress});
+          }
+
+          startButton.addEventListener('click', start);
+        }
+
+        var gameInstance = null;
+      })();
     </script>
   </body>
 </html>
