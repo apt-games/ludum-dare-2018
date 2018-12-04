@@ -54,6 +54,7 @@ public class GameController : MonoBehaviour
     {
         TrapEffectsEnabled = false;
         MapController.InitiateLevel1(); // TODO: replace with 0 when tutorial
+        RestartPlayer();
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
 
