@@ -48,28 +48,31 @@ public class PlayerController : MonoBehaviour
         {
             SelectedCharacter.MoveTo(room);
 
+            var currentlyInParty = Characters.Where(player => player.IsAlive && (player.ID != SelectedCharacter?.ID)).ToList();
             if (room.Visibility == RoomVisibilityStatus.Visited && room.IsSafe)
             {
-                MovePartyTo(room);
+                MovePartyTo(room, currentlyInParty);
             }
             else
             {
                 //TODO: Improve this
-                StartCoroutine(WaitForSafe(room));
+                StartCoroutine(WaitForSafe(room, currentlyInParty));
             }
         }
     }
 
-    private IEnumerator WaitForSafe(RoomBehaviour room)
+    private IEnumerator WaitForSafe(RoomBehaviour room, List<CharacterBehaviour> party)
     {
-        yield return new WaitForSeconds(3);
         if (room != null)
-            MovePartyTo(room);
+        {
+            yield return new WaitForSeconds(room.IsSafe ? 1.5f : 3f);
+            MovePartyTo(room, party);
+        }
     }
 
-    public void MovePartyTo(RoomBehaviour room)
+    public void MovePartyTo(RoomBehaviour room, List<CharacterBehaviour> party)
     {
-        foreach (var player in Characters.Where(player => player.IsAlive && (player.ID != SelectedCharacter?.ID)))
+        foreach (var player in party)
         {
             player.MoveTo(room);
         }
