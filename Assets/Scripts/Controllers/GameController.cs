@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
     public PlayerController PlayerController;
     public MapController MapController;
     public UIController UIController;
+    public DialogueController DialogueController;
 
     public UnityEvent OnPlayIntro;
     public UnityEvent OnStartTutorial;
@@ -58,6 +59,7 @@ public class GameController : MonoBehaviour
         RestartPlayer();
         PlayerController.PlaceCharactersInRoom(MapController.CurrentRoom);
         CameraController.ShowRoom(MapController.CurrentRoom);
+        DialogueController.gameObject.SetActive(true);
 
         OnStartTutorial?.Invoke();
 

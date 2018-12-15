@@ -30,7 +30,6 @@ public class UIController : MonoBehaviour {
 
     private int _previousAlivePlayersCount = -1;
     private int _contentMinHeight = 1080;
-    private bool _shouldUpdateContentHeight = true;
 
     public UIController() {
         _characterAvatarPosX = (_characterAvatarHeight / 2) - (_characterAvatarMargin * 2);
@@ -62,8 +61,6 @@ public class UIController : MonoBehaviour {
         int alivePlayersCount = 0;
         foreach (var Character in PlayerController.Characters.Where(p => p.IsAlive)) {
             alivePlayersCount++;
-
-            Vector3 position = new Vector3(_characterAvatarPosX, posY, 0);
 
             var characterAvatar = Instantiate(CharacterAvatarPrefab, Vector3.zero, Quaternion.identity, Content.transform);
 
@@ -187,6 +184,14 @@ public class UIController : MonoBehaviour {
     public void Update() {
         if (Input.GetMouseButtonDown(1) && (_activeCharacterAvatar != null || _activeCharacterAbility)) {
             ResetSelection();
+        }
+    }
+
+    public void ShowDialogue(DialogueItem dialogue, float fadeTime)
+    {
+        if(_characterAvatars.Count > dialogue.Character)
+        {
+            _characterAvatars[dialogue.Character].ShowDialogue(dialogue, fadeTime);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class CharacterAvatar : MonoBehaviour {
     public GameObject Actions;
     public GameObject Image;
     public GameObject AvatarName;
+    public GameObject SpeechBubble;
     [HideInInspector]
     public CharacterBehaviour Character;
     public CharacterAbility CharacterAbilityPrefab;
@@ -114,4 +116,30 @@ public class CharacterAvatar : MonoBehaviour {
 	void Update () {
 
 	}
+
+    public void ShowDialogue(DialogueItem dialogue, float fadeTime)
+    {
+        StartCoroutine(ShowAndFadeDialogue(dialogue, fadeTime));
+    }
+
+    IEnumerator ShowAndFadeDialogue(DialogueItem dialogue, float fadeTime)
+    {
+        CanvasGroup dialogueCanvasGroup = SpeechBubble.GetComponent<CanvasGroup>();
+        TextMeshProUGUI uiText = SpeechBubble.GetComponent<TextMeshProUGUI>();
+
+        dialogueCanvasGroup.alpha = 1;
+        uiText.text = dialogue.Text;
+
+        yield return new WaitForSeconds(dialogue.Duration);
+
+        const float FADE_STEPS = 30.0f;
+        const float stepsize = 1.0f / FADE_STEPS;
+        float waitTime = fadeTime / FADE_STEPS;
+        for(float f = 1; f >= 0; f -= stepsize)
+        {
+            dialogueCanvasGroup.alpha = f;
+            yield return new WaitForSeconds(waitTime);
+        }
+        dialogueCanvasGroup.alpha = 0;
+    }
 }
