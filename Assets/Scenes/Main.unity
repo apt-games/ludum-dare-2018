@@ -3228,6 +3228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameController: {fileID: 1862339990}
   PlayerController: {fileID: 367920721}
+  MapController: {fileID: 1781157867}
   UIController: {fileID: 1918072528}
   FadeoutTime: 1
   WaitThreshold: 5

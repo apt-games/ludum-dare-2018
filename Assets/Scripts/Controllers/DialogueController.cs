@@ -1,3 +1,4 @@
+using AptGames.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,9 +20,14 @@ public class DialogueController : MonoBehaviour {
     public float FadeoutTime = 1;
     public float WaitThreshold = 5;
 
-    List<Dialogue> dialogues = new List<Dialogue>();
+    Dictionary<DialogueType, List<Dialogue>> dialogues = new Dictionary<DialogueType, List<Dialogue>>();
+    Dictionary<DialogueType, int> dialogueIndex = new Dictionary<DialogueType, int>() {
+        {DialogueType.Waiting, 0 },
+        {DialogueType.EnterRoom, 0 },
+        {DialogueType.CharacterDied, 0 },
+        {DialogueType.FoundCharacter, 0 },
+    };
     Dialogue currentDialogue = null;
-    //List<int> completedDialogueIndices = new List<int>();
     float timeSinceLastDialogue = 0;
 
     private void Awake()
@@ -37,8 +43,14 @@ public class DialogueController : MonoBehaviour {
 
     void ConstructDialogues()
     {
+        dialogues.Add(DialogueType.Waiting, ConstructWaitingDialogues());
+        dialogues.Add(DialogueType.CharacterDied, ConstructCharacterDiedDialogues());
+    }
+
+    List<Dialogue> ConstructWaitingDialogues()
+    {
         //TODO: generate dialogues dynamically based on number of teammembers
-        dialogues.Clear();
+        var waitingDialogues = new List<Dialogue>();
 
         var helloWorld = new List<DialogueItem>
         {
@@ -46,7 +58,33 @@ public class DialogueController : MonoBehaviour {
             new DialogueItem(1, "Oh shut up!"),
             new DialogueItem(0, "You shut up"),
         };
-        dialogues.Add(ConstructDialogue(DialogueType.Waiting, helloWorld));
+        waitingDialogues.Add(ConstructDialogue(DialogueType.Waiting, helloWorld));
+
+        return waitingDialogues;
+    }
+
+    List<Dialogue> ConstructCharacterDiedDialogues()
+    {
+        var diedDialogues = new List<Dialogue>();
+
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(0, "Noooooooooo!")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(1, "Whatever...")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(0, "Finally!")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(1, "What the...")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(2, "Why would you even go in there?")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(0, "Good riddance!")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(1, "Another one bites the dust")}));
+        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
+            new List<DialogueItem> { new DialogueItem(0, "I wonder if they had life insurance")}));
+
+        return diedDialogues;
     }
 
     Dialogue ConstructDialogue(DialogueType type, List<DialogueItem> entries)
@@ -66,7 +104,7 @@ public class DialogueController : MonoBehaviour {
             if (timeSinceLastDialogue >= WaitThreshold)
             {
                 //TODO: make generic
-                StartDialogue(dialogues[0]);
+                StartDialogue(GetDialogueFromType(DialogueType.Waiting));
             }
             else
             {
@@ -82,6 +120,13 @@ public class DialogueController : MonoBehaviour {
             currentDialogue.Stop();
         }
         timeSinceLastDialogue = 0;
+    }
+
+    Dialogue GetDialogueFromType(DialogueType type)
+    {
+        var index = dialogueIndex[type]++;
+        index %= dialogues[type].Count;
+        return dialogues[type][index];
     }
 
     void StartDialogue(Dialogue dialogue)
@@ -121,8 +166,20 @@ public class DialogueController : MonoBehaviour {
 
     private void OnCharacterDied(CharacterBehaviour character)
     {
-        //TODO: Stop dialogue if needed char is killed
+        //NOTE: Stop dialogue if needed char is killed
+        if(currentDialogue != null)
+        {
+            var indexOfDead = PlayerController.Characters.IndexOf(character);
+            if(currentDialogue.CharactersNeeded.Contains(indexOfDead))
+            {
+                currentDialogue.Stop();
+            }
+        }
         //TODO: Start dialogue if any char is killed
+        if(currentDialogue == null)
+        {
+            StartDialogue(GetDialogueFromType(DialogueType.CharacterDied));
+        }
     }
 
     void OnRoomSelected(RoomBehaviour room)
