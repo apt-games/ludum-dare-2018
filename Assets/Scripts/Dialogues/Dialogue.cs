@@ -61,5 +61,6 @@ public class Dialogue : MonoBehaviour {
             yield return new WaitForSeconds(entry.Duration);
         }
         DialogueComplete?.Invoke();
+        dialogueRoutine = null;
     }
 }
