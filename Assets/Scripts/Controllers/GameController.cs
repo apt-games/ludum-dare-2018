@@ -28,7 +28,8 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        PlayerController.PlayersChanged += OnPlayersChanged;
+        PlayerController.CharacterAdded += OnPlayersChanged;
+        PlayerController.CharacterDied += OnPlayersChanged;
         MapController.RoomSelected += OnRoomSelected;
 
         RestartPlayer();
@@ -143,7 +144,7 @@ public class GameController : MonoBehaviour
         _toggleAbility = state;
     }
 
-    public void OnPlayersChanged()
+    public void OnPlayersChanged(CharacterBehaviour character)
     {
         UIController?.UpdateUI();
 

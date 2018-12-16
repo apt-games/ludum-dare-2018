@@ -7,7 +7,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public List<CharacterBehaviour> Characters { get; } = new List<CharacterBehaviour>();
-    public event Action PlayersChanged;
+    public event Action<CharacterBehaviour> CharacterAdded;
+    public event Action<CharacterBehaviour> CharacterDied;
 
     public CharacterBehaviour SelectedCharacter;
     public AudioSource newCharAudio;
@@ -19,7 +20,7 @@ public class PlayerController : MonoBehaviour
         var initialCharacter = CharacterFactory.Create(Vector3.zero, transform);
         Characters.Add(initialCharacter);
 
-        PlayersChanged?.Invoke();
+        CharacterAdded?.Invoke(initialCharacter);
     }
 
     public void PlaceCharactersInRoom(RoomBehaviour room)
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
         Characters.Add(character);
         newCharAudio.PlayDelayed(1.0f);
 
-        PlayersChanged?.Invoke();
+        CharacterAdded?.Invoke(character);
     }
 
     public void MoveSelectedCharacterTo(RoomBehaviour room)
@@ -86,7 +87,7 @@ public class PlayerController : MonoBehaviour
         if (Characters.Contains(character))
         {
             SelectedCharacter = null;
-            PlayersChanged?.Invoke();
+            CharacterDied?.Invoke(character);
         }
     }
 }

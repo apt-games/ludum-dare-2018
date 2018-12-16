@@ -14,6 +14,7 @@ public class DialogueController : MonoBehaviour {
 
     public GameController GameController;
     public PlayerController PlayerController;
+    public MapController MapController;
     public UIController UIController;
     public float FadeoutTime = 1;
     public float WaitThreshold = 5;
@@ -26,7 +27,9 @@ public class DialogueController : MonoBehaviour {
     private void Awake()
     {
         ConstructDialogues();
-        PlayerController.PlayersChanged += OnPlayersChanged;
+        PlayerController.CharacterAdded += OnCharacterAdded;
+        PlayerController.CharacterDied += OnCharacterDied;
+        MapController.RoomSelected += OnRoomSelected;
     }
 
     void Start () {
@@ -111,11 +114,19 @@ public class DialogueController : MonoBehaviour {
         timeSinceLastDialogue = 0;
     }
 
-    void OnPlayersChanged()
+    private void OnCharacterAdded(CharacterBehaviour character)
+    {
+        //TODO: Start dialogue if char is discovered
+    }
+
+    private void OnCharacterDied(CharacterBehaviour character)
     {
         //TODO: Stop dialogue if needed char is killed
         //TODO: Start dialogue if any char is killed
-        //TODO: Start dialogue if char is discovered
+    }
+
+    void OnRoomSelected(RoomBehaviour room)
+    {
         //TODO: Start dialogue when char is about the enter room
         //TODO: Start dialog after char entered room without trap.
     }
