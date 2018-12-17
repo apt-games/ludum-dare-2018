@@ -8,6 +8,20 @@ public class CharacterInfo
     public string name { get; set; }
     public Sprite avatar { get; set; }
     public CharacterColors colors { get; set; }
+    public PersonalityTrait Personality { get; set; }
+}
+
+[Flags]
+public enum PersonalityTrait
+{
+    None            = 0,
+    Kind            = 1 << 0,
+    Curious         = 1 << 1,
+    Loner           = 1 << 2,
+    Angry           = 1 << 3,
+    Crazy           = 1 << 4,
+    Flirtatious     = 1 << 5,
+    Sad             = 1 << 6,
 }
 
 [Serializable]
@@ -31,6 +45,7 @@ static class CharacterInfoGenerator {
                 name = getFemaleName(),
                 avatar = details.Avatar,
                 colors = details.Colors,
+                Personality = getRandomPersonality(),
             };
         }
         else
@@ -41,8 +56,15 @@ static class CharacterInfoGenerator {
                 name = getMaleName(),
                 avatar = details.Avatar,
                 colors = details.Colors,
+                Personality = getRandomPersonality(),
             };
         }
+    }
+
+    static PersonalityTrait getRandomPersonality()
+    {
+        return (PersonalityTrait)Random.Range(0, 0xFFFF);
+
     }
 
     static string getFemaleName()
