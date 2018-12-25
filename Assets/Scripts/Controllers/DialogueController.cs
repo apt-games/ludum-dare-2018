@@ -1,6 +1,8 @@
 using AptGames.Utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DialogueController : MonoBehaviour {
@@ -13,26 +15,29 @@ public class DialogueController : MonoBehaviour {
         FoundCharacter,
     }
 
+    struct CharWithTrait
+    {
+        public int Index;
+        public PersonalityTrait Trait;
+    }
+
     public GameController GameController;
     public PlayerController PlayerController;
     public MapController MapController;
     public UIController UIController;
     public float FadeoutTime = 1;
     public float WaitThreshold = 5;
+    public Dialogues Dialogues;
 
-    Dictionary<DialogueType, List<Dialogue>> dialogues = new Dictionary<DialogueType, List<Dialogue>>();
-    Dictionary<DialogueType, int> dialogueIndex = new Dictionary<DialogueType, int>() {
-        {DialogueType.Waiting, 0 },
-        {DialogueType.EnterRoom, 0 },
-        {DialogueType.CharacterDied, 0 },
-        {DialogueType.FoundCharacter, 0 },
-    };
-    Dialogue currentDialogue = null;
+    Dialogue currentDialogue;
+    Coroutine dialogueRoutine;
+    DialogueLine currentLine;
+    List<CharWithTrait> charactersInDialogue = new List<CharWithTrait>();
+
     float timeSinceLastDialogue = 0;
 
     private void Awake()
     {
-        ConstructDialogues();
         PlayerController.CharacterAdded += OnCharacterAdded;
         PlayerController.CharacterDied += OnCharacterDied;
         MapController.RoomSelected += OnRoomSelected;
@@ -41,69 +46,12 @@ public class DialogueController : MonoBehaviour {
     void Start () {
 	}
 
-    void ConstructDialogues()
-    {
-        dialogues.Add(DialogueType.Waiting, ConstructWaitingDialogues());
-        dialogues.Add(DialogueType.CharacterDied, ConstructCharacterDiedDialogues());
-    }
-
-    List<Dialogue> ConstructWaitingDialogues()
-    {
-        //TODO: generate dialogues dynamically based on number of teammembers
-        var waitingDialogues = new List<Dialogue>();
-
-        var helloWorld = new List<DialogueItem>
-        {
-            new DialogueItem(0, "Hello World!"),
-            new DialogueItem(1, "Oh shut up!"),
-            new DialogueItem(0, "You shut up"),
-        };
-        waitingDialogues.Add(ConstructDialogue(DialogueType.Waiting, helloWorld));
-
-        return waitingDialogues;
-    }
-
-    List<Dialogue> ConstructCharacterDiedDialogues()
-    {
-        var diedDialogues = new List<Dialogue>();
-
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(0, "Noooooooooo!")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(1, "Whatever...")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(0, "Finally!")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(1, "What the...")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(2, "Why would you even go in there?")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(0, "Good riddance!")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(1, "Another one bites the dust")}));
-        diedDialogues.Add(ConstructDialogue(DialogueType.CharacterDied,
-            new List<DialogueItem> { new DialogueItem(0, "I wonder if they had life insurance")}));
-
-        return diedDialogues;
-    }
-
-    Dialogue ConstructDialogue(DialogueType type, List<DialogueItem> entries)
-    {
-        var gameObject = new GameObject("Dialogue");
-        gameObject.AddComponent<Dialogue>();
-        Dialogue dialogue = gameObject.GetComponent<Dialogue>();
-        dialogue.Init(UIController, type, entries);
-        return dialogue;
-    }
-
-	// Update is called once per frame
 	void Update () {
-        if(currentDialogue == null)
+        if (currentDialogue == null)
         {
             //triggering DialogueType.Waiting
             if (timeSinceLastDialogue >= WaitThreshold)
             {
-                //TODO: make generic
                 StartDialogue(GetDialogueFromType(DialogueType.Waiting));
             }
             else
@@ -113,70 +61,88 @@ public class DialogueController : MonoBehaviour {
         }
     }
 
-    public void Reset()
-    {
-        if(currentDialogue != null)
-        {
-            currentDialogue.Stop();
-        }
-        timeSinceLastDialogue = 0;
-    }
-
     Dialogue GetDialogueFromType(DialogueType type)
     {
-        var index = dialogueIndex[type]++;
-        index %= dialogues[type].Count;
-        return dialogues[type][index];
+        List<Dialogue> dialogueList = null;
+        switch(type)
+        {
+            case DialogueType.Waiting: dialogueList = Dialogues.Waiting; break;
+            case DialogueType.CharacterDied: dialogueList = Dialogues.CharacterDied; break;
+            case DialogueType.FoundCharacter: dialogueList = Dialogues.CharacterFound; break;
+            case DialogueType.EnterRoom: dialogueList = Dialogues.EnterRoom; break;
+        }
+        if(dialogueList != null)
+        {
+            foreach(var d in dialogueList)
+            {
+                List<PersonalityTrait> traitsNeeded = d.GetPersonalitiesNeeded();
+                List<PersonalityTrait> traitsFound = new List<PersonalityTrait>();
+                charactersInDialogue.Clear();
+                foreach(var trait in traitsNeeded)
+                {
+                    for (int i = 0; i < PlayerController.Characters.Count; ++i)
+                    {
+                        if(!charactersInDialogue.Any(c => c.Trait == trait))
+                        {
+                            var character = PlayerController.Characters[i];
+                            if(character.CharacterInfo.Personality == trait &&
+                                !charactersInDialogue.Any(c => c.Index == i))
+                            {
+                                charactersInDialogue.Add(new CharWithTrait { Index = i, Trait = trait });
+                            }
+                        }
+                    }
+                    if(charactersInDialogue.Count == traitsNeeded.Count)
+                    {
+                        return d;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public void Reset()
+    {
+        if (currentDialogue != null)
+        {
+            StopDialogue();
+        }
+        timeSinceLastDialogue = 0;
     }
 
     void StartDialogue(Dialogue dialogue)
     {
-        currentDialogue = dialogue;
-        int charactersAccountedFor = 0;
-        foreach(var cId in dialogue.CharactersNeeded)
-        {
-            if (PlayerController.Characters.Count > cId)
-            {
-                charactersAccountedFor++;
-            }
-        }
-        if(charactersAccountedFor == dialogue.CharactersNeeded.Count)
-        {
-            currentDialogue.DialogueComplete += OnDialogueComplete;
-            currentDialogue.Begin(FadeoutTime);
-        }
-        else
-        {
-            currentDialogue = null;
-            timeSinceLastDialogue = 0;
-        }
-    }
+        if (dialogue == null)
+            return;
 
-    void OnDialogueComplete()
-    {
-        currentDialogue.DialogueComplete -= OnDialogueComplete;
-        currentDialogue = null;
-        timeSinceLastDialogue = 0;
+        currentDialogue = dialogue;
+        if (dialogueRoutine == null)
+            dialogueRoutine = StartCoroutine(DialogRoutine());
     }
 
     private void OnCharacterAdded(CharacterBehaviour character)
     {
         //TODO: Start dialogue if char is discovered
+        if(currentDialogue == null)
+        {
+            StartDialogue(GetDialogueFromType(DialogueType.FoundCharacter));
+        }
     }
 
     private void OnCharacterDied(CharacterBehaviour character)
     {
         //NOTE: Stop dialogue if needed char is killed
-        if(currentDialogue != null)
+        if (currentDialogue != null)
         {
             var indexOfDead = PlayerController.Characters.IndexOf(character);
-            if(currentDialogue.CharactersNeeded.Contains(indexOfDead))
+            if (charactersInDialogue.Any(c => c.Index == indexOfDead))
             {
-                currentDialogue.Stop();
+                StopDialogue();
             }
         }
         //TODO: Start dialogue if any char is killed
-        if(currentDialogue == null)
+        if (currentDialogue == null)
         {
             StartDialogue(GetDialogueFromType(DialogueType.CharacterDied));
         }
@@ -185,6 +151,37 @@ public class DialogueController : MonoBehaviour {
     void OnRoomSelected(RoomBehaviour room)
     {
         //TODO: Start dialogue when char is about the enter room
+        if(currentDialogue == null)
+        {
+            StartDialogue(GetDialogueFromType(DialogueType.EnterRoom));
+        }
         //TODO: Start dialog after char entered room without trap.
+    }
+
+    void StopDialogue()
+    {
+        if(dialogueRoutine != null)
+        {
+            StopCoroutine(dialogueRoutine);
+        }
+        if(currentDialogue != null)
+        {
+            currentDialogue = null;
+        }
+    }
+
+    IEnumerator DialogRoutine()
+    {
+        for (int i = 0; i < currentDialogue.DialogueLines.Count; ++i)
+        {
+            var line = currentDialogue.DialogueLines[i];
+            var charIndex = charactersInDialogue.First(c => c.Trait == line.CharacterTraitsNeeded).Index;
+            yield return new WaitForSeconds(line.WaitBefore);
+            UIController.ShowDialogue(charIndex, line, FadeoutTime);
+            yield return new WaitForSeconds(line.Duration);
+        }
+        dialogueRoutine = null;
+        currentDialogue = null;
+        timeSinceLastDialogue = 0;
     }
 }

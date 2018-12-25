@@ -11,17 +11,16 @@ public class CharacterInfo
     public PersonalityTrait Personality { get; set; }
 }
 
-[Flags]
 public enum PersonalityTrait
 {
-    None            = 0,
-    Kind            = 1 << 0,
-    Curious         = 1 << 1,
-    Loner           = 1 << 2,
-    Angry           = 1 << 3,
-    Crazy           = 1 << 4,
-    Flirtatious     = 1 << 5,
-    Sad             = 1 << 6,
+    None,            
+    Kind,           
+    Curious,
+    Loner,
+    Angry,
+    Crazy,
+    Flirtatious,
+    Sad,
 }
 
 [Serializable]
@@ -63,7 +62,7 @@ static class CharacterInfoGenerator {
 
     static PersonalityTrait getRandomPersonality()
     {
-        return (PersonalityTrait)Random.Range(0, 0xFFFF);
+        return (PersonalityTrait)Random.Range(0, (int)PersonalityTrait.Sad + 1);
 
     }
 

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2174a7da9f11f1b4e80e2066f8a2b58e, type: 3}
+  m_Name: WillWeEverGetOut
+  m_EditorClassIdentifier: 
+  DialogueLines:
+  - CharacterTraitsNeeded: 2
+    Text: So, do you think we'll ever find a way out?
+    WaitBefore: 1
+    Duration: 2
+  - CharacterTraitsNeeded: 64
+    Text: I think we'll all die...
+    WaitBefore: 1
+    Duration: 2
+  - CharacterTraitsNeeded: 1
+    Text: No. We'll make it!
+    WaitBefore: 1
+    Duration: 2

@@ -1,66 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static DialogueController;
 
-public class Dialogue : MonoBehaviour {
+[Serializable]
+[CreateAssetMenu(menuName = "Dialogue")]
+public class Dialogue : ScriptableObject
+{
+    public List<DialogueLine> DialogueLines;
 
-    public event Action DialogueComplete;
-    public List<int> CharactersNeeded { get; private set; } = new List<int>();
-
-    List<DialogueItem> Entries;
-    UIController UIController;
-    Coroutine dialogueRoutine = null;
-    int currentEntry;
-
-    public DialogueType Type;
-
-    public void Init(UIController uiController, DialogueType type, List<DialogueItem> entries)
+    public List<PersonalityTrait> GetPersonalitiesNeeded()
     {
-        Type = type;
-        Entries = entries;
-        UIController = uiController;
-        foreach (var e in entries)
+        List<PersonalityTrait> traitsNeeded = new List<PersonalityTrait>();
+        foreach(var line in DialogueLines)
         {
-            if (!CharactersNeeded.Contains(e.Character))
-                CharactersNeeded.Add(e.Character);
+            if(!traitsNeeded.Contains(line.CharacterTraitsNeeded))
+            {
+                traitsNeeded.Add(line.CharacterTraitsNeeded);
+            }
         }
-    }
-
-   
-    void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
-
-    public void Begin(float fadeoutTime)
-    {
-        if(dialogueRoutine == null)
-            dialogueRoutine = StartCoroutine(DialogRoutine(fadeoutTime));
-    }
-
-    public void Stop()
-    {
-        if(dialogueRoutine != null)
-        {
-            StopCoroutine(dialogueRoutine);
-        }
-    }
-
-    IEnumerator DialogRoutine(float fadeoutTime)
-    {
-        for(int i = 0; i < Entries.Count; ++i)
-        {
-            var entry = Entries[i];
-            yield return new WaitForSeconds(entry.WaitBefore);
-            UIController.ShowDialogue(entry, fadeoutTime);
-            yield return new WaitForSeconds(entry.Duration);
-        }
-        DialogueComplete?.Invoke();
-        dialogueRoutine = null;
+        return traitsNeeded;
     }
 }

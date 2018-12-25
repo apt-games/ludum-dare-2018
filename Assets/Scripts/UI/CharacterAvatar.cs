@@ -117,12 +117,12 @@ public class CharacterAvatar : MonoBehaviour {
 
 	}
 
-    public void ShowDialogue(DialogueItem dialogue, float fadeTime)
+    public void ShowDialogue(DialogueLine dialogue, float fadeTime)
     {
         StartCoroutine(ShowAndFadeDialogue(dialogue, fadeTime));
     }
 
-    IEnumerator ShowAndFadeDialogue(DialogueItem dialogue, float fadeTime)
+    IEnumerator ShowAndFadeDialogue(DialogueLine dialogue, float fadeTime)
     {
         CanvasGroup dialogueCanvasGroup = SpeechBubble.GetComponent<CanvasGroup>();
         TextMeshProUGUI uiText = SpeechBubble.GetComponent<TextMeshProUGUI>();
