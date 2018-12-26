@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 public class DialogueController : MonoBehaviour {
 
@@ -25,6 +26,9 @@ public class DialogueController : MonoBehaviour {
     public PlayerController PlayerController;
     public MapController MapController;
     public UIController UIController;
+    public float ChanceCharacterDiedTalking = 0.4f;
+    public float ChanceCharacterFoundTalking = 0.4f;
+    public float ChanceEnterRoomTalking = 0.4f;
     public float FadeoutTime = 1;
     public float WaitThreshold = 5;
     public Dialogues Dialogues;
@@ -34,13 +38,31 @@ public class DialogueController : MonoBehaviour {
     DialogueLine currentLine;
     List<CharWithTrait> charactersInDialogue = new List<CharWithTrait>();
 
+    List<int> AvailableWaitingDialogues = new List<int>();
+    List<int> AvailableCharacterFoundDialogues = new List<int>();
+    List<int> AvailableCharacterDiedDialogues = new List<int>();
+    List<int> AvailableEnterRoomDialogues = new List<int>();
+
     float timeSinceLastDialogue = 0;
 
     private void Awake()
     {
         PlayerController.CharacterAdded += OnCharacterAdded;
         PlayerController.CharacterDied += OnCharacterDied;
+        PlayerController.RoomWasSafe += OnRoomWasSafe;
         MapController.RoomSelected += OnRoomSelected;
+        GameController.GameStarted += ResetDialogues;
+
+        ResetDialogues();
+
+    }
+
+    public void ResetDialogues()
+    {
+        CreateShuffledDialogue(Dialogues.Waiting.Count, ref AvailableEnterRoomDialogues);
+        CreateShuffledDialogue(Dialogues.CharacterFound.Count, ref AvailableCharacterFoundDialogues);
+        CreateShuffledDialogue(Dialogues.CharacterDied.Count, ref AvailableCharacterDiedDialogues);
+        CreateShuffledDialogue(Dialogues.EnterRoom.Count, ref AvailableEnterRoomDialogues);
     }
 
     void Start () {
@@ -61,22 +83,51 @@ public class DialogueController : MonoBehaviour {
         }
     }
 
+    void CreateShuffledDialogue(int amount, ref List<int> dialogueIndices)
+    {
+        dialogueIndices.Clear();
+        for(int i = 0; i < amount; ++i)
+        {
+            dialogueIndices.Add(i);
+            dialogueIndices.Shuffle();
+        }
+    }
+
     Dialogue GetDialogueFromType(DialogueType type)
     {
         List<Dialogue> dialogueList = null;
+        List<int> dialogueOrderList = null;
         switch(type)
         {
-            case DialogueType.Waiting: dialogueList = Dialogues.Waiting; break;
-            case DialogueType.CharacterDied: dialogueList = Dialogues.CharacterDied; break;
-            case DialogueType.FoundCharacter: dialogueList = Dialogues.CharacterFound; break;
-            case DialogueType.EnterRoom: dialogueList = Dialogues.EnterRoom; break;
+            case DialogueType.Waiting:
+                dialogueList = Dialogues.Waiting;
+                dialogueOrderList = AvailableWaitingDialogues;
+                break;
+            case DialogueType.CharacterDied:
+                dialogueList = Dialogues.CharacterDied;
+                dialogueOrderList = AvailableCharacterDiedDialogues;
+                break;
+            case DialogueType.FoundCharacter:
+                dialogueList = Dialogues.CharacterFound;
+                dialogueOrderList = AvailableCharacterFoundDialogues;
+                break;
+            case DialogueType.EnterRoom:
+                dialogueList = Dialogues.EnterRoom;
+                dialogueOrderList = AvailableEnterRoomDialogues;
+                break;
         }
+
+        if(dialogueOrderList.Count == 0)
+        {
+            CreateShuffledDialogue(dialogueList.Count, ref dialogueOrderList);
+        }
+
         if(dialogueList != null)
         {
-            foreach(var d in dialogueList)
+            foreach(var index in dialogueOrderList)
             {
+                var d = dialogueList[index];
                 List<PersonalityTrait> traitsNeeded = d.GetPersonalitiesNeeded();
-                List<PersonalityTrait> traitsFound = new List<PersonalityTrait>();
                 charactersInDialogue.Clear();
                 foreach(var trait in traitsNeeded)
                 {
@@ -94,6 +145,7 @@ public class DialogueController : MonoBehaviour {
                     }
                     if(charactersInDialogue.Count == traitsNeeded.Count)
                     {
+                        dialogueOrderList.Remove(index);
                         return d;
                     }
                 }
@@ -123,29 +175,40 @@ public class DialogueController : MonoBehaviour {
 
     private void OnCharacterAdded(CharacterBehaviour character)
     {
-        //TODO: Start dialogue if char is discovered
-        if(currentDialogue == null)
+        if (UnityEngine.Random.Range(0, 1) <= ChanceCharacterFoundTalking)
         {
-            StartDialogue(GetDialogueFromType(DialogueType.FoundCharacter));
+            //TODO: Start dialogue if char is discovered
+            if (currentDialogue == null)
+            {
+                StartDialogue(GetDialogueFromType(DialogueType.FoundCharacter));
+            }
         }
     }
 
     private void OnCharacterDied(CharacterBehaviour character)
     {
-        //NOTE: Stop dialogue if needed char is killed
-        if (currentDialogue != null)
+        if (UnityEngine.Random.Range(0, 1) <= ChanceCharacterDiedTalking)
         {
-            var indexOfDead = PlayerController.Characters.IndexOf(character);
-            if (charactersInDialogue.Any(c => c.Index == indexOfDead))
+            //NOTE: Stop dialogue if needed char is killed
+            if (currentDialogue != null)
             {
-                StopDialogue();
+                var indexOfDead = PlayerController.Characters.IndexOf(character);
+                if (charactersInDialogue.Any(c => c.Index == indexOfDead))
+                {
+                    StopDialogue();
+                }
+            }
+            //TODO: Start dialogue if any char is killed
+            if (currentDialogue == null)
+            {
+                StartDialogue(GetDialogueFromType(DialogueType.CharacterDied));
             }
         }
-        //TODO: Start dialogue if any char is killed
-        if (currentDialogue == null)
-        {
-            StartDialogue(GetDialogueFromType(DialogueType.CharacterDied));
-        }
+    }
+
+    void OnRoomWasSafe(bool wasSafe)
+    {
+        //TODO: feedback dialogue based on when room was safe
     }
 
     void OnRoomSelected(RoomBehaviour room)

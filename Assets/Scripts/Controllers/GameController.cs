@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
     public UnityEvent OnPlayerDied;
     public UnityEvent OnPlayerWon;
 
+    public event Action GameStarted;
+
     [HideInInspector]
     public RoomBehaviour SelectedRoom;
 
@@ -63,6 +65,7 @@ public class GameController : MonoBehaviour
         DialogueController.gameObject.SetActive(true);
 
         OnStartTutorial?.Invoke();
+        GameStarted?.Invoke();
 
         StartCoroutine (AudioFadeOut.FadeOut (UIController.IntroView.SpeechDisplayAudio, 0.25f));
     }

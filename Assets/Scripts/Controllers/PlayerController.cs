@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public List<CharacterBehaviour> Characters { get; } = new List<CharacterBehaviour>();
     public event Action<CharacterBehaviour> CharacterAdded;
     public event Action<CharacterBehaviour> CharacterDied;
+    public event Action<bool> RoomWasSafe;
 
     public CharacterBehaviour SelectedCharacter;
     public AudioSource newCharAudio;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
         if (room != null)
         {
             yield return new WaitForSeconds(room.IsSafe ? 1.5f : 3f);
+            RoomWasSafe?.Invoke(room.IsSafe);
             MovePartyTo(room, party);
         }
     }
