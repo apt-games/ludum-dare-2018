@@ -3230,6 +3230,9 @@ MonoBehaviour:
   PlayerController: {fileID: 367920721}
   MapController: {fileID: 1781157867}
   UIController: {fileID: 1918072528}
+  ChanceCharacterDiedTalking: 1
+  ChanceCharacterFoundTalking: 1
+  ChanceEnterRoomTalking: 1
   FadeoutTime: 1
   WaitThreshold: 5
   Dialogues: {fileID: 11400000, guid: b4a7662f732e1514fa1b53a1b916bd9f, type: 2}

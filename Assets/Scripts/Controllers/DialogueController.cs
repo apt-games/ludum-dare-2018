@@ -89,8 +89,9 @@ public class DialogueController : MonoBehaviour {
         for(int i = 0; i < amount; ++i)
         {
             dialogueIndices.Add(i);
-            dialogueIndices.Shuffle();
         }
+
+        dialogueIndices.Shuffle();
     }
 
     Dialogue GetDialogueFromType(DialogueType type)
@@ -124,8 +125,9 @@ public class DialogueController : MonoBehaviour {
 
         if(dialogueList != null)
         {
-            foreach(var index in dialogueOrderList)
+            for(int j = dialogueOrderList.Count - 1; j >= 0; j--)
             {
+                int index = dialogueOrderList[j];
                 var d = dialogueList[index];
                 List<PersonalityTrait> traitsNeeded = d.GetPersonalitiesNeeded();
                 charactersInDialogue.Clear();
@@ -145,7 +147,7 @@ public class DialogueController : MonoBehaviour {
                     }
                     if(charactersInDialogue.Count == traitsNeeded.Count)
                     {
-                        dialogueOrderList.Remove(index);
+                        dialogueOrderList.RemoveAt(j);
                         return d;
                     }
                 }

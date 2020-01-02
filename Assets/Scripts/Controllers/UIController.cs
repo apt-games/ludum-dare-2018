@@ -189,6 +189,7 @@ public class UIController : MonoBehaviour {
 
     public void ShowDialogue(int charIndex, DialogueLine line, float fadeTime)
     {
-        _characterAvatars[charIndex].ShowDialogue(line, fadeTime);
+        if(charIndex < _characterAvatars.Count)
+            _characterAvatars[charIndex].ShowDialogue(line, fadeTime);
     }
 }
