@@ -19,15 +19,15 @@
     <meta name="description" property="og:description" content="Guide a group of survivors through a deadly maze as part of a cruel experiment. Along the way you will have to make tough choices on who gets to go on and who gets sacrificed for the greater good.">
 
     <meta property="og:title" content="Altruist Project">
-    <meta property="og:url" content="https://altruist-project.com">
-    <meta property="og:image" content="https://altruist-project.com/share.jpg">
+    <meta property="og:url" content="https://apt-games.github.io/ludum-dare-2018/">
+    <meta property="og:image" content="https://apt-games.github.io/ludum-dare-2018/share.jpg">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fe0468">
+    <link rel="apple-touch-icon" sizes="180x180" href="/ludum-dare-2018/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/ludum-dare-2018/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/ludum-dare-2018/favicon-16x16.png">
+    <link rel="manifest" href="/ludum-dare-2018/site.webmanifest">
+    <link rel="mask-icon" href="/ludum-dare-2018/safari-pinned-tab.svg" color="#fe0468">
 
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="theme-color" content="#000000">
@@ -361,7 +361,7 @@
   </head>
   <body>
     <header class="header">
-      <img src="/logo.png" alt="Altruist Project logo">
+      <img src="/ludum-dare-2018/logo.png" alt="Altruist Project logo">
       <div class="header-start">
         <p class="audio-hint">Turn up the volume</p>
         <button class="start-button">
@@ -436,7 +436,7 @@
           <h1>Altruist Project</h1>
         </header>
         <section>
-          <img class="instructions-image" src="/instructions.jpg" alt="Game instructions">
+          <img class="instructions-image" src="/ludum-dare-2018/instructions.jpg" alt="Game instructions">
         </section>
       </article>
       <button class="close-help-button">
@@ -446,7 +446,7 @@
       </button>
     </div>
 
-    <script src="/Build/UnityLoader.js"></script>
+    <script src="/ludum-dare-2018/Build/UnityLoader.js"></script>
     <script>
       (() => {
         function getDeviceInfo() {
@@ -717,7 +717,7 @@
             startButton.style.pointerEvents = 'none';
             startButton.style.cursor = 'auto';
 
-            gameInstance = UnityLoader.instantiate("gameContainer", "/Build/dist.json", {onProgress: onProgress});
+            gameInstance = UnityLoader.instantiate("gameContainer", "/ludum-dare-2018/Build/dist.json", {onProgress: onProgress});
           }
 
           startButton.addEventListener('click', start);
